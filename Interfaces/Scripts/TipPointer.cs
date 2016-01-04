@@ -27,10 +27,10 @@ public class TipPointer : MonoBehaviour {
     public bool[] useLeftFinger = new bool[5];
     
     //양손에 붙일 것인지 조사
-    public bool isBothHand;
+    //public bool isBothHand;
 
     //왼손잡이인지 조사(한 손만 사용할 경우)
-    public bool isLeftHand;
+    //public bool isLeftHand;
 
     protected HandController handcontroller;
     protected Collider active_object_;

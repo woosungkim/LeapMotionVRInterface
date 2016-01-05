@@ -5,21 +5,19 @@ namespace Interface.Shortcut
 {
 	public class ShortcutItem
 	{
+		private int id { set; get; }
 		private string name { set; get; }
 
-	
+		/// <summary>
+		/// Constructors
+		/// </summary>
 		public ShortcutItem()
 		{
 		}
-
-		public ShortcutItem(string n)
+		public ShortcutItem(int id, string name)
 		{
-			this.name = n;
+			this.id = id;
+			this.name = name;
 		}
-
-		~ShortcutItem()
-		{
-		}
-
 	}
 }

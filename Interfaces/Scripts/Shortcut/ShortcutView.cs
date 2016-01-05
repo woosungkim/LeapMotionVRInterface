@@ -1,15 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShortcutView : MonoBehaviour {
+namespace Interface.Shortcut
+{
+	public class ShortcutView 
+	{
+		private GameObject[] itemInstance;
 
-	// Use this for initialization
-	void Start () {
-	
+		/// <summary>
+		/// Bind shortcut items to shortcut view
+		/// </summary>
+		public void bindItems(ShortcutItem[] items)
+		{
+			itemInstance = new GameObject[items.Length];
+
+			for (int i = 0; i < items.Length; i++) {
+				// 각 아이템의 데이터를 itemInstance에 bind한다.
+				
+
+			}
+
+		}
+
+		/// <summary>
+		/// Draw shortcut interface
+		/// </summary>
+		public void drawShortcut()
+		{
+
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

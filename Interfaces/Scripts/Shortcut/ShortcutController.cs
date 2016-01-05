@@ -1,37 +1,57 @@
 ﻿using UnityEngine;
-using System.Text;
 using System.Collections;
 
 namespace Interface.Shortcut
 {
 	public class ShortcutController
 	{
-		private static int MAX_ITEMS = 20;
-		private ShortcutItem[] items;
-	
+		public static int MAX_ITEMS = 10; // max number of shortcut
+
+		private ShortcutView scView;
+		private ShortcutItem[] scItems;
+		
 		private int nItems; // number of shortcut items
 
 		/// <summary>
-		/// Constructor
+		/// Constructors
 		/// </summary>
-		public ShortcutController() {
-			items = new ShortcutItem[MAX_ITEMS];
-			nItems = 0;
+		public ShortcutController() 
+		{
+		}
+		public ShortcutController(int size)
+		{
+			scItems = new ShortcutItem[size];
+			nItems = size;
+
+		
 		}
 
 		/// <summary>
-		/// Add item to this shortcut
+		/// Add shortcut item to shortcut
 		/// </summary>
-		public void addItem(string n)
+		public void addItem(int id, string name)
 		{
 			if (nItems < MAX_ITEMS) {
-				items[nItems] = new ShortcutItem();// param
-				nItems++;
+				scItems[id] = new ShortcutItem(id, name);
 			}
 		}
 
+		/// <summary>
+		/// Bind shortcut items to shortcut view 
+		/// </summary>
+		public void bindItems()
+		{
+			scView.bindItems (scItems);
+		}
 
+		/// <summary>
+		/// Draw shortcut interface
+		/// </summary>
+		public void drawShortcut()
+		{
 
+			scView.drawShortcut ();
+		}
 
 	}
 }

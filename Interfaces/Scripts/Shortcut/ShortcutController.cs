@@ -7,6 +7,8 @@ namespace Interface.Shortcut
 	{
 		public static int MAX_ITEMS = 10; // max number of shortcut
 
+		private string resName;
+
 		private ShortcutView scView;
 		private ShortcutItem[] scItems;
 		
@@ -18,21 +20,22 @@ namespace Interface.Shortcut
 		public ShortcutController() 
 		{
 		}
-		public ShortcutController(int size)
+		public ShortcutController(string resName, int size)
 		{
+			this.resName = resName;
+
 			scItems = new ShortcutItem[size];
 			nItems = size;
-
 		
 		}
 
 		/// <summary>
 		/// Add shortcut item to shortcut
 		/// </summary>
-		public void addItem(int id, string name)
+		public void addItem(int id, SelectActionBase action)
 		{
 			if (nItems < MAX_ITEMS) {
-				scItems[id] = new ShortcutItem(id, name);
+				scItems[id] = new ShortcutItem(id, action);
 			}
 		}
 
@@ -41,7 +44,8 @@ namespace Interface.Shortcut
 		/// </summary>
 		public void bindItems()
 		{
-			scView.bindItems (scItems);
+			scView = new ShortcutView ();
+			scView.bindItems (resName, scItems);
 		}
 
 		/// <summary>

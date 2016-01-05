@@ -5,8 +5,11 @@ namespace Interface.Shortcut
 {
 	public class ShortcutItem
 	{
-		private int id { set; get; }
-		private string name { set; get; }
+		public int id { set; get; }
+		public string name { set; get; }
+	
+		public SelectActionBase action { set; get; }
+
 
 		/// <summary>
 		/// Constructors
@@ -14,10 +17,11 @@ namespace Interface.Shortcut
 		public ShortcutItem()
 		{
 		}
-		public ShortcutItem(int id, string name)
+		public ShortcutItem(int id, SelectActionBase action)
 		{
 			this.id = id;
-			this.name = name;
+			this.action = action;
 		}
+
 	}
 }

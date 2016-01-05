@@ -1,25 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Switcher : MonoBehaviour {
+public class CameraTransitions : MonoBehaviour {
 
-	public static Switcher _instance;
+	public static CameraTransitions _instance;
 
 	enum CameraState : int { AR, VR };
 
-	public GameObject _target = null;
+	public GameObject _targetHead = null;
 	private GameObject quadForeground;
 	private CameraState state;
 	private Vector3 vrPos, arPos;
 
 	// Use this for initialization
 	void Start () {
-		if (_target == null) {
+		if (_targetHead == null) {
 			Debug.Log ("no target");
 			return;
 		}
 
 		quadForeground = GameObject.Find ("QuadForeground");
+
+		transform.position = _targetHead.transform.position;
+		transform.rotation = _targetHead.transform.rotation;
+
 		state = CameraState.VR;
 		vrPos = new Vector3 (0.0f, 1.0f, 0.137f);
 		arPos = new Vector3 (0.0f, 0.0f, 0.137f);
@@ -31,10 +35,10 @@ public class Switcher : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (_target != null) {
+		if (_targetHead != null) {
 			// track camera position & rotation
-			transform.position = _target.transform.position;
-			transform.rotation = _target.transform.rotation;
+			//transform.position = _targetHead.transform.position;
+			transform.rotation = _targetHead.transform.rotation;
 		}
 	}
 
@@ -56,11 +60,13 @@ public class Switcher : MonoBehaviour {
 		float t = 0.0f;
 		Vector3 fromPos, toPos;
 
-		fromPos = quadForeground.transform.position;
+		fromPos = quadForeground.transform.localPosition;
 		toPos = (from == CameraState.AR) ? vrPos : arPos;
 
+
+
 		while (t < 1.0f) { 
-			quadForeground.transform.position = Vector3.Lerp (fromPos, toPos, t);
+			quadForeground.transform.localPosition = Vector3.Lerp (fromPos, toPos, t);
 
 			t = t + 0.1f;
 			yield return new WaitForSeconds(0.02f);

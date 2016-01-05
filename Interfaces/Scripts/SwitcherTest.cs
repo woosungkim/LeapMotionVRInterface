@@ -68,15 +68,15 @@ public class SwitcherTest : MonoBehaviour {
 							endPoint = hand.PalmPosition;
 							//Debug.Log("end point : " + hand.PalmPosition);
 
-							if ( startPoint.y < 100 && endPoint.y < 100 &&
+							if ( startPoint.y < 150 && endPoint.y < 150 &&
 							    startPoint.z < endPoint.z ) {
-								Switcher._instance.switchCameraToAR ();
+								CameraTransitions._instance.switchCameraToAR ();
 								// SCController.onSC()
 							}
 
-							if ( startPoint.y < 100 && endPoint.y < 100 &&
+							if ( startPoint.y < 150 && endPoint.y < 150 &&
 							    startPoint.z > endPoint.z ) {
-								Switcher._instance.switchCameraToVR ();
+								CameraTransitions._instance.switchCameraToVR ();
 								// SCController.offSC()
 							}
 

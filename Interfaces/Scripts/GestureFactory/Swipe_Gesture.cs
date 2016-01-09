@@ -24,8 +24,6 @@ public class Swipe_Gesture : MonoBehaviour, IGesture
 
     public bool isRight
     { get; set; }
-    public bool isLeft
-    { get; set; }
 
     public Controller _leap_controller
     { get; set; }
@@ -53,7 +51,6 @@ public class Swipe_Gesture : MonoBehaviour, IGesture
         this.maxVelocity = 100000;
         this.maxLength = 100000;
         this.isRight = false;
-        this.isLeft = false;
         this.isPlaying = false;
         return true;
     }
@@ -71,14 +68,7 @@ public class Swipe_Gesture : MonoBehaviour, IGesture
                
                 swipe_gestrue = new SwipeGesture(gestures[g]);
 
-                if (gestures[g].Hands.Rightmost.IsRight)
-                {
-                    this.isRight = true;
-                }
-                else if(gestures[g].Hands.Leftmost.IsLeft)
-                {
-                    this.isLeft = true;
-                }
+                AnyHand();
 
                 this.isChecked = true;
                 break;
@@ -96,14 +86,20 @@ public class Swipe_Gesture : MonoBehaviour, IGesture
     //1이면 오른손 0이면 왼손 제스처
     public int AnyHand()
     {
-        if (this.isRight)
+        if (swipe_gestrue.IsValid)
         {
-            this.isRight = false;
+            if (swipe_gestrue.Hands.Rightmost.IsRight)
+            {
+                this.isRight = true;
+            }
+            else if (swipe_gestrue.Hands.Leftmost.IsLeft)
+            {
+                this.isRight = false;
+            }
             return 1;
         }
         else
         {
-            this.isLeft = false;
             return 0;
         }
     }

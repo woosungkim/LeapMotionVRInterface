@@ -35,12 +35,6 @@ public interface IGesture
         set;
     }
 
-    bool isLeft
-    {
-        get;
-        set;
-    }
-
     bool isPlaying
     {
         get;

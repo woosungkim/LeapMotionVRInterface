@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using Leap;
 
-public interface GestureInterface
+//모든 제스처 관련 클래스들이 상속 받아야할 인터페이스 클래스이다.
+public interface IGesture
 {
     bool SetConfig();
     bool CheckGesture();
     void UnCheck();
+    int AnyHand();
+
     Controller _leap_controller
     {
         get;
@@ -21,6 +24,24 @@ public interface GestureInterface
     }
 
     bool isChecked
+    {
+        get;
+        set;
+    }
+
+    bool isRight
+    {
+        get;
+        set;
+    }
+
+    bool isLeft
+    {
+        get;
+        set;
+    }
+
+    bool isPlaying
     {
         get;
         set;

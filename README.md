@@ -17,7 +17,7 @@ ___
 
 ___
 
-**Gesture Interface** can detech many gesture pattern which is made by user. This function is dependent with other gameobject.
+**Gesture Interface** can detech many gesture pattern which is made by user. This function is independent of other gameobject int the Unity GameScene.
 
 
 

@@ -1,5 +1,5 @@
 # LeapMotionVRInterface
-
+##Caution! This Project is still developing very hard. Please wait few weeks. ^^
 **What is the LeapMotion VR Interface?**
 
  This is a kind of Unity VR Framework. This is helpful to you for making a Unity Application.<br>

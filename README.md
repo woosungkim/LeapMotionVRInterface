@@ -2,7 +2,7 @@
 **Caution! This Project is still developing very hard. Please wait few weeks. ^^**<br>
  This is a kind of Unity VR Framework. This is helpful to you for making a Unity Application.<br>
  This Interface has 4 components of user input system.<br><br>
-[Get started at the project wiki >](https://github.com/woosungkim/LeapMotionVRInterface/wiki)
+[Get started >](https://github.com/woosungkim/LeapMotionVRInterface/wiki)
 ___
 
 **Camera Transition** is have function of change view VR to AR

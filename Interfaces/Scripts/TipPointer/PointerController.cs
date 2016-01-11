@@ -16,6 +16,8 @@ public class PointerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		gameObject.transform.SetParent (_Camera.transform, false);
+
 		_controller = new Controller ();
 
 		GameObject pointersObj = new GameObject("Pointers");
@@ -50,24 +52,22 @@ public class PointerController : MonoBehaviour {
 			FingerList fingers = hand.Fingers;
 
 			foreach (Finger finger in fingers) {
-				PointerType type = ConvertType(hand, finger.Type);
+				PointerType type = Converter.ConvertType(hand, finger.Type);
 
 				if (type != null) {
 					if (_pointerDict.ContainsKey(type)) {
 						GameObject pointerObj = _pointerDict[type];
 
 						Transform pointerTransform = pointerObj.transform;
-						pointerTransform.localPosition = Camera.main.ViewportToWorldPoint(ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+						pointerTransform.localPosition = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 						pointerTransform.localRotation = Quaternion.identity;
+
+                        //print(ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 
 						Vector3 camWorld = _Camera.TransformPoint (Vector3.zero);
 						Vector3 camLocal = pointerTransform.InverseTransformPoint (camWorld);
+
 						pointerTransform.localRotation = Quaternion.FromToRotation (Vector3.down, camLocal);
-
-						if (type == PointerType.RIGHT_INDEX) {
-							print(InteractionManager.GetPointerPos(type));
-
-						}
 
 					}
 				}
@@ -78,29 +78,7 @@ public class PointerController : MonoBehaviour {
 
 	}
 
-	private PointerType ConvertType(Hand hand, Finger.FingerType fingerType)
-	{
-		if (hand.IsRight) {
-			switch (fingerType) {
-			case Finger.FingerType.TYPE_THUMB: return PointerType.RIGHT_THUMB;
-			case Finger.FingerType.TYPE_INDEX: return PointerType.RIGHT_INDEX;
-			case Finger.FingerType.TYPE_MIDDLE: return PointerType.RIGHT_MIDDLE;
-			case Finger.FingerType.TYPE_RING: return PointerType.RIGHT_RING;
-			case Finger.FingerType.TYPE_PINKY: return PointerType.RIGHT_PINKY;
-			}
-		}
 
-		return PointerType.NULL;
 
-	}
-
-	private Vector3 ConvertPosInFrustum(Vector3 fromPos) {
-		
-		Vector3 toPos = new Vector3(((fromPos.x+150.0f)/300.0f), 
-		                            (fromPos.y/300.0f), 
-		                            ((fromPos.z+150.0f)/300.0f));
-		
-		return toPos;
-	}
 
 }

@@ -39,6 +39,15 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
     public bool isPlaying
     { get; set; }
 
+    public virtual void Update()
+    {
+        if(!this.isChecked)
+        {
+            CheckGesture();
+        }
+        UnCheck();
+    }
+
     public bool SetConfig()
     {
         _leap_controller = new Controller();
@@ -95,7 +104,7 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
         return position;
     }
 
-    public virtual bool CheckGesture()
+    public virtual void CheckGesture()
     {
         lastFrame = _leap_controller.Frame(0);
         hands = lastFrame.Hands;
@@ -106,19 +115,30 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
             {
                 keytab_gesture = new KeyTapGesture(gestures[g]);
 
-                AnyHand();
-
+                this.GetDirection();
+                this.AnyHand();
+                this.GetPointable();
+                this.GetPosition();
                 this.isChecked = true;
+
                 break;
             }
         }
 
-        return isChecked;
+        if(this.isChecked)
+        {
+            DoAction();
+        }
     }
 
     public virtual void UnCheck()
     {
         this.isChecked = false;
+    }
+
+    protected virtual void DoAction()
+    {
+        print("Please code this method");
     }
 
     public int AnyHand()

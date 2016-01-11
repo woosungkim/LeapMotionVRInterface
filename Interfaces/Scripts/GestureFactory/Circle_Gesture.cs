@@ -5,26 +5,34 @@ using Leap;
 
 public class Circle_Gesture : MonoBehaviour,IGesture 
 {
-    protected float minRadius = 5.0f;
-    protected float maxRadius;
+    protected float _minRadius = 5.0f;
+    protected float _maxRadius;
 
-    protected float minArc = 4.71f;
-    protected float maxArc;
+    protected float _minArc = 4.71f;
+    protected float _maxArc;
 
-    protected bool isClockwise;
-    protected Vector normal;
+    protected int _isClockwise;
+    protected Vector _normal;
 
-    protected float progress;
-    protected float minProgress;
+    protected float _progress;
+    
+    protected Pointable _pointable;
+    protected float _radius;
+    protected CircleGesture _circle_gesture;
 
-    protected Pointable pointable;
-    protected float radius;
-    protected CircleGesture circle_gesture;
+    protected HandList _hands;
+    protected GestureList _gestures;
+    protected FingerList _fingers;
+    protected float _startProgress;
+    protected float _endProgress;
+    protected Gesture.GestureState _state;
 
-    protected HandList hands;
-    protected GestureList gestures;
-    protected FingerList fingers;
+    //-------------------------------------------------
 
+    protected int _useDirection = 0;
+    protected float _minProgress;
+
+    //------------------------------------------------
 
     public bool isRight
     { get; set; }
@@ -41,16 +49,28 @@ public class Circle_Gesture : MonoBehaviour,IGesture
     public bool isPlaying
     { get; set; }
 
+    public virtual void Update()
+    {
+        if(!isChecked)
+        {
+            CheckGesture();
+        }
+        UnCheck();
+    }
+
     public bool SetConfig()
     {
         _leap_controller = new Controller();
         _leap_controller.EnableGesture(Gesture.GestureType.TYPE_CIRCLE);
-        _leap_controller.Config.SetFloat("Gesture.Circle.MinRadius", this.minRadius);
-        _leap_controller.Config.SetFloat("Gesture.Circle.MinArc", this.minArc);
+        _leap_controller.Config.SetFloat("Gesture.Circle.MinRadius", this._minRadius);
+        _leap_controller.Config.SetFloat("Gesture.Circle.MinArc", this._minArc);
         _leap_controller.Config.Save();
 
+        this._maxArc = 100000;
+        this._maxRadius = 100000;
+        this._state = Gesture.GestureState.STATE_INVALID;
         this.isChecked = false;
-        this.isClockwise = false;
+        this._isClockwise = -1;
         this.isRight = false;
         this.isPlaying = false;
 
@@ -59,60 +79,107 @@ public class Circle_Gesture : MonoBehaviour,IGesture
 
     protected virtual Pointable GetPointable()
     {
-        pointable = circle_gesture.Pointable;
-        return pointable;
+        _pointable = _circle_gesture.Pointable;
+        return _pointable;
     }
 
     protected virtual float GetProgress()
     {
-        progress = circle_gesture.Progress;
-        return progress;
+        _progress = _circle_gesture.Progress;
+        return _progress;
     }
     protected virtual Vector GetNormal()
     {
-        return circle_gesture.Normal;
+        return _circle_gesture.Normal;
     }
 
-    protected bool IsClockWise()
+    protected int IsClockWise()
     {
-        if(circle_gesture.Pointable.Direction.AngleTo(this.GetNormal()) <= 3.14/2)
+        if(_circle_gesture.Pointable.Direction.AngleTo(this.GetNormal()) <= 3.14/2)
         {
-            isClockwise = true;
+            _isClockwise = 1;
         }
         else
         {
-            isClockwise = false;
+            _isClockwise = -1;
         }
 
-        return isClockwise;
+        return _isClockwise;
     }
 
     protected bool SetMinRadius(float radius)
     {
-        this.minRadius = radius;
+        this._minRadius = radius;
         return true;
     }
 
-    public virtual bool CheckGesture()
+    public virtual void CheckGesture()
     {
         lastFrame = _leap_controller.Frame(0);
-        hands = lastFrame.Hands;
-        gestures = lastFrame.Gestures();
+        _hands = lastFrame.Hands;
+        _gestures = lastFrame.Gestures();
 
-        for(int g = 0; g<lastFrame.Gestures().Count; g++)
+        foreach( Gesture gesture in _gestures)
         {
-            if(lastFrame.Gestures()[g].Type == Gesture.GestureType.TYPE_CIRCLE)
-            {
-                circle_gesture = new CircleGesture(lastFrame.Gestures()[g]);
+            int id = gesture.Id;
 
-                AnyHand();
+            if( gesture.Type == Gesture.GestureType.TYPE_CIRCLE )
+            {
+                print("Circle Gesture");
                 
-                this.isChecked = true;
-                break;
+                _circle_gesture = new CircleGesture(gesture);
+                this.AnyHand();
+                if(!isPlaying && gesture.State == Gesture.GestureState.STATE_START)
+                {
+                    isPlaying = !isPlaying;
+                    this._startProgress = _circle_gesture.Progress;
+                    //print("start");
+                    print("start progress : " + this._startProgress);
+                }
+
+                if(isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
+                {
+                    int direc = this.IsClockWise();
+                    this._endProgress = _circle_gesture.Progress;
+                    print("stop progress : " + this._endProgress);
+                    if( this._endProgress  >= this._minProgress && direc == _useDirection)
+                    {
+                        this.isChecked = true;
+                        this.isPlaying = !this.isPlaying;
+                    }
+                    this._state = gesture.State;
+                    
+                    break;
+                }
+                this._state = gesture.State;
+                
             }
         }
+
+        if(isPlaying && _state == Gesture.GestureState.STATE_UPDATE)
+        {
+            int direc = this.IsClockWise();
+            this._endProgress = _circle_gesture.Progress;
+            print("update progress : " + this._endProgress);
+            if ( this._endProgress >= this._minProgress && direc == _useDirection)
+            {
+                this.isChecked = true;
+                this.isPlaying = !this.isPlaying;
+            }
+                    
+        }
         
-        return isChecked;
+
+        if(isChecked)
+        {
+            DoAction();
+        }
+       // return isChecked;
+    }
+
+    protected virtual void DoAction()
+    {
+        print("핸들러 만들어라 이 자식아");
     }
 
     public virtual void UnCheck()
@@ -120,17 +187,25 @@ public class Circle_Gesture : MonoBehaviour,IGesture
         isChecked = false;
     }
 
+    protected virtual bool SetGestureCondition(int direction, float progress)
+    {
+        this._useDirection = direction;
+        this.SetMinProgress(progress);
+
+        return true;
+    }
+
     //1이면 오른손 0이면 왼손
     public int AnyHand()
     {
 
-        if (circle_gesture.IsValid)
+        if (_circle_gesture.IsValid)
         {
-            if (circle_gesture.Hands.Rightmost.IsRight)
+            if (_circle_gesture.Hands.Rightmost.IsRight)
             {
                 this.isRight = true;
             }
-            else if (circle_gesture.Hands.Leftmost.IsLeft)
+            else if (_circle_gesture.Hands.Leftmost.IsLeft)
             {
                 this.isRight = false;
             }
@@ -145,19 +220,19 @@ public class Circle_Gesture : MonoBehaviour,IGesture
 
     protected bool SetMinProgress(float times)
     {
-        this.minProgress = times;
+        this._minProgress = times;
         return true;
     }
 
     protected bool SetMaxRadius(float radius)
     {
-        this.maxRadius = radius;
+        this._maxRadius = radius;
         return true;
     }
 
     protected bool SetMaxArc(float arc)
     {
-        this.maxArc = arc;
+        this._maxArc = arc;
         return true;
     }
 }

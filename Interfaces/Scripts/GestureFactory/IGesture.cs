@@ -7,10 +7,10 @@ using Leap;
 public interface IGesture
 {
     bool SetConfig();
-    bool CheckGesture();
+    void CheckGesture();
     void UnCheck();
     int AnyHand();
-
+    
     Controller _leap_controller
     {
         get;

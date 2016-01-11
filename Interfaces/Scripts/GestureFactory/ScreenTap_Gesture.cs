@@ -38,6 +38,15 @@ public class ScreenTap_Gesture : MonoBehaviour, IGesture
     public bool isPlaying
     { get; set; }
 
+    public virtual void Update()
+    {
+        if(!this.isChecked)
+        {
+            CheckGesture();
+        }
+        UnCheck();
+    }
+
     public bool SetConfig()
     {
         _leap_controller = new Controller();
@@ -55,7 +64,7 @@ public class ScreenTap_Gesture : MonoBehaviour, IGesture
         return true;
     }
 
-    public virtual bool CheckGesture()
+    public virtual void CheckGesture()
     {
         lastFrame = _leap_controller.Frame(0);
         hands = lastFrame.Hands;
@@ -63,14 +72,25 @@ public class ScreenTap_Gesture : MonoBehaviour, IGesture
 
         for (int g = 0; g < gestures.Count; g++ )
         {
-            screentap_gesture = new ScreenTapGesture(gestures[g]);
+            if(gestures[g].Type == Gesture.GestureType.TYPE_SCREEN_TAP)
+            {
+                screentap_gesture = new ScreenTapGesture(gestures[g]);
 
-            AnyHand();
+                this.GetDirection();
+                this.AnyHand();
+                this.GetPointable();
+                this.GetPosition();
 
-            this.isChecked = true;
-            break;
+                this.isChecked = true;
+                break;
+            }
+            
         }
-        return isChecked;
+
+        if(this.isChecked)
+        {
+            DoAction();
+        }
     }
 
     public virtual void UnCheck()
@@ -97,6 +117,11 @@ public class ScreenTap_Gesture : MonoBehaviour, IGesture
             return 0;
         }
         
+    }
+
+    protected virtual void DoAction()
+    {
+        print("Please code this method");
     }
 
     protected virtual Vector GetPosition()

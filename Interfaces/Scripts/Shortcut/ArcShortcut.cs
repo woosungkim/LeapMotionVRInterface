@@ -37,7 +37,7 @@ public class ArcShortcut : MonoBehaviour {
             itemObj.transform.SetParent (gameObject.transform, false);
 			itemObj.transform.localRotation = Quaternion.Euler(0, eachItemDegree*i, 0);
             uiArcItem = itemObj.AddComponent<UIArcItem>();
-            uiArcItem.Build(innerRadius, thickness, startAngle, endAngle);
+            //uiArcItem.Build(innerRadius, thickness, startAngle, endAngle);
 
 		}
 		  

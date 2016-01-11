@@ -34,7 +34,9 @@ public class UILabel : MonoBehaviour {
 		textObj.transform.SetParent (canvasObj.transform, false);
 		
 		Text text = textObj.AddComponent<Text> ();
-		text.GetComponent<Text> ().alignment = TextAnchor.MiddleCenter;
+
+
+		text.GetComponent<Text> ().alignment = TextAnchor.MiddleLeft;
 
 		/*********************************************************/
 		
@@ -45,6 +47,8 @@ public class UILabel : MonoBehaviour {
 		text.font = Resources.Load<Font> ("Fonts/"+fontName);
 		text.color = Color.black;
 		text.text = "dd";
+
+
 	}
 
 	public string Label {
@@ -55,5 +59,7 @@ public class UILabel : MonoBehaviour {
 			textObj.GetComponent<Text>().text = value;
 		}
 	}
+
+
 
 }

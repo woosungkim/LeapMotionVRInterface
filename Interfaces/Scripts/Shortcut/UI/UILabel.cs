@@ -46,8 +46,6 @@ public class UILabel : MonoBehaviour {
 		string fontName = "Tahoma";
 		text.font = Resources.Load<Font> ("Fonts/"+fontName);
 		text.color = Color.black;
-		text.text = "dd";
-
 
 	}
 

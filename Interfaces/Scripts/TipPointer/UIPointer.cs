@@ -8,18 +8,22 @@ public class UIPointer : MonoBehaviour {
 
 	public Color ColorNormal = new Color(1, 1, 1, 0.6f);
 	public Color ColorHighlighted = new Color(1, 1, 1, 1);
-	public float RadiusNormal = 0.12f;
-	public float RadiusHighlighted = 0.06f;
-	public float ThicknessNormal = 0.1f;
+	public float RadiusNormal = 0.06f;
+	public float RadiusHighlighted = 0.01f;
+	public float ThicknessNormal = 0.1f; 
 	public float ThicknessHighlighted = 0.4f;
 	public float CursorForwardDistance = 0;
+
+
+	private PointerType _type;
 
 	MeshBuilder _meshBuilder;
 
 	GameObject _pointerObj;
 
 	// Use this for initialization
-	internal void Build() {
+	internal void Build(PointerType type) {
+		_type = type;
 
 		_pointerObj = new GameObject ("Pointer");
 		_pointerObj.transform.SetParent (gameObject.transform, false);
@@ -36,7 +40,9 @@ public class UIPointer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float maxProg = 1.0f; 
+	
+		float maxProg = InteractionManager.GetPointerHighlightProgress(_type); 
+		print (maxProg);
 		float thick = Mathf.Lerp (ThicknessNormal, ThicknessHighlighted, maxProg);
 		float scale = Mathf.Lerp(RadiusNormal, RadiusHighlighted, maxProg);
 		

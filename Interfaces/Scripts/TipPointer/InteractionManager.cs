@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public static class InteractionManager {
 
+	private static float TriggerDistance = 0.2f;
+
+
+
 	static Dictionary<PointerType, Vector3> _pointerPosDict = new Dictionary<PointerType, Vector3>();
-	static Dictionary<string, Vector3> _itemPosDict = new Dictionary<string, Vector3> ();
+	static Dictionary<int, Vector3> _itemPosDict = new Dictionary<int, Vector3> ();
 
 	public static bool HasPointer(PointerType type) 
 	{
@@ -33,29 +38,47 @@ public static class InteractionManager {
 	}
 
 
-	public static bool HasItemPath(string path) 
+	public static bool HasItemId(int id) 
 	{
-		if (_itemPosDict.ContainsKey (path))
+		if (_itemPosDict.ContainsKey (id))
 			return true;
 		return false;
 	}
 
-	public static void SetItemPos(string path, Vector3 pos)
+	public static void SetItemPos(int id, Vector3 pos)
 	{
-		if (_itemPosDict.ContainsKey (path)) {
-			_itemPosDict [path] = pos;
+		if (_itemPosDict.ContainsKey (id)) {
+			_itemPosDict [id] = pos;
 		} else {
-			_itemPosDict.Add (path, pos);
+			_itemPosDict.Add (id, pos);
 		}
 	}
 
-	public static Vector3 GetItemPos(string path)
+	public static Vector3 GetItemPos(int id)
 	{
-		if (_itemPosDict.ContainsKey (path)) {
-			return _itemPosDict[path];
+		if (_itemPosDict.ContainsKey (id)) {
+			return _itemPosDict[id];
 		} else {
 			return Vector3.zero;
 		}
+	}
+
+	public static float findNearestItemDistance(Vector3 pos) {
+		float nearestDis = 999.0f;
+
+		foreach (int key in _itemPosDict.Keys) {
+			nearestDis = Math.Min (nearestDis, Vector3.Distance(pos, _itemPosDict[key])); 
+		}
+		return nearestDis;
+	}
+
+
+	public static float GetPointerHighlightProgress(PointerType type) {
+
+		float nearestDis = findNearestItemDistance (_pointerPosDict [type]);
+
+		return (TriggerDistance / nearestDis);
+
 	}
 
 }

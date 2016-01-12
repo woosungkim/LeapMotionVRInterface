@@ -21,7 +21,7 @@ public class Pointer : MonoBehaviour {
 		_pointerRendererObj.transform.SetParent (gameObject.transform, false);
 
 		_uiPointer = _pointerRendererObj.AddComponent<UIPointer> ();
-		_uiPointer.Build ();
+		_uiPointer.Build (_type);
 	}
 
 
@@ -32,6 +32,8 @@ public class Pointer : MonoBehaviour {
 	void Update() {
 		// Save current object position to interaction hashtable
 		InteractionManager.SetPointerPos (_type, gameObject.transform.position);
+
+
 
 	}
 

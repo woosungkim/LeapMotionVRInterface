@@ -9,10 +9,16 @@ public class ShortcutController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		// set shortcut inside of camera
 		gameObject.transform.SetParent (_Camera.transform, false);
+	
+		Vector3 pos = new Vector3 (_ShortcutSetting.X, _ShortcutSetting.Y, _ShortcutSetting.Z);
+		gameObject.transform.position = Camera.main.ViewportToWorldPoint (pos);
+		gameObject.transform.rotation = Quaternion.LookRotation(_Camera.transform.up);
 
-		_ItemHierarchy.Build (_ShortcutSetting, _Camera);
 
+		// item hierarchy build
+		_ItemHierarchy.Build (_ShortcutSetting);
 	}
 	
 	// Update is called once per frame

@@ -42,7 +42,6 @@ public class UIPointer : MonoBehaviour {
 	void Update () {
 	
 		float maxProg = InteractionManager.GetPointerHighlightProgress(_type); 
-		print (maxProg);
 		float thick = Mathf.Lerp (ThicknessNormal, ThicknessHighlighted, maxProg);
 		float scale = Mathf.Lerp(RadiusNormal, RadiusHighlighted, maxProg);
 		

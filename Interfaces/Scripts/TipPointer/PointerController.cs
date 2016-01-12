@@ -59,7 +59,7 @@ public class PointerController : MonoBehaviour {
 						GameObject pointerObj = _pointerDict[type];
 
 						Transform pointerTransform = pointerObj.transform;
-						pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+						pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
 						pointerTransform.localRotation = Quaternion.identity;
 
                         //print(ConvertPosInFrustum(finger.TipPosition.ToUnity()));

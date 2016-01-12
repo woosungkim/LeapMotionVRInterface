@@ -6,9 +6,7 @@ using System;
 public static class InteractionManager {
 
 	private static float TriggerDistance = 0.2f;
-
-
-
+	
 	static Dictionary<PointerType, Vector3> _pointerPosDict = new Dictionary<PointerType, Vector3>();
 	static Dictionary<int, Vector3> _itemPosDict = new Dictionary<int, Vector3> ();
 
@@ -63,6 +61,16 @@ public static class InteractionManager {
 		}
 	}
 
+
+	public static float findNearestPointerDistance(Vector3 pos) {
+		float nearestDis = 999.0f;
+
+		foreach (PointerType type in _pointerPosDict.Keys) {
+			nearestDis = Math.Min (nearestDis, Vector3.Distance(pos, _pointerPosDict[type]));
+		}
+		return nearestDis;
+	}
+
 	public static float findNearestItemDistance(Vector3 pos) {
 		float nearestDis = 999.0f;
 
@@ -72,6 +80,14 @@ public static class InteractionManager {
 		return nearestDis;
 	}
 
+
+
+	public static float GetItemHighlightProgress(int id) {
+		float nearestDis = findNearestPointerDistance (_itemPosDict [id]);
+
+		return (TriggerDistance / nearestDis);
+
+	}
 
 	public static float GetPointerHighlightProgress(PointerType type) {
 

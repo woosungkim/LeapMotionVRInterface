@@ -31,4 +31,13 @@ public static class Converter {
 		return toPos;
 	}
 
+	public static Vector3 ConvertPosInFrustumVR(Vector3 fromPos) {
+		
+		Vector3 toPos = new Vector3( 1-((fromPos.x+150.0f)/300.0f), 
+		                            ((fromPos.z+150.0f)/300.0f),
+		                            (fromPos.y/300.0f));
+		
+		return toPos;
+	}
+
 }

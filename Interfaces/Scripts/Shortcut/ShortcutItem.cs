@@ -15,7 +15,6 @@ public class ShortcutItem : MonoBehaviour {
 
 	private int _id;
 
-
 	private ShortcutSetting _setting;
 
 	private GameObject rendererObj;
@@ -23,6 +22,7 @@ public class ShortcutItem : MonoBehaviour {
 	private GameObject focusingObj;
 	private GameObject selectingObj;
 	private GameObject labelObj;
+	private GameObject centerObj;
 
 	private UIArcItem _uiArcItemBg;
 	private UIArcItem _uiArcItemFs; 
@@ -78,19 +78,27 @@ public class ShortcutItem : MonoBehaviour {
 		labelObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.right);
 		labelObj.transform.localScale = new Vector3(1, 1, 1);
 
+		centerObj = new GameObject("Center");
+		centerObj.transform.SetParent (rendererObj.transform, false);
+		centerObj.transform.localPosition = new Vector3 (0, 0, setting.InnerRadius + (setting.Thickness / 2));
+
+
 		_uiLabel = labelObj.AddComponent<UILabel>();
 		_uiLabel.Label = " "+_Label;
-	
+		_uiLabel.Font = setting.FontName;
+		_uiLabel.Color = Color.black;
 
 		// interaction setting
-		InteractionManager.SetItemPos (_id, labelObj.transform.position);
+		InteractionManager.SetItemPos (_id, Camera.main.WorldToViewportPoint(centerObj.transform.position));
+
 	}
 
 
 	void Update() {
 
 		if (InteractionManager.HasItemId (_id)) {
-			InteractionManager.SetItemPos (_id, labelObj.transform.position);
+			InteractionManager.SetItemPos (_id, Camera.main.WorldToViewportPoint(centerObj.transform.position));
+			//print (Camera.main.WorldToViewportPoint(labelObj.transform.position));
 			float prog = InteractionManager.GetItemHighlightProgress(_id);
 
 			float focusStart = 0.8f;

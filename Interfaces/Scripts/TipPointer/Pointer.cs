@@ -31,9 +31,6 @@ public class Pointer : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		// Save current object position to interaction hashtable
-		InteractionManager.SetPointerPos (_type, gameObject.transform.position);
-
-
 
 	}
 

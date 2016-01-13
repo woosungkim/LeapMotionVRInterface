@@ -66,8 +66,12 @@ public static class InteractionManager {
 		float nearestDis = 999.0f;
 
 		foreach (PointerType type in _pointerPosDict.Keys) {
-			nearestDis = Math.Min (nearestDis, Vector3.Distance(pos, _pointerPosDict[type]));
+			//nearestDis = Math.Min (nearestDis, Vector3.Distance(pos, _pointerPosDict[type]));
+			nearestDis = Math.Min (nearestDis, Vector2.Distance((Vector2)pos, (Vector2)_pointerPosDict[type]));
+			//Debug.Log ("Item : " + (Vector2)pos);
 		}
+
+
 		return nearestDis;
 	}
 
@@ -75,7 +79,8 @@ public static class InteractionManager {
 		float nearestDis = 999.0f;
 
 		foreach (int key in _itemPosDict.Keys) {
-			nearestDis = Math.Min (nearestDis, Vector3.Distance(pos, _itemPosDict[key])); 
+			nearestDis = Math.Min (nearestDis, Vector2.Distance((Vector2)pos, (Vector2)_itemPosDict[key])); 
+			//Debug.Log ("Pointer : " + (Vector2)pos);
 		}
 		return nearestDis;
 	}

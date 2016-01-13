@@ -35,7 +35,7 @@ public class PointerController : MonoBehaviour {
 			pointerObj.transform.SetParent (pointersObj.transform, false);
 
 			_pointerDict.Add (type, pointerObj);
-			InteractionManager.SetPointerPos(type, pointerObj.transform.position);
+			InteractionManager.SetPointerPos(type, Camera.main.WorldToViewportPoint(pointerObj.transform.position));
 
 
 			Pointer pointer = pointerObj.AddComponent<Pointer>();
@@ -59,10 +59,17 @@ public class PointerController : MonoBehaviour {
 						GameObject pointerObj = _pointerDict[type];
 
 						Transform pointerTransform = pointerObj.transform;
-						pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+		
+						InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+						if (_PointerSetting._MountType == MountType.TableMount) {
+							pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+						} else if (_PointerSetting._MountType == MountType.HeadMount) {
+							pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+						}
+						//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+
 						pointerTransform.localRotation = Quaternion.identity;
 
-                        //print(ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 
 						Vector3 camWorld = _Camera.TransformPoint (Vector3.zero);
 						Vector3 camLocal = pointerTransform.InverseTransformPoint (camWorld);

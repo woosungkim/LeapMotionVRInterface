@@ -10,6 +10,10 @@ public class UILabel : MonoBehaviour {
 	private GameObject canvasObj;
 	private GameObject textObj;
 
+	private Text _text;
+	private string _fontName;
+	private Color _color;
+
 	public void Awake() {
 		canvasGroupObj = new GameObject ("CanvasGroup");
 		canvasGroupObj.transform.SetParent(gameObject.transform, false);
@@ -33,19 +37,15 @@ public class UILabel : MonoBehaviour {
 		textObj = new GameObject ("Text");
 		textObj.transform.SetParent (canvasObj.transform, false);
 		
-		Text text = textObj.AddComponent<Text> ();
+		_text = textObj.AddComponent<Text> ();
 
 
-		text.GetComponent<Text> ().alignment = TextAnchor.MiddleLeft;
+		_text.GetComponent<Text> ().alignment = TextAnchor.MiddleLeft;
 
 		/*********************************************************/
 		
-		text.material = Materials.GetTextLayer (text.material, 1);
+		_text.material = Materials.GetTextLayer (_text.material, 1);
 		/*********************************************************/
-		
-		string fontName = "Tahoma";
-		text.font = Resources.Load<Font> ("Fonts/"+fontName);
-		text.color = Color.black;
 
 	}
 
@@ -56,6 +56,28 @@ public class UILabel : MonoBehaviour {
 		set {
 			textObj.GetComponent<Text>().text = value;
 		}
+	}
+
+	public string Font {
+		get {
+			return _fontName;
+		}
+		set {
+			_fontName = value;
+			_text.font = Resources.Load<Font> ("Fonts/"+_fontName);
+		}
+
+	}
+
+	public Color Color {
+		get {
+			return _color;
+		}
+		set {
+			_color = value;
+			_text.color = _color;
+		}
+
 	}
 
 

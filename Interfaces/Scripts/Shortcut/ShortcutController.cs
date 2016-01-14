@@ -25,4 +25,12 @@ public class ShortcutController : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void Appear() {
+
+	}
+
+	public void Disappear() {
+
+	}
 }

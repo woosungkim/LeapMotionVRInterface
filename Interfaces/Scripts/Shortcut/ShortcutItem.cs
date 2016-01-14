@@ -36,7 +36,7 @@ public class ShortcutItem : MonoBehaviour {
 
 	private float _selectProg = 0.0f;
 
-	internal void Build(ShortcutSetting setting) {
+	internal void Build(ShortcutSetting setting, GameObject uiItem) {
 		_id = ShortcutUtil.ItemAutoId;
 		_setting = setting;
 
@@ -52,7 +52,7 @@ public class ShortcutItem : MonoBehaviour {
 
 		// make renderer gameobject
 		rendererObj = new GameObject ("Renderer");
-		rendererObj.transform.SetParent (gameObject.transform, false);
+		rendererObj.transform.SetParent (uiItem.transform, false);
 
 		// build arc item background ui
 		backgroundObj = new GameObject ("Background");

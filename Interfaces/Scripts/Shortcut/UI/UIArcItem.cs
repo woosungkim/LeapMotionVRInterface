@@ -3,6 +3,8 @@ using System.Collections;
 using System;
 
 public class UIArcItem : MonoBehaviour {
+
+	ShortcutItemSettings _iSettings;
 	
 	private float _innerRadius;
 	private float _outerRadius;
@@ -12,18 +14,15 @@ public class UIArcItem : MonoBehaviour {
 	private int _meshStep;
 
 	
-	private Color backgroundColor = new Color (0.1f, 0.1f, 0.1f, 0.5f);
-	private Color focusingColor = new Color (0.5f, 0.5f, 0.5f, 0.5f);
-	private Color seiectingColor = new Color (0.8f, 0.8f, 0.8f, 0.5f);
-	
 	MeshFilter _filter;
 	MeshBuilder _meshBuilder;
 	
-	internal void Build(ShortcutSetting setting)
+	internal void Build(ShortcutItemSettings iSettings)
 	{
-		
+		_iSettings = iSettings;
+
 		float toDegree = 180 / (float)Mathf.PI;
-		float eachItemAngle = setting.EachItemDegree / toDegree;
+		float eachItemAngle = _iSettings.EachItemDegree / toDegree;
 
 		_startAngle = -(eachItemAngle/2);
 		_endAngle = eachItemAngle/2;

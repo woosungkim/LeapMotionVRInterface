@@ -44,33 +44,6 @@ public static class MeshNative {
 		}
 	}
 
-	
-	public static void BuildCircleMesh(MeshBuilder meshBuilder,
-	                                   float radius,
-	                                   int steps) {
-		const float angleFull = (float)Math.PI*2;
-		float angleInc = angleFull/steps;
-		float angle = 0;
-		
-		meshBuilder.Resize(steps+2, steps*3);
-		
-		meshBuilder.AddVertex(Vector3.zero);
-		meshBuilder.AddUv(new Vector2(0, 0));
-		
-		for ( int i = 0 ; i <= steps ; ++i ) {
-			meshBuilder.AddVertex(GetArcPoint(radius, angle));
-			meshBuilder.AddUv(new Vector2(i/(float)steps, 1));
-			
-			if ( i > 0 ) {
-				int vi = meshBuilder.VertexIndex;
-				meshBuilder.AddTriangle(0, vi-2, vi-1);
-			}
-			
-			angle += angleInc;
-		}
-	}
-
-
 	public static void BuildRectangleMesh(MeshBuilder meshBuilder, 
 	                                      float width,
 	                                      float height, 

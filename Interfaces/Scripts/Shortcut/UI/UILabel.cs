@@ -12,6 +12,7 @@ public class UILabel : MonoBehaviour {
 
 	private Text _text;
 	private string _fontName;
+	private int _size;
 	private Color _color;
 
 	public void Awake() {
@@ -65,6 +66,17 @@ public class UILabel : MonoBehaviour {
 		set {
 			_fontName = value;
 			_text.font = Resources.Load<Font> ("Fonts/"+_fontName);
+		}
+
+	}
+
+	public int Size {
+		get {
+			return _size;
+		}
+		set {
+			_size = value;
+			_text.fontSize = _size;
 		}
 
 	}

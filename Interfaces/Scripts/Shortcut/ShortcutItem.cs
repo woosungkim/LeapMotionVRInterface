@@ -8,9 +8,9 @@ public class ShortcutItem : MonoBehaviour {
 	public string _Label = "";
 	public EventScript action;
 
-	private Color backgroundColor = new Color (0.1f, 0.1f, 0.1f, 0.5f);
-	private Color focusingColor = new Color (0.5f, 0.5f, 0.5f, 0.5f);
-	private Color selectingColor = new Color (0.8f, 0.8f, 0.8f, 0.5f);
+	private Color _backgroundColor;
+	private Color _focusingColor;
+	private Color _selectingColor;
 
 	
 	private float _innerRadius;
@@ -20,7 +20,8 @@ public class ShortcutItem : MonoBehaviour {
 
 	private int _id;
 
-	private ShortcutSetting _setting;
+	private ShortcutSettings _sSettings;
+	private ShortcutItemSettings _iSettings;
 
 	private GameObject _parentObj;
 
@@ -53,16 +54,21 @@ public class ShortcutItem : MonoBehaviour {
 	}
 
 
-	internal void Build(ShortcutSetting setting, GameObject parentObj) {
+	internal void Build(ShortcutSettings sSettings, ShortcutItemSettings iSettings, GameObject parentObj) {
 		/***** variables setting *****/
 		_id = ShortcutUtil.ItemAutoId;
 
-		_setting = setting;
+		_sSettings = sSettings;
+		_iSettings = iSettings;
 		_parentObj = parentObj;
 
-		_innerRadius = _setting.InnerRadius;
-		_outerRadius = _setting.InnerRadius + _setting.Thickness;
-		_thickness = _setting.Thickness;
+		_innerRadius = _iSettings.InnerRadius;
+		_outerRadius = _iSettings.InnerRadius + _iSettings.Thickness;
+		_thickness = _iSettings.Thickness;
+
+		_backgroundColor = _iSettings.BackgroundColor;
+		_focusingColor = _iSettings.FocusingColor;
+		_selectingColor = _iSettings.SelectingColor;
 
 		// rendering
 		Rendering ();
@@ -104,24 +110,24 @@ public class ShortcutItem : MonoBehaviour {
 								
 							}
 							// select ui update
-							_uiArcItemBg.UpdateMesh (0.0f, 0.0f, backgroundColor);
-							_uiArcItemFs.UpdateMesh (_innerRadius + (_thickness * _selectProg), _innerRadius + (_thickness * focusProg), focusingColor);
-							_uiArcItemSt.UpdateMesh (_innerRadius, _innerRadius + (_thickness * _selectProg), selectingColor);
+							_uiArcItemBg.UpdateMesh (0.0f, 0.0f, _backgroundColor);
+							_uiArcItemFs.UpdateMesh (_innerRadius + (_thickness * _selectProg), _innerRadius + (_thickness * focusProg), _focusingColor);
+							_uiArcItemSt.UpdateMesh (_innerRadius, _innerRadius + (_thickness * _selectProg), _selectingColor);
 							
 						} else {
 							_selectProg = 0.0f;
 							_isSelected = false;
 							// focus ui update
-							_uiArcItemBg.UpdateMesh (_innerRadius + (_thickness * focusProg), _outerRadius, backgroundColor);
-							_uiArcItemFs.UpdateMesh (_innerRadius, _innerRadius + (_thickness * focusProg), focusingColor);
-							_uiArcItemSt.UpdateMesh (0.0f, 0.0f, selectingColor);
+							_uiArcItemBg.UpdateMesh (_innerRadius + (_thickness * focusProg), _outerRadius, _backgroundColor);
+							_uiArcItemFs.UpdateMesh (_innerRadius, _innerRadius + (_thickness * focusProg), _focusingColor);
+							_uiArcItemSt.UpdateMesh (0.0f, 0.0f, _selectingColor);
 						}
 						
 					} else { // is non focusing
 						// general ui update
-						_uiArcItemBg.UpdateMesh (_innerRadius, _outerRadius, backgroundColor);
-						_uiArcItemFs.UpdateMesh (0.0f, 0.0f, focusingColor);
-						_uiArcItemSt.UpdateMesh (0.0f, 0.0f, selectingColor);
+						_uiArcItemBg.UpdateMesh (_innerRadius, _outerRadius, _backgroundColor);
+						_uiArcItemFs.UpdateMesh (0.0f, 0.0f, _focusingColor);
+						_uiArcItemSt.UpdateMesh (0.0f, 0.0f, _selectingColor);
 					}
 					
 					/****************************************/
@@ -141,7 +147,7 @@ public class ShortcutItem : MonoBehaviour {
 		switch (_ItemType) {
 		case (ItemType.Parent) :
 			ShortcutItemLayer layer = Getter.GetChildLayerFromGameObject (gameObject);
-			layer.Build (_setting, gameObject);
+			layer.Build (_sSettings, _iSettings, gameObject);
 			_curlayer.GetComponent<UILayer>().DisappearLayer();
 			break;
 		case (ItemType.NormalButton) :
@@ -164,37 +170,59 @@ public class ShortcutItem : MonoBehaviour {
 		// center pivot position setting
 		centerObj = new GameObject("Center");
 		centerObj.transform.SetParent (rendererObj.transform, false);
-		centerObj.transform.localPosition = new Vector3 (0, 0, _setting.InnerRadius + (_setting.Thickness / 2));
+		centerObj.transform.localPosition = new Vector3 (0, 0, _iSettings.InnerRadius + (_iSettings.Thickness / 2));
 		
 		// build arc item background ui
 		backgroundObj = new GameObject ("Background");
 		backgroundObj.transform.SetParent (rendererObj.transform, false);
 		_uiArcItemBg = backgroundObj.AddComponent<UIArcItem> ();
-		_uiArcItemBg.Build (_setting);
-		_uiArcItemBg.UpdateMesh(_innerRadius, _outerRadius, backgroundColor);
+		_uiArcItemBg.Build (_iSettings);
+		_uiArcItemBg.UpdateMesh(_innerRadius, _outerRadius, _backgroundColor);
 		
 		focusingObj = new GameObject ("Focusing");
 		focusingObj.transform.SetParent (rendererObj.transform, false);
 		_uiArcItemFs = focusingObj.AddComponent<UIArcItem> ();
-		_uiArcItemFs.Build (_setting);
+		_uiArcItemFs.Build (_iSettings);
 		
 		selectingObj = new GameObject ("Selecting");
 		selectingObj.transform.SetParent (rendererObj.transform, false);
 		_uiArcItemSt = selectingObj.AddComponent<UIArcItem> ();
-		_uiArcItemSt.Build (_setting);
+		_uiArcItemSt.Build (_iSettings);
 		
 		// build item label ui
 		labelObj = new GameObject ("Label");
 		labelObj.transform.SetParent(rendererObj.transform, false);
-		labelObj.transform.localPosition = new Vector3(0, 0, _setting.InnerRadius);
+		labelObj.transform.localPosition = new Vector3(0, 0, _iSettings.InnerRadius);
 		labelObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.right);
 		labelObj.transform.localScale = new Vector3(1, 1, 1);
 		
 		_uiLabel = labelObj.AddComponent<UILabel>();
 		_uiLabel.Label = " "+_Label;
-		_uiLabel.Font = _setting.FontName;
-		_uiLabel.Color = Color.black;
+		_uiLabel.Font = _iSettings.TextFont;
+		_uiLabel.Size = _iSettings.TextSize;
+		_uiLabel.Color = _iSettings.TextColor; 
 
+
+		// each type's ui
+		switch (_ItemType) {
+		case (ItemType.Parent) :
+			GameObject labelHasChildObj = new GameObject ("HasChildArrow");
+			labelHasChildObj.transform.SetParent (rendererObj.transform, false);
+			labelHasChildObj.transform.localPosition = new Vector3(0, 0, _iSettings.InnerRadius+_iSettings.Thickness);
+			labelHasChildObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.right);
+			labelHasChildObj.transform.localScale = new Vector3(1, 1, 1);
+
+			UILabelHasChild uiLabelHasChild = labelHasChildObj.AddComponent<UILabelHasChild>();
+			uiLabelHasChild.Font = _iSettings.TextFont;
+			uiLabelHasChild.Size = _iSettings.TextSize;
+			uiLabelHasChild.Color = _iSettings.TextColor;
+			break;
+		case (ItemType.NormalButton) :
+
+			break;
+		default :
+			break;
+		}
 
 	}
 }

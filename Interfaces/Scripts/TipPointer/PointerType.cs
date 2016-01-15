@@ -1,10 +1,10 @@
 ﻿
 
 public enum PointerType {
-	RIGHT_THUMB,
-	RIGHT_INDEX,
-	RIGHT_MIDDLE,
-	RIGHT_RING,
-	RIGHT_PINKY,
-	NULL
+	RightThumb,
+	RightIndex,
+	RightMiddle,
+	RightRing,
+	RightPinky,
+	Null
 }

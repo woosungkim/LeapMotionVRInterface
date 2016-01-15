@@ -13,9 +13,8 @@ public class Pointer : MonoBehaviour {
 	private UIPointer _uiPointer;
 
 
-    public void Build(PointerType type, Transform cameraTransform) {
+    public void Build(PointerType type) {
 		_type = type;
-		_cameraTransform = cameraTransform;
 
 		_pointerRendererObj = new GameObject ("Renderer");
 		_pointerRendererObj.transform.SetParent (gameObject.transform, false);

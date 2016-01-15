@@ -9,15 +9,15 @@ public static class Converter {
 	{
 		if (hand.IsRight) {
 			switch (fingerType) {
-			case Finger.FingerType.TYPE_THUMB: return PointerType.RIGHT_THUMB;
-			case Finger.FingerType.TYPE_INDEX: return PointerType.RIGHT_INDEX;
-			case Finger.FingerType.TYPE_MIDDLE: return PointerType.RIGHT_MIDDLE;
-			case Finger.FingerType.TYPE_RING: return PointerType.RIGHT_RING;
-			case Finger.FingerType.TYPE_PINKY: return PointerType.RIGHT_PINKY;
+			case Finger.FingerType.TYPE_THUMB: return PointerType.RightThumb;
+			case Finger.FingerType.TYPE_INDEX: return PointerType.RightIndex;
+			case Finger.FingerType.TYPE_MIDDLE: return PointerType.RightMiddle;
+			case Finger.FingerType.TYPE_RING: return PointerType.RightRing;
+			case Finger.FingerType.TYPE_PINKY: return PointerType.RightPinky;
 			}
 		}
 		
-		return PointerType.NULL;
+		return PointerType.Null;
 		
 	}
 

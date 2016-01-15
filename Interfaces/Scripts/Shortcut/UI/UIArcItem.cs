@@ -10,8 +10,7 @@ public class UIArcItem : MonoBehaviour {
 	private float _startAngle;
 	private float _endAngle;
 	private int _meshStep;
-	
-	private int _id;
+
 	
 	private Color backgroundColor = new Color (0.1f, 0.1f, 0.1f, 0.5f);
 	private Color focusingColor = new Color (0.5f, 0.5f, 0.5f, 0.5f);
@@ -20,9 +19,8 @@ public class UIArcItem : MonoBehaviour {
 	MeshFilter _filter;
 	MeshBuilder _meshBuilder;
 	
-	internal void Build(ShortcutSetting setting, int id)
+	internal void Build(ShortcutSetting setting)
 	{
-		_id = id;
 		
 		float toDegree = 180 / (float)Mathf.PI;
 		float eachItemAngle = setting.EachItemDegree / toDegree;

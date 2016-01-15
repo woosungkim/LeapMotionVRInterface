@@ -6,11 +6,9 @@ public class ItemHierarchy : MonoBehaviour {
 
 	internal void Build(ShortcutSetting setting) {
 
-		ItemLayer layer = Getter.GetChildLayerFromGameObject (gameObject);
+		ShortcutItemLayer layer = Getter.GetChildLayerFromGameObject (gameObject);
 
-		layer.Build (setting);
-
-
+		layer.Build (setting, gameObject);
 
 	}
 

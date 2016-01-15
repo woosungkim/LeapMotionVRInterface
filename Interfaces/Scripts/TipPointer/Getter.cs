@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public static class Getter {
 
 
-	public static ItemLayer GetChildLayerFromGameObject(GameObject parentObj)
+	public static ShortcutItemLayer GetChildLayerFromGameObject(GameObject parentObj)
 	{
 		Transform transform = parentObj.transform;
 		
-		ItemLayer layer = transform.GetChild (0).GetComponent<ItemLayer>();
+		ShortcutItemLayer layer = transform.GetChild (0).GetComponent<ShortcutItemLayer>();
 		
 		return layer;
 	}

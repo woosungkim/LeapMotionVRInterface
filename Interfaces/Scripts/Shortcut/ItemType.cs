@@ -1,5 +1,5 @@
 ﻿
 public enum ItemType {
 	Parent,
-	Button
+	NormalButton
 }

@@ -4,7 +4,7 @@ using System;
 
 public class UIArcItem : MonoBehaviour {
 
-	ShortcutItemSettings _iSettings;
+	ItemSettings _iSettings;
 	
 	private float _innerRadius;
 	private float _outerRadius;
@@ -17,7 +17,7 @@ public class UIArcItem : MonoBehaviour {
 	MeshFilter _filter;
 	MeshBuilder _meshBuilder;
 	
-	internal void Build(ShortcutItemSettings iSettings)
+	internal void Build(ItemSettings iSettings)
 	{
 		_iSettings = iSettings;
 

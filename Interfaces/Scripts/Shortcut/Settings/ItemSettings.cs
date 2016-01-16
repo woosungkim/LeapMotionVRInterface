@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShortcutItemSettings : MonoBehaviour {
+public class ItemSettings : MonoBehaviour {
 
 	public string TextFont = "Tahoma";
 	public Color TextColor = Color.black;
 	public int TextSize = 12;
 
+	public string CancelItemLabel = "Cancel";
+	
 	public Color BackgroundColor = new Color (0.1f, 0.1f, 0.1f, 0.5f);
 	public Color FocusingColor = new Color (0.5f, 0.5f, 0.5f, 0.5f);
 	public Color SelectingColor = new Color (0.8f, 0.8f, 0.8f, 0.5f);
@@ -15,5 +17,4 @@ public class ShortcutItemSettings : MonoBehaviour {
 	public float Thickness = 0.2f;
 	
 	public float EachItemDegree = 30.0f;
-
 }

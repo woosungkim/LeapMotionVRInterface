@@ -8,6 +8,16 @@ public class ShortcutItem : MonoBehaviour {
 	public string _Label = "";
 	public EventScript action;
 
+    private bool _isCancelItem = false;
+    public bool IsCancelItem {
+        get {
+            return _isCancelItem;
+        }
+        set {
+            _isCancelItem = value;
+        }
+    }
+
 	private Color _backgroundColor;
 	private Color _focusingColor;
 	private Color _selectingColor;
@@ -21,7 +31,7 @@ public class ShortcutItem : MonoBehaviour {
 	private int _id;
 
 	private ShortcutSettings _sSettings;
-	private ShortcutItemSettings _iSettings;
+	private ItemSettings _iSettings;
 
 	private GameObject _parentObj;
 
@@ -43,18 +53,20 @@ public class ShortcutItem : MonoBehaviour {
 	private float _selectSpeed = 0.01f;
 	private bool _isSelected = false;
 
-	private GameObject _curlayer;
-	public GameObject Layer {
+	private ShortcutItemLayer _nextLayer = null;
+
+	private ShortcutItemLayer _curLayer;
+	public ShortcutItemLayer Layer {
 		get {
-			return _curlayer;
+			return _curLayer;
 		}
 		set {
-			_curlayer = value;
+			_curLayer = value;
 		}
 	}
 
 
-	internal void Build(ShortcutSettings sSettings, ShortcutItemSettings iSettings, GameObject parentObj) {
+	internal void Build(ShortcutSettings sSettings, ItemSettings iSettings, GameObject parentObj) {
 		/***** variables setting *****/
 		_id = ShortcutUtil.ItemAutoId;
 
@@ -80,9 +92,9 @@ public class ShortcutItem : MonoBehaviour {
 
 
 	void Update() {
-		if (_curlayer != null) {
+		if (_curLayer != null) {
 			if (InteractionManager.HasItemId (_id)) {
-				if (_curlayer.GetComponent<UILayer> ().IsCurrentLayer) {
+				if (_curLayer.UILayer.IsCurrentLayer) {
 					// register this item pos to interaction manager
 					InteractionManager.SetItemPos (_id, Camera.main.WorldToViewportPoint (centerObj.transform.position));
 					
@@ -146,13 +158,34 @@ public class ShortcutItem : MonoBehaviour {
 	private void SelectAction() {
 		switch (_ItemType) {
 		case (ItemType.Parent) :
-			ShortcutItemLayer layer = Getter.GetChildLayerFromGameObject (gameObject);
-			layer.Build (_sSettings, _iSettings, gameObject);
-			_curlayer.GetComponent<UILayer>().DisappearLayer();
+			if (_nextLayer == null) {
+				_nextLayer = Getter.GetChildLayerFromGameObject (gameObject);
+				_nextLayer.Level = _curLayer.Level+1;
+				_nextLayer.PrevLayer = _curLayer;
+				
+				_nextLayer.Build (_sSettings, _iSettings, gameObject);
+			}
+			else {
+				_nextLayer.UILayer.AppearLayer(_nextLayer.Level - _curLayer.Level);
+			}
+			_curLayer.UILayer.DisappearLayer(_nextLayer.Level - _curLayer.Level);
+
+			//print ("curLevel : " + _curLayer.Level + "  nextLevel : " + _nextLayer.Level);
 			break;
 		case (ItemType.NormalButton) :
+			if (_isCancelItem) { // action for cancel item
+				ShortcutItemLayer prevLayer = _curLayer.PrevLayer;
+				prevLayer.UILayer.AppearLayer(prevLayer.Level - _curLayer.Level);
+				_curLayer.UILayer.DisappearLayer(prevLayer.Level - _curLayer.Level);
+
+				//print ("curLevel : " + _curLayer.Level + "  nextLevel : " + prevLayer.Level);
+				break;
+			}
 			if (action != null) {
 				action.ClickAction ();
+			}
+			else {
+				print ("action script is empty");
 			}
 			break;
 		default :

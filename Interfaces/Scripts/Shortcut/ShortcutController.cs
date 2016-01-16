@@ -4,7 +4,7 @@ using System.Collections;
 public class ShortcutController : MonoBehaviour {
 
 	public ShortcutSettings _ShortcutSettings;
-	public ShortcutItemSettings _ShortcutItemSettings;
+	public ItemSettings _ItemSettings;
 	public ItemHierarchy _ItemHierarchy;
 	public Transform _Camera;
 	
@@ -20,7 +20,8 @@ public class ShortcutController : MonoBehaviour {
 		gameObject.transform.localScale = Vector3.one * _ShortcutSettings.ScaleCoeff;
 
 		// item hierarchy build
-		_ItemHierarchy.Build (_ShortcutSettings, _ShortcutItemSettings);
+		_ItemHierarchy.Build (_ShortcutSettings, _ItemSettings);
+
 	}
 	
 	// Update is called once per frame

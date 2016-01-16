@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 public class ItemHierarchy : MonoBehaviour {
 
-	internal void Build(ShortcutSettings sSettings, ShortcutItemSettings iSettings ) {
+	internal void Build(ShortcutSettings sSettings, ItemSettings iSettings ) {
 
 		ShortcutItemLayer layer = Getter.GetChildLayerFromGameObject (gameObject);
 
 		layer.Build (sSettings, iSettings, gameObject);
+
 
 	}
 

@@ -6,11 +6,15 @@ public class UILayer : MonoBehaviour {
 	private float _scale = 0.0f;
 	private float _appearRate = 0.02f;
 
-	private float _appearStart = 2.0f;
+	private float _outScale = 2.0f;
 	private float _normalScale = 1.0f;
-	private float _disappearEnd = 0.0f;
+	private float _inScale = 0.0f;
 
 	private bool _appearAnimFlag = false;
+	private bool _disappearAnimFlag = false;
+
+	private int _aDirection = 0; // appear direction
+	private int _dDirection = 0; // disappear direction
 
 	private bool _isCurrentLayer = false;
 	public bool IsCurrentLayer {
@@ -19,29 +23,33 @@ public class UILayer : MonoBehaviour {
 		}
 	}
 	
-	private bool _disappearAnimFlag = false;
-
 
 	internal void Build(ShortcutSettings sSettings, ShortcutItemSettings iSettings) {
-
-
 
 	}
 	
 
-	public void AppearLayer() {
+	public void AppearLayer(int direction) {
 		gameObject.SetActive (true);
-		_appearAnimFlag = true;
-		_scale = _appearStart;
+		_aDirection = direction;
+		if (direction > 0) {
+			_scale = _outScale;
+		} 
+        else {
+			_scale = _inScale;
+		}
 
 		_isCurrentLayer = true;
+        _appearAnimFlag = true;
 	}
 
-	public void DisappearLayer() {
-		_disappearAnimFlag = true;
+	public void DisappearLayer(int direction) {
+		
+		_dDirection = direction;
 		_scale = _normalScale;
 
 		_isCurrentLayer = false;
+        _disappearAnimFlag = true;
 	}
 
 	void Update() {
@@ -56,23 +64,43 @@ public class UILayer : MonoBehaviour {
 
 	
 	void AppearAnimation() {
-		_scale -= _appearRate;
-		gameObject.transform.localScale = Vector3.one * _scale;
-		
-		if (_scale <= _normalScale) {
-			_appearAnimFlag = false;
+		if (_aDirection > 0) {
+			_scale -= _appearRate;
+			gameObject.transform.localScale = Vector3.one * _scale;
 			
+			if (_scale <= _normalScale) {
+				_appearAnimFlag = false;
+			}
+		} 
+		else {
+			_scale += _appearRate;
+
+			gameObject.transform.localScale = Vector3.one * _scale;
+			if (_scale >= _normalScale) {
+				_appearAnimFlag = false;
+			}
 		}
-		
 	}
 
 	void DisappearAnimation() {
-		_scale -= _appearRate;
-		gameObject.transform.localScale = Vector3.one * _scale;
+		if (_dDirection > 0) {
+			_scale -= _appearRate;
+			gameObject.transform.localScale = Vector3.one * _scale;
 
-		if (_scale <= _disappearEnd) {
-			_disappearAnimFlag = false;
-			gameObject.SetActive(false);
+			if (_scale <= _inScale) {
+				_disappearAnimFlag = false;
+				gameObject.SetActive(false);
+			}
+		}
+		else {
+			_scale += _appearRate;
+			gameObject.transform.localScale = Vector3.one * _scale;
+			
+			if (_scale >= _outScale) {
+				_disappearAnimFlag = false;
+				gameObject.SetActive(false);
+			}
 		}
 	}
+
 }

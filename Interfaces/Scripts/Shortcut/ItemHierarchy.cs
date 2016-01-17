@@ -4,23 +4,36 @@ using System.Collections.Generic;
 
 public class ItemHierarchy : MonoBehaviour {
 
-	internal void Build(ShortcutSettings sSettings, ItemSettings iSettings ) {
+	private ShortcutItemLayer layer;
+	private bool isAppearing = true;
 
-		ShortcutItemLayer layer = Getter.GetChildLayerFromGameObject (gameObject);
+	internal void Build(ShortcutSettings sSettings, GameObject parentObj) {
 
-		layer.Build (sSettings, iSettings, gameObject);
+		layer = Getter.GetChildLayerFromGameObject (gameObject);
 
-
-	}
-
-	void Update()
-	{
-
-
+		layer.Build (sSettings, gameObject);
 	}
 
 
+	/* Appear this shortcut. */
+	public void Appear() {
+		if (!isAppearing) {
+			layer.UILayer.AppearLayer (layer.Level - 0);
 
+			isAppearing = true;
+		}
+	}
+
+
+	/* Disappear this shortcut. */
+	public void Disappear() {
+		if (isAppearing) {
+			layer.UILayer.DisappearLayer (0 - layer.Level);
+
+			isAppearing = false;
+		}
+
+	}
 
 
 

@@ -4,6 +4,7 @@ using System;
 
 public class UIArcItem : MonoBehaviour {
 
+    ShortcutSettings _sSettings;
 	ItemSettings _iSettings;
 	
 	private float _innerRadius;
@@ -17,9 +18,11 @@ public class UIArcItem : MonoBehaviour {
 	MeshFilter _filter;
 	MeshBuilder _meshBuilder;
 	
-	internal void Build(ItemSettings iSettings)
+	internal void Build(ShortcutSettings sSettings)
 	{
-		_iSettings = iSettings;
+		// variables setting
+        _sSettings = sSettings;
+		_iSettings = sSettings.ItemSettings;
 
 		float toDegree = 180 / (float)Mathf.PI;
 		float eachItemAngle = _iSettings.EachItemDegree / toDegree;
@@ -27,10 +30,9 @@ public class UIArcItem : MonoBehaviour {
 		_startAngle = -(eachItemAngle/2);
 		_endAngle = eachItemAngle/2;
 		_meshStep = (int)Math.Round(Math.Max(2, (_endAngle-_startAngle)/Math.PI*60));
-		
-		/*********************************************************/
 
-		
+
+		// rendering
 		gameObject.AddComponent<MeshRenderer> ();
 		
 		_filter = gameObject.AddComponent<MeshFilter>();
@@ -39,8 +41,6 @@ public class UIArcItem : MonoBehaviour {
 		
 		gameObject.GetComponent<MeshRenderer> ().sharedMaterial = 
 			Materials.GetLayer (Materials.Layer.Background, 1);
-		
-		/*********************************************************/
 		
 	}
 	

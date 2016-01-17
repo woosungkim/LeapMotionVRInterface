@@ -9,7 +9,7 @@ public interface IGesture
     bool SetConfig();
     void CheckGesture();
     void UnCheck();
-    int AnyHand();
+    bool AnyHand();
     
     Controller _leap_controller
     {
@@ -17,25 +17,31 @@ public interface IGesture
         set;
     }
 
-    Frame lastFrame
+    HandList Hands
     {
         get;
         set;
     }
 
-    bool isChecked
+    Frame _lastFrame
     {
         get;
         set;
     }
 
-    bool isRight
+    bool _isChecked
     {
         get;
         set;
     }
 
-    bool isPlaying
+    bool _isRight
+    {
+        get;
+        set;
+    }
+
+    bool _isPlaying
     {
         get;
         set;

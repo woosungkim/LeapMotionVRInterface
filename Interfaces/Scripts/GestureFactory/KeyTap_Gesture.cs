@@ -5,43 +5,45 @@ using Leap;
 
 public class KeyTap_Gesture : MonoBehaviour, IGesture 
 {
-    protected float minDownVelocity = 50f;
-    protected float maxDownVelocity;
+    protected float _minDownVelocity = 50f;
+    protected float _maxDownVelocity;
 
-    protected float historySeconds = 0.1f;
+    protected float _historySeconds = 0.1f;
 
-    protected float minDistance = 3.0f;
-    protected float maxDistance;
+    protected float _minDistance = 3.0f;
+    protected float _maxDistance;
 
-    protected KeyTapGesture keytab_gesture;
-    protected Vector direction;
-    protected Pointable pointable;
-    protected Vector position;
-    protected float progress;
+    protected KeyTapGesture _keytab_gesture;
+    protected Vector _direction;
+    protected Pointable _pointable;
+    protected Vector _position;
+    protected float _progress;
 
-    protected HandList hands;
-    protected GestureList gestures;
-    protected FingerList fingers;
+    
+    protected GestureList _gestures;
+    protected FingerList _fingers;
 
+    public HandList Hands
+    { get; set; }
 
-    public bool isRight
+    public bool _isRight
     { get; set; }
 
     public Controller _leap_controller
     { get; set; }
 
-    public Frame lastFrame
+    public Frame _lastFrame
     { get; set; }
 
-    public bool isChecked
+    public bool _isChecked
     { get; set; }
 
-    public bool isPlaying
+    public bool _isPlaying
     { get; set; }
 
     public virtual void Update()
     {
-        if(!this.isChecked)
+        if(!this._isChecked)
         {
             CheckGesture();
         }
@@ -52,80 +54,78 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
     {
         _leap_controller = new Controller();
         _leap_controller.EnableGesture(Gesture.GestureType.TYPE_KEY_TAP);
-        _leap_controller.Config.SetFloat("Gesture.KeyTap.MinDownVelocity", this.minDownVelocity);
-        _leap_controller.Config.SetFloat("Gesture.KeyTap.HistorySeconds", this.historySeconds);
-        _leap_controller.Config.SetFloat("Gesture.KeyTap.MinDistance", this.minDistance);
+        _leap_controller.Config.SetFloat("Gesture.KeyTap.MinDownVelocity", this._minDownVelocity);
+        _leap_controller.Config.SetFloat("Gesture.KeyTap.HistorySeconds", this._historySeconds);
+        _leap_controller.Config.SetFloat("Gesture.KeyTap.MinDistance", this._minDistance);
         _leap_controller.Config.Save();
 
     
-        this.isRight = false;
-        this.isChecked = false;
-        this.maxDistance = 100000;
-        this.maxDownVelocity = 100000;
-        this.direction = Vector.Zero;
+        this._isRight = false;
+        this._isChecked = false;
+        this._maxDistance = 100000;
+        this._maxDownVelocity = 100000;
+        this._direction = Vector.Zero;
 
         return true;
     }
 
     protected virtual Vector GetDirection()
     {
-        Vector tempDirection = keytab_gesture.Direction;
+        Vector tempDirection = _keytab_gesture.Direction;
         float x = Mathf.Abs(tempDirection.x);
         float y = Mathf.Abs(tempDirection.y);
         float z = Mathf.Abs(tempDirection.z);
         if(x>y && x>z)
         {
-            if (tempDirection.x > 0) this.direction = new Vector(1, 0, 0);
-            else if (tempDirection.x < 0) this.direction = new Vector(-1, 0, 0);
+            if (tempDirection.x > 0) this._direction = new Vector(1, 0, 0);
+            else if (tempDirection.x < 0) this._direction = new Vector(-1, 0, 0);
         }
         else if(y>x && y>z)
         {
-            if (tempDirection.y > 0) this.direction = new Vector(0, 1, 0);
-            else if (tempDirection.y < 0) this.direction = new Vector(0, -1, 0);
+            if (tempDirection.y > 0) this._direction = new Vector(0, 1, 0);
+            else if (tempDirection.y < 0) this._direction = new Vector(0, -1, 0);
         }
         else if(z>x && z>y)
         {
-            if (tempDirection.z > 0) this.direction = new Vector(0, 0, 1);
-            else if (tempDirection.z < 0) this.direction = new Vector(0, 0, -1);
+            if (tempDirection.z > 0) this._direction = new Vector(0, 0, 1);
+            else if (tempDirection.z < 0) this._direction = new Vector(0, 0, -1);
         }
 
-        return this.direction;
-    }
-
-    protected virtual Pointable GetPointable()
-    {
-        pointable = keytab_gesture.Pointable;
-        return pointable;
-    }
-
-    protected virtual Vector GetPosition()
-    {
-        position = keytab_gesture.Position;
-        return position;
+        return this._direction;
     }
 
     public virtual void CheckGesture()
     {
-        lastFrame = _leap_controller.Frame(0);
-        hands = lastFrame.Hands;
-        gestures = lastFrame.Gestures();
-        for (int g = 0; g < gestures.Count; g++ )
+        this._lastFrame = this._leap_controller.Frame(0);
+        this.Hands = this._lastFrame.Hands;
+        this._gestures = this._lastFrame.Gestures();
+        
+        foreach(Hand hand in Hands)
         {
-            if(gestures[g].Type == Gesture.GestureType.TYPE_KEY_TAP)
+            this._fingers = hand.Fingers;
+
+            foreach(Gesture gesture in _gestures)
             {
-                keytab_gesture = new KeyTapGesture(gestures[g]);
+                if (gesture.Type == Gesture.GestureType.TYPE_KEY_TAP)
+                {
+                    _keytab_gesture = new KeyTapGesture(gesture);
 
-                this.GetDirection();
-                this.AnyHand();
-                this.GetPointable();
-                this.GetPosition();
-                this.isChecked = true;
+                    this.GetDirection();
+                    this.AnyHand();
+                    this.GetPointable();
+                    this.GetPosition();
+                    this._isChecked = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        if(this.isChecked)
+            if(this._isChecked)
+            { break; }
+
+        }
+       
+        if(this._isChecked)
         {
             DoAction();
         }
@@ -133,7 +133,7 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
 
     public virtual void UnCheck()
     {
-        this.isChecked = false;
+        this._isChecked = false;
     }
 
     protected virtual void DoAction()
@@ -141,37 +141,93 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
         print("Please code this method");
     }
 
-    public int AnyHand()
+    public bool AnyHand()
     {
-        if(keytab_gesture.IsValid)
+        if(_keytab_gesture.IsValid)
         {
-            if(keytab_gesture.Hands.Rightmost.IsRight)
+            if(_keytab_gesture.Hands.Rightmost.IsRight)
             {
-                this.isRight = true;
+                this._isRight = true;
             }
-            else if(keytab_gesture.Hands.Leftmost.IsLeft)
+            else if(_keytab_gesture.Hands.Leftmost.IsLeft)
             {
-                this.isRight = false;
+                this._isRight = false;
             }
-            return 1;
+            return this._isRight;
         }
         else
         {
-            return 0;
+            print("This object is not valid");
+            return false;
         }
     }
 
     protected bool SetMaxDownVelocity(float velocity)
     {
-        this.maxDownVelocity = velocity;
+        this._maxDownVelocity = velocity;
         return true;
     }
 
     protected bool SetMaxDistance(float distance)
     {
-        this.maxDistance = distance;
+        this._maxDistance = distance;
         return true;
     }
+
+    protected HandList GetHandList()
+    {
+        if(_keytab_gesture != null)
+        {
+            return Hands;
+        }
+        else
+        {
+            return new HandList();
+        }
+        
+    }
+
+    protected FingerList GetFingerList()
+    {
+        if(_keytab_gesture != null)
+        {
+            return _fingers;
+        }
+        else
+        {
+            return new FingerList();
+        }
+        
+    }
+
+    protected Pointable GetPointable()
+    {
+        if(_keytab_gesture != null)
+        {
+            _pointable = _keytab_gesture.Pointable;
+            return _pointable;
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+
+    protected Vector GetPosition()
+    {
+        if(_keytab_gesture != null)
+        {
+            _position = _keytab_gesture.Position;
+            return _position;
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+
 }
 
 

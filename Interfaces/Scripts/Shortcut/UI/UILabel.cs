@@ -50,6 +50,20 @@ public class UILabel : MonoBehaviour {
 
 	}
 
+	public void SetAttributes(string text, string font, int size, Color color) {
+		textObj.GetComponent<Text>().text = text;
+
+		_fontName = font;
+		_text.font = Resources.Load<Font> ("Fonts/"+_fontName);
+
+		_size = size;
+		_text.fontSize = _size;
+
+		_color = color;
+		_text.color = _color;
+	}
+
+
 	public string Label {
 		get { 
 			return textObj.GetComponent<Text> ().text;

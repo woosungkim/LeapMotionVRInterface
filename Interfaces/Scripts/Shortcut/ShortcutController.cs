@@ -7,33 +7,60 @@ public class ShortcutController : MonoBehaviour {
 	public ItemSettings _ItemSettings;
 	public ItemHierarchy _ItemHierarchy;
 	public Transform _Camera;
-	
-	// Use this for initialization
-	void Start () {
-		// set shortcut inside of camera
+
+	private bool isFirst = true;
+
+
+	void Awake () {
+		if (!CheckInspector ()) {
+			print ("Check inspector factors");
+			return;
+		}
+		_ShortcutSettings.ItemSettings = _ItemSettings;
+
+		PutInsideOfMainCamera ();
+	}
+
+
+	/* Check all Inspector factors are valid. */
+	private bool CheckInspector() {
+		if (_ShortcutSettings == null ||
+		    _ItemSettings == null ||
+		    _ItemHierarchy == null ||
+		    _Camera == null) {
+			return false; 
+		}
+		return true;
+	}
+
+
+	/* Put this shortcut inside of main camera. */
+	private void PutInsideOfMainCamera() {
 		gameObject.transform.SetParent (_Camera.transform, false);
-	
+		
 		Vector3 pos = new Vector3 (_ShortcutSettings.XPosition, _ShortcutSettings.YPosition, 1.0f);
 		gameObject.transform.position = Camera.main.ViewportToWorldPoint (pos);
 		gameObject.transform.rotation = Quaternion.LookRotation(_Camera.transform.up);
-
+		
 		gameObject.transform.localScale = Vector3.one * _ShortcutSettings.ScaleCoeff;
-
-		// item hierarchy build
-		_ItemHierarchy.Build (_ShortcutSettings, _ItemSettings);
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 
+
+	/* Appear this shortcut. */
 	public void Appear() {
-
+		if (isFirst) {
+			// item hierarchy build
+			_ItemHierarchy.Build (_ShortcutSettings, gameObject);
+			isFirst = false;
+		} 
+		else {
+			_ItemHierarchy.Appear ();
+		}
 	}
 
-	public void Disappear() {
 
+	/* DisAppear this shortcut. */
+	public void Disappear() {
+		_ItemHierarchy.Disappear ();
 	}
 }

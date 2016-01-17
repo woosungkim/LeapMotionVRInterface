@@ -3,7 +3,7 @@ using System.Collections;
 
 public class UILayer : MonoBehaviour {
 
-	private float _scale = 0.0f;
+	private float _scale = 2.0f;
 	private float _appearRate = 0.02f;
 
 	private float _outScale = 2.0f;
@@ -24,10 +24,11 @@ public class UILayer : MonoBehaviour {
 	}
 	
 
-	internal void Build(ShortcutSettings sSettings, ShortcutItemSettings iSettings) {
-
+	internal void Build(ShortcutSettings sSettings) {
+		gameObject.transform.localScale = Vector3.one * _scale;
 	}
-	
+
+
 
 	public void AppearLayer(int direction) {
 		gameObject.SetActive (true);

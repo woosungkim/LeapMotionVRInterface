@@ -12,4 +12,16 @@ public class ShortcutSettings : MonoBehaviour {
 	
 	public float ScaleCoeff = 1.0f;
 
+
+	//
+	private ItemSettings _itemSettings;
+	public ItemSettings ItemSettings {
+		get {
+			return _itemSettings;
+		}
+		set {
+			_itemSettings = value;
+		}
+	}
+
 }

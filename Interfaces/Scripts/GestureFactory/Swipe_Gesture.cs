@@ -270,12 +270,10 @@ public class Swipe_Gesture : MonoBehaviour, IGesture
         if (!_isVR)
         {
             Vector position = hand.PalmPosition;
-            //print("leap : " + position);
             Vector3 unityPosition = position.ToUnity();
             Vector3 toPos = new Vector3(((unityPosition.x + 150.0f) / 300.0f), (unityPosition.y / 300.0f), ((unityPosition.z + 150.0f) / 300.0f));
             Vector3 pos = Camera.main.ViewportToWorldPoint(toPos);
             Vector3 tempos = Camera.main.WorldToViewportPoint(pos);
-            //print(tempos);
 
             switch (_userSide)
             {
@@ -375,9 +373,11 @@ public class Swipe_Gesture : MonoBehaviour, IGesture
                     return false;
             }
         }
+        
+       
     }
 
-    protected void OnVR()
+    public void OnVR()
     {
         _isVR = true;
     }

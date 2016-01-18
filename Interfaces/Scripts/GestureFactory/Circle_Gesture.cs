@@ -51,6 +51,12 @@ public class Circle_Gesture : MonoBehaviour,IGesture
     public bool _isPlaying
     { get; set; }
 
+    public int _userSide
+    { get; set; }
+
+    public bool _isVR
+    { get; set; }
+
     public virtual void Update()
     {
         if(!_isChecked)
@@ -68,6 +74,8 @@ public class Circle_Gesture : MonoBehaviour,IGesture
         _leap_controller.Config.SetFloat("Gesture.Circle.MinArc", this._minArc);
         _leap_controller.Config.Save();
 
+        this._isVR = false;
+        this._userSide = 0;
         this._maxArc = 100000;
         this._maxRadius = 100000;
         this._state = Gesture.GestureState.STATE_INVALID;
@@ -99,59 +107,64 @@ public class Circle_Gesture : MonoBehaviour,IGesture
         Hands = _lastFrame.Hands;
         _gestures = _lastFrame.Gestures();
 
-        foreach( Gesture gesture in _gestures)
+        foreach(Hand hand in Hands)
         {
-            if( gesture.Type == Gesture.GestureType.TYPE_CIRCLE )
+            foreach (Gesture gesture in _gestures)
             {
-                print("Circle Gesture");
-                
-                _circle_gesture = new CircleGesture(gesture);
-                this.AnyHand();
-                if(!_isPlaying && gesture.State == Gesture.GestureState.STATE_START)
+                if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE)
                 {
-                    _isPlaying = !_isPlaying;
-                    this._startProgress = _circle_gesture.Progress;
-                    //print("start");
-                    print("start progress : " + this._startProgress);
-                }
+                    print("Circle Gesture");
 
-                if(_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
-                {
-                    int direc = this.IsClockWise();
-                    this._endProgress = _circle_gesture.Progress;
-                    print("stop progress : " + this._endProgress);
-                    if( this._endProgress  >= this._minProgress && direc == _useDirection)
+                    _circle_gesture = new CircleGesture(gesture);
+                    this.AnyHand();
+                    if (!_isPlaying && (gesture.State == Gesture.GestureState.STATE_START) && WhichSide(hand))
                     {
-                        this._isChecked = true;
-                        this._isPlaying = !this._isPlaying;
+                        _isPlaying = !_isPlaying;
+                        this._startProgress = _circle_gesture.Progress;
+                        //print("start");
+                        print("start progress : " + this._startProgress);
+                    }
+
+                    if (_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
+                    {
+                        int direc = this.IsClockWise();
+                        this._endProgress = _circle_gesture.Progress;
+                        print("stop progress : " + this._endProgress);
+                        if (this._endProgress >= this._minProgress && direc == _useDirection)
+                        {
+                            this._isChecked = true;
+                            this._isPlaying = !this._isPlaying;
+                        }
+                        this._state = gesture.State;
+
+                        break;
                     }
                     this._state = gesture.State;
-                    
-                    break;
-                }
-                this._state = gesture.State;
-                
-            }
-        }
 
-        if(_isPlaying && _state == Gesture.GestureState.STATE_UPDATE)
-        {
-            int direc = this.IsClockWise();
-            this._endProgress = _circle_gesture.Progress;
-            print("update progress : " + this._endProgress);
-            if ( this._endProgress >= this._minProgress && direc == _useDirection)
-            {
-                this._isChecked = true;
-                this._isPlaying = !this._isPlaying;
+                }
             }
-                    
+
+            if (_isPlaying && _state == Gesture.GestureState.STATE_UPDATE)
+            {
+                int direc = this.IsClockWise();
+                this._endProgress = _circle_gesture.Progress;
+                print("update progress : " + this._endProgress);
+                if (this._endProgress >= this._minProgress && direc == _useDirection)
+                {
+                    this._isChecked = true;
+                    this._isPlaying = !this._isPlaying;
+                }
+
+
+            }
+
+
+            if (_isChecked)
+            {
+                DoAction();
+            }
         }
         
-
-        if(_isChecked)
-        {
-            DoAction();
-        }
        // return isChecked;
     }
 
@@ -165,6 +178,123 @@ public class Circle_Gesture : MonoBehaviour,IGesture
         _isChecked = false;
     }
 
+    //사용자가 원하는 구역에 제스처가 잡혔는지를 검사.
+    //all:0, left:1, right:2, up:3, down:4.
+    public bool WhichSide(Hand hand)
+    {
+        if (!_isVR)
+        {
+            Vector position = hand.PalmPosition;
+            Vector3 unityPosition = position.ToUnity();
+            Vector3 toPos = new Vector3(((unityPosition.x + 150.0f) / 300.0f), (unityPosition.y / 300.0f), ((unityPosition.z + 150.0f) / 300.0f));
+            Vector3 pos = Camera.main.ViewportToWorldPoint(toPos);
+            Vector3 tempos = Camera.main.WorldToViewportPoint(pos);
+
+            switch (_userSide)
+            {
+                case 0:
+                    return true;
+                case 1:
+                    if (tempos.x < 0.5 && tempos.x >= 0 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 2:
+                    if (tempos.x > 0.5 && tempos.x <= 1 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 3:
+                    if (tempos.y > 0.5 && tempos.y <= 1 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 4:
+                    if (tempos.y < 0.5 && tempos.y >= 0 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+        // left, right : x, up,down : z
+        else
+        {
+            Vector position = hand.PalmPosition;
+            Vector3 unityPosition = position.ToUnity();
+            Vector3 toPos = new Vector3(1 - ((unityPosition.x + 150.0f) / 300.0f), ((unityPosition.z + 150.0f) / 300.0f), (unityPosition.y / 300.0f));
+            Vector3 pos = Camera.main.ViewportToWorldPoint(toPos);
+            Vector3 tempos = Camera.main.WorldToViewportPoint(pos);
+
+            switch (_userSide)
+            {
+                case 0:
+                    return true;
+                case 1:
+                    if (tempos.x < 0.5 && tempos.x >= 0 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 2:
+                    if (tempos.x > 0.5 && tempos.x <= 1 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 3:
+                    if (tempos.y > 0.5 && tempos.y <= 1 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 4:
+                    if (tempos.y < 0.5 && tempos.y >= 0 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+
+
+    }
+
+    public void OnVR()
+    {
+        _isVR = true;
+    }
     protected virtual bool SetGestureCondition(int direction, float progress)
     {
         this._useDirection = direction;

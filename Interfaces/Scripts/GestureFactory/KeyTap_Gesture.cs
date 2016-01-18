@@ -41,6 +41,12 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
     public bool _isPlaying
     { get; set; }
 
+    public int _userSide
+    { get; set; }
+
+    public bool _isVR
+    { get; set; }
+
     public virtual void Update()
     {
         if(!this._isChecked)
@@ -59,7 +65,8 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
         _leap_controller.Config.SetFloat("Gesture.KeyTap.MinDistance", this._minDistance);
         _leap_controller.Config.Save();
 
-    
+        this._isVR = false;
+        this._userSide = 0;
         this._isRight = false;
         this._isChecked = false;
         this._maxDistance = 100000;
@@ -106,7 +113,7 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
 
             foreach(Gesture gesture in _gestures)
             {
-                if (gesture.Type == Gesture.GestureType.TYPE_KEY_TAP)
+                if ( (gesture.Type == Gesture.GestureType.TYPE_KEY_TAP) && WhichSide(hand))
                 {
                     _keytab_gesture = new KeyTapGesture(gesture);
 
@@ -139,6 +146,124 @@ public class KeyTap_Gesture : MonoBehaviour, IGesture
     protected virtual void DoAction()
     {
         print("Please code this method");
+    }
+
+    //사용자가 원하는 구역에 제스처가 잡혔는지를 검사.
+    //all:0, left:1, right:2, up:3, down:4.
+    public bool WhichSide(Hand hand)
+    {
+        if (!_isVR)
+        {
+            Vector position = hand.PalmPosition;
+            Vector3 unityPosition = position.ToUnity();
+            Vector3 toPos = new Vector3(((unityPosition.x + 150.0f) / 300.0f), (unityPosition.y / 300.0f), ((unityPosition.z + 150.0f) / 300.0f));
+            Vector3 pos = Camera.main.ViewportToWorldPoint(toPos);
+            Vector3 tempos = Camera.main.WorldToViewportPoint(pos);
+
+            switch (_userSide)
+            {
+                case 0:
+                    return true;
+                case 1:
+                    if (tempos.x < 0.5 && tempos.x >= 0 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 2:
+                    if (tempos.x > 0.5 && tempos.x <= 1 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 3:
+                    if (tempos.y > 0.5 && tempos.y <= 1 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 4:
+                    if (tempos.y < 0.5 && tempos.y >= 0 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+        // left, right : x, up,down : z
+        else
+        {
+            Vector position = hand.PalmPosition;
+            Vector3 unityPosition = position.ToUnity();
+            Vector3 toPos = new Vector3(1 - ((unityPosition.x + 150.0f) / 300.0f), ((unityPosition.z + 150.0f) / 300.0f), (unityPosition.y / 300.0f));
+            Vector3 pos = Camera.main.ViewportToWorldPoint(toPos);
+            Vector3 tempos = Camera.main.WorldToViewportPoint(pos);
+
+            switch (_userSide)
+            {
+                case 0:
+                    return true;
+                case 1:
+                    if (tempos.x < 0.5 && tempos.x >= 0 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 2:
+                    if (tempos.x > 0.5 && tempos.x <= 1 && tempos.y >= 0 && tempos.y <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 3:
+                    if (tempos.y > 0.5 && tempos.y <= 1 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 4:
+                    if (tempos.y < 0.5 && tempos.y >= 0 && tempos.x >= 0 && tempos.x <= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+
+
+    }
+
+    public void OnVR()
+    {
+        _isVR = true;
     }
 
     public bool AnyHand()

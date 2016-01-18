@@ -10,7 +10,9 @@ public interface IGesture
     void CheckGesture();
     void UnCheck();
     bool AnyHand();
-    
+    bool WhichSide(Hand hand);
+    void OnVR();
+
     Controller _leap_controller
     {
         get;
@@ -29,6 +31,12 @@ public interface IGesture
         set;
     }
 
+    int _userSide
+    {
+        get;
+        set;
+    }
+
     bool _isChecked
     {
         get;
@@ -36,6 +44,12 @@ public interface IGesture
     }
 
     bool _isRight
+    {
+        get;
+        set;
+    }
+
+    bool _isVR
     {
         get;
         set;

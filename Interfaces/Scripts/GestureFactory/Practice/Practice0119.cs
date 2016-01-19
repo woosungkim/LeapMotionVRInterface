@@ -1,18 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public class Practice0119 : Swipe_Gesture {
 
-public class MyGesture : Circle_Gesture {
-
-   
 	// Use this for initialization
 	void Start () {
-        SetConfig();
-        SetGestureCondition(-1, 1f);
+        SetGestureCondition('x', 1, 0);
 	}
 
     protected override void DoAction()
     {
-        print("원이당 ~~~");
+        
+        print("check");
     }
 }

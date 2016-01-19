@@ -12,7 +12,7 @@ public class MyGesture2 : Swipe_Gesture {
 	void Start () {
         switcher = Switcher.GetInstance();
      
-        SetConfig();
+        //SetConfig();
         SetGestureCondition('z', 1, 1);
 	}
 	

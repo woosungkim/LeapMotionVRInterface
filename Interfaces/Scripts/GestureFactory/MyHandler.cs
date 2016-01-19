@@ -2,13 +2,13 @@
 using System.Collections;
 using Leap;
 
-public class MyHandler : Swipe_Gesture {
+public class MyHandler : Circle_Gesture {
 
 
 	void Start()
     {
-        SetGestureCondition('x', 1, 4);
-        OnVR();
+        SetGestureCondition(1, 1);
+        SetMount();
     }
 
    

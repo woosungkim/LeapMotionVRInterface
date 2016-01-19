@@ -6,13 +6,25 @@ using Leap;
 //모든 제스처 관련 클래스들이 상속 받아야할 인터페이스 클래스이다.
 public interface IGesture
 {
+    /*
+    // Function for setting basic option of using gesture.
     bool SetConfig();
+    */
+    // Function of Check gesture captured every frame.
     void CheckGesture();
-    void UnCheck();
-    bool AnyHand();
-    bool WhichSide(Hand hand);
-    void OnVR();
 
+    // Uncheck checked gesture flag
+    void UnCheck();
+
+    // Function of getting hand which side user used.
+    bool AnyHand();
+
+    // Set flag of VR mode.
+    void SetMount();
+
+    GestureType gt
+    { get; set; }
+   
     Controller _leap_controller
     {
         get;
@@ -49,7 +61,7 @@ public interface IGesture
         set;
     }
 
-    bool _isVR
+    bool _isHeadMount
     {
         get;
         set;
@@ -60,5 +72,6 @@ public interface IGesture
         get;
         set;
     }
+
 }
 

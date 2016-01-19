@@ -13,14 +13,14 @@ public class Pointer : MonoBehaviour {
 	private UIPointer _uiPointer;
 
 
-    public void Build(PointerType type) {
+    public void Build(PointerSettings pSettings, PointerType type) {
 		_type = type;
 
 		_pointerRendererObj = new GameObject ("Renderer");
 		_pointerRendererObj.transform.SetParent (gameObject.transform, false);
 
 		_uiPointer = _pointerRendererObj.AddComponent<UIPointer> ();
-		_uiPointer.Build (_type);
+		_uiPointer.Build (pSettings, _type);
 	}
 
 

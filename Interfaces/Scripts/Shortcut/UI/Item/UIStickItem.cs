@@ -4,28 +4,29 @@ using System;
 
 public class UIStickItem : MonoBehaviour {
 	
+	ShortcutSettings _sSettings;
 	ItemSettings _iSettings;
 
 	// for rectangle mesh
 	private float _width;
 	private float _height;
-	private float _amount;
+	private float _wStart = 0.0f;
+	private float _hStart = 0.0f;
+	private float _amount = 1.0f;
 
 	
 
 	MeshFilter _filter;
 	MeshBuilder _meshBuilder;
 	
-	internal void Build(ItemSettings iSettings)
+	internal void Build(ShortcutSettings sSettings)
 	{
-		_iSettings = iSettings;
-				
-		_width = 3.0f;
-		_height = 3.0f;
-		_amount = 3.0f;
-		/*********************************************************/
-		
-		
+		// variables setting
+		_sSettings = sSettings;
+		_iSettings = sSettings.ItemSettings;
+
+
+
 		gameObject.AddComponent<MeshRenderer> ();
 		
 		_filter = gameObject.AddComponent<MeshFilter>();
@@ -33,9 +34,9 @@ public class UIStickItem : MonoBehaviour {
 		_meshBuilder = new MeshBuilder ();
 		
 		gameObject.GetComponent<MeshRenderer> ().sharedMaterial = 
-			Materials.GetLayer (Materials.Layer.Background, 1);
+			ShortcutUtil.GetMaterial ();
 		
-		/*********************************************************/
+
 		
 	}
 	
@@ -45,8 +46,14 @@ public class UIStickItem : MonoBehaviour {
 		
 	}
 	
-	public void UpdateMesh(float innerRadius, float outerRadius, Color color)
+	public void UpdateMesh(float width, float height, float wStart, float hStart, Color color)
 	{		
+
+		_width = width;
+		_height = height;
+		_wStart = wStart;
+		_hStart = hStart;
+
 		// update mesh
 		BuildMesh (_meshBuilder);
 		
@@ -61,6 +68,8 @@ public class UIStickItem : MonoBehaviour {
 		MeshNative.BuildRectangleMesh (meshBuilder, 
 		                        		_width,
 		                        		_height,
+		                               	_wStart,
+		                               	_hStart,
 		                                _amount);
 		
 	}

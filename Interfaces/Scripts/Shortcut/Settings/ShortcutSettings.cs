@@ -9,9 +9,9 @@ public class ShortcutSettings : MonoBehaviour {
 	public float XPosition = 0.5f, YPosition = 0.5f;
 
 	public ShortcutType Type = ShortcutType.Arc;
-	
-	public float ScaleCoeff = 1.0f;
 
+
+	public StickShortcutDirection Direction = StickShortcutDirection.Horizontal;
 
 	//
 	private ItemSettings _itemSettings;

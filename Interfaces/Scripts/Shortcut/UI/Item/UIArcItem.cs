@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class UIArcItem : MonoBehaviour {
+public class UIArcItem : MonoBehaviour, IUIArcItem {
 
     ShortcutSettings _sSettings;
 	ItemSettings _iSettings;
@@ -18,7 +18,7 @@ public class UIArcItem : MonoBehaviour {
 	MeshFilter _filter;
 	MeshBuilder _meshBuilder;
 	
-	internal void Build(ShortcutSettings sSettings)
+	public void Build(ShortcutSettings sSettings)
 	{
 		// variables setting
         _sSettings = sSettings;
@@ -40,7 +40,7 @@ public class UIArcItem : MonoBehaviour {
 		_meshBuilder = new MeshBuilder ();
 		
 		gameObject.GetComponent<MeshRenderer> ().sharedMaterial = 
-			Materials.GetLayer (Materials.Layer.Background, 1);
+			ShortcutUtil.GetMaterial ();
 		
 	}
 	
@@ -65,7 +65,7 @@ public class UIArcItem : MonoBehaviour {
 
 	}
 	
-	void BuildMesh(MeshBuilder meshBuilder) {
+	private void BuildMesh(MeshBuilder meshBuilder) {
 		MeshNative.BuildArcMesh (meshBuilder, 
 		                         _innerRadius, 
 		                         _outerRadius, 

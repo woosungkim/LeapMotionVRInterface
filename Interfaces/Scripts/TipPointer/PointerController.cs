@@ -14,13 +14,15 @@ public class PointerController : MonoBehaviour {
 	private Dictionary<PointerType, GameObject> _pointerDict =
 			new Dictionary<PointerType, GameObject>();
 
+	private GameObject pointersObj;
+
 	// Use this for initialization
 	void Start () {
 		gameObject.transform.SetParent (_Camera.transform, false);
 
 		_controller = new Controller ();
 
-		GameObject pointersObj = new GameObject("Pointers");
+		pointersObj = new GameObject("Pointers");
 		pointersObj.transform.SetParent (gameObject.transform, false);
 	
 
@@ -36,11 +38,11 @@ public class PointerController : MonoBehaviour {
 			pointerObj.transform.SetParent (pointersObj.transform, false);
 			
 			_pointerDict.Add (type, pointerObj);
-			InteractionManager.SetPointerPos (type, Camera.main.WorldToViewportPoint (pointerObj.transform.position));
+			InteractionManager.SetPointerPos (type, Vector3.one*9999.0f);
 			
 			
 			Pointer pointer = pointerObj.AddComponent<Pointer> ();
-			pointer.Build (type);
+			pointer.Build (_PointerSettings, type);
 		}
 
 	}
@@ -53,7 +55,13 @@ public class PointerController : MonoBehaviour {
 	private void UpdateLeapPointers() {
 		Frame frame = _controller.Frame (0);
 		HandList hands = frame.Hands;
-		
+
+		if (hands.Count == 0) {
+			pointersObj.SetActive (false);
+		}
+		else {
+			pointersObj.SetActive (true);
+		}
 		foreach (Hand hand in hands) {
 			FingerList fingers = hand.Fingers;
 			
@@ -66,10 +74,12 @@ public class PointerController : MonoBehaviour {
 						
 						Transform pointerTransform = pointerObj.transform;
 						
-						InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+
 						if (_PointerSettings.MountType == MountType.TableMount) {
+							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 							pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 						} else if (_PointerSettings.MountType == MountType.HeadMount) {
+							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
 							pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
 						}
 						//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));

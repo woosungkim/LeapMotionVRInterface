@@ -25,7 +25,7 @@ public static class Converter {
 	public static Vector3 ConvertPosInFrustum(Vector3 fromPos) {
 		
 		Vector3 toPos = new Vector3(((fromPos.x+150.0f)/300.0f), 
-		                            (fromPos.y/300.0f), 
+		                            ((fromPos.y-100.0f)/300.0f), 
 		                            ((fromPos.z+150.0f)/300.0f));
 		
 		return toPos;

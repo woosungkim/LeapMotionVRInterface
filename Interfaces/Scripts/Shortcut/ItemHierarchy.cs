@@ -7,8 +7,10 @@ public class ItemHierarchy : MonoBehaviour {
 	private ShortcutItemLayer layer;
 	private bool isAppearing = true;
 
-	internal void Build(ShortcutSettings sSettings, GameObject parentObj) {
+	private GameObject _cutLayerObj;
 
+	internal void Build(ShortcutSettings sSettings, GameObject parentObj) {
+	
 		layer = Getter.GetChildLayerFromGameObject (gameObject);
 
 		layer.Build (sSettings, gameObject);
@@ -28,11 +30,11 @@ public class ItemHierarchy : MonoBehaviour {
 	/* Disappear this shortcut. */
 	public void Disappear() {
 		if (isAppearing) {
-			layer.UILayer.DisappearLayer (0 - layer.Level);
+			GameObject curLayerObj = ShortcutUtil.CurrentLayerObj;
+			curLayerObj.GetComponent<UILayer>().DisappearLayer(0-1);
 
 			isAppearing = false;
 		}
-
 	}
 
 

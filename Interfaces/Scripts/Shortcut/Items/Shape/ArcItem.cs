@@ -1,35 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArcItem : Item {
-
-	private int _id;
-    private string _label;
-	private ItemType _itemType;
-    private EventScript _action;
-
-	private ShortcutSettings _sSettings;
-	private ItemSettings _iSettings;
-	private GameObject _parentObj;
-
-	private Color _backgroundColor;
-	private Color _focusingColor;
-	private Color _selectingColor;
-
+public class ArcItem : ShapeItem {
+	
 	private GameObject rendererObj;
 	private GameObject backgroundObj;
 	private GameObject focusingObj;
 	private GameObject selectingObj;
 	private GameObject labelObj;
 	private GameObject centerObj;
-
-
+	
 	private UIArcItem _uiArcItemBg;
 	private UIArcItem _uiArcItemFs; 
 	private UIArcItem _uiArcItemSt;
-
-	private UILabel _uiLabel;
-
+	
 
 	private float _innerRadius;
 	private float _outerRadius;
@@ -37,65 +21,29 @@ public class ArcItem : Item {
 
 
 	private float _selectProg = 0.0f;
-	private float _selectSpeed = 0.01f;
+	private float _selectSpeed = 0.02f;
 	private bool _isSelected = false;
 
-	private ShortcutItemLayer _nextLayer = null;
+	public override void Build (ShortcutSettings sSettings, GameObject parentObj)
+	{
+		base.Build (sSettings, parentObj);
 
-	private ShortcutItemLayer _curLayer;
-	public ShortcutItemLayer Layer {
-		get {
-			return _curLayer;
-		}
-		set {
-			_curLayer = value;
-		}
-	}
-
-	private bool _isCancelItem = false;
-	public bool IsCancelItem {
-		get {
-			return _isCancelItem;
-		}
-		set {
-			_isCancelItem = value;
-		}
-	}
-
-	/* Set User input datas */
-    public override void SetUserInputs(string label, ItemType itemType, EventScript action) {
-        _label = label;
-        _itemType = itemType;
-        _action = action;
-    }
-
-
-	public override void Build(ShortcutSettings sSettings, GameObject parentObj) {
-		// variables setting
-		_id = ShortcutUtil.ItemAutoId;
-		
-		_sSettings = sSettings;
-		_iSettings = _sSettings.ItemSettings;
-		_parentObj = parentObj;
+		_selectSpeed = _iSettings.SelectSpeed;
 
 		_innerRadius = _iSettings.InnerRadius;
 		_outerRadius = _iSettings.InnerRadius + _iSettings.Thickness;
 		_thickness = _iSettings.Thickness;
 
-		_backgroundColor = _iSettings.BackgroundColor;
-		_focusingColor = _iSettings.FocusingColor;
-		_selectingColor = _iSettings.SelectingColor;
-
 		// rendering
 		Rendering ();
 
 		// interaction setting
-		InteractionManager.SetItemPos (_id, Camera.main.WorldToViewportPoint(centerObj.transform.position));
-
+		InteractionManager.SetItemPos (_id, Camera.main.WorldToViewportPoint (centerObj.transform.position));
 	}
 	
+
 	// Update is called once per frame
-	public override void Update () {
+	void Update () {
 		if (_curLayer != null) {
 			if (InteractionManager.HasItemId (_id)) {
 				if (_curLayer.UILayer.IsCurrentLayer) {
@@ -106,7 +54,7 @@ public class ArcItem : Item {
 					/***** focus, select ui update *****/
 					float progress = InteractionManager.GetItemHighlightProgress (_id);
 					
-					float focusStart = 0.8f; // trigger focus percent = 80%
+					float focusStart = _iSettings.FocusStart; // trigger focus percent = 80%
 					if (progress > focusStart) { // is focusing
 						float focusProg = Mathf.Lerp (0, 1, progress - focusStart);
 						
@@ -121,9 +69,8 @@ public class ArcItem : Item {
 								_selectProg = 1.0f;
 								if (!_isSelected) { // select action is triggered just once
 									_isSelected = true;
-									SelectAction();
+									_selectableItem.SelectAction();
 								}
-								
 							}
 							// select ui update
 							_uiArcItemBg.UpdateMesh (0.0f, 0.0f, _backgroundColor);
@@ -158,47 +105,6 @@ public class ArcItem : Item {
 			}
 		}
 	}
-
-
-	private void SelectAction() {
-		switch (_itemType) {
-		case (ItemType.Parent) :
-			if (_nextLayer == null) {
-				_nextLayer = Getter.GetChildLayerFromGameObject (gameObject);
-				_nextLayer.Level = _curLayer.Level+1;
-				_nextLayer.PrevLayer = _curLayer;
-				
-				_nextLayer.Build (_sSettings, gameObject);
-			}
-			else {
-				_nextLayer.UILayer.AppearLayer(_nextLayer.Level - _curLayer.Level);
-			}
-			_curLayer.UILayer.DisappearLayer(_nextLayer.Level - _curLayer.Level);
-			
-			//print ("curLevel : " + _curLayer.Level + "  nextLevel : " + _nextLayer.Level);
-			break;
-		case (ItemType.NormalButton) :
-			if (_isCancelItem) { // action for cancel item
-				ShortcutItemLayer prevLayer = _curLayer.PrevLayer;
-				prevLayer.UILayer.AppearLayer(prevLayer.Level - _curLayer.Level);
-				_curLayer.UILayer.DisappearLayer(prevLayer.Level - _curLayer.Level);
-				
-				//print ("curLevel : " + _curLayer.Level + "  nextLevel : " + prevLayer.Level);
-				break;
-			}
-			if (_action != null) {
-				_action.ClickAction ();
-			}
-			else {
-				print ("action script is empty");
-			}
-			break;
-		default :
-			break;
-		}
-		
-	}
-
 
 
 	public override void Rendering() {
@@ -238,8 +144,8 @@ public class ArcItem : Item {
 		labelObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.right);
 		labelObj.transform.localScale = new Vector3(1, 1, 1);
 		
-		_uiLabel = labelObj.AddComponent<UILabel>();
-		_uiLabel.SetAttributes (_label, _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
+		UIItemLabel _uiItemLabel = labelObj.AddComponent<UIItemLabel>();
+		_uiItemLabel.SetAttributes (_label, _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
 		
 		// each type's ui
 		switch (_itemType) {
@@ -250,7 +156,7 @@ public class ArcItem : Item {
 			labelHasChildObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.right);
 			labelHasChildObj.transform.localScale = new Vector3(1, 1, 1);
 			
-			UILabelHasChild uiLabelHasChild = labelHasChildObj.AddComponent<UILabelHasChild>();
+			UIHasChild uiLabelHasChild = labelHasChildObj.AddComponent<UIHasChild>();
 			uiLabelHasChild.SetAttributes (">", _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
 
 			break;

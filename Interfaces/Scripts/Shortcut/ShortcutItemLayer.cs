@@ -4,85 +4,45 @@ using System.Collections;
 public class ShortcutItemLayer : MonoBehaviour {
 
 	public string _LayerName = "";
-
-	private bool _appearAnimFlag = false;
-
-	private ItemSettings _iSettings;
 	
-    private GameObject _uiLayerObj;
-	private UILayer _uiLayer;
-	private int _curLevel = 1;
-	private ShortcutItemLayer _prevLayer = null;
-	private int _prevLevel = 0;
+	private ItemSettings _iSettings;
 
+	private ItemLayer _itemLayer;
+	private int _level = 1;
+	private ShortcutItemLayer _prevLayer = null;
 
 	internal void Build(ShortcutSettings sSettings, GameObject parentObj) {
 
-		_iSettings = sSettings.ItemSettings;
-		
-		ShortcutItem[] items = Getter.GetChildItemsFromGameObject (gameObject);
-
-		_uiLayerObj = new GameObject ("UILayer_" + _LayerName);
-		_uiLayerObj.transform.SetParent (parentObj.transform, false);
-		_uiLayer = _uiLayerObj.AddComponent<UILayer> ();
-		_uiLayer.Build (sSettings);
-		_uiLayer.AppearLayer(_curLevel-_prevLevel);
-
-		for (int i=0; i<items.Length; i++) {
-			GameObject _uiItemObj = new GameObject("UIItem_"+items[i]._Label);
-			_uiItemObj.transform.SetParent(_uiLayerObj.transform, false);
-
-			_uiItemObj.transform.localRotation = Quaternion.Euler (0, _iSettings.EachItemDegree*i, 0);
-
-			items[i].Layer = gameObject.GetComponent<ShortcutItemLayer>();
-			items[i].Build(sSettings, _uiItemObj);
-
-		}
-
-		if (_curLevel > 1) { // in case parent item, draw cancel button
-			GameObject uiCancelItemObj = new GameObject("UIItem_Cancel");
-			uiCancelItemObj.transform.SetParent (_uiLayerObj.transform, false);
-			uiCancelItemObj.transform.localRotation = Quaternion.Euler (0, _iSettings.EachItemDegree*items.Length, 0);
+		switch (sSettings.Type) {
+		case (ShortcutType.Arc) :
+			_itemLayer = gameObject.AddComponent<ArcLayer>();
 			
-			ShortcutItem cancelItem = uiCancelItemObj.AddComponent<ShortcutItem>();
-			cancelItem.Layer = gameObject.GetComponent<ShortcutItemLayer>();
-			cancelItem._Label = _iSettings.CancelItemLabel;
-			cancelItem._ItemType = ItemType.NormalButton;
-			cancelItem.IsCancelItem = true;
+			_itemLayer.LayerName = _LayerName;
+			_itemLayer.Level = _level;
+			_itemLayer.PrevLayer = _prevLayer;
 
-			cancelItem.Build (sSettings, uiCancelItemObj);                                    
-		}
+			_itemLayer.Build (sSettings, parentObj);
 
-	}
-	
+			break;
+		case (ShortcutType.Stick) :
+			_itemLayer = gameObject.AddComponent<StickLayer>();
 
-	public int Level {
-		get {
-			return _curLevel;
-		}
-		set {
-			_curLevel = value;
-		}
-	}
+			_itemLayer.LayerName = _LayerName;
+			_itemLayer.Level = _level;
+			_itemLayer.PrevLayer = _prevLayer;
 
-	public UILayer UILayer {
-		get {
-			return _uiLayer;
-		}
-		set {
-			_uiLayer = value;
-		}
-	}
+			_itemLayer.Build (sSettings, parentObj);
 
-	public ShortcutItemLayer PrevLayer {
-		get {
-			return _prevLayer;
-		}
-		set {
-			_prevLayer = value;
-			_prevLevel = _prevLayer.Level;
+			break;
+		default :
+			
+			break;
 		}
 
 	}
+
+	public int Level { get { return _level; } set { _level = value; } }
+	public UILayer UILayer { get { return _itemLayer.UILayer; } set {	_itemLayer.UILayer = value; } }
+	public ShortcutItemLayer PrevLayer { get { return _prevLayer; }	set { _prevLayer = value; }	}
 	
 }

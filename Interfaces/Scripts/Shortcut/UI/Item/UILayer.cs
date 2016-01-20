@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UILayer : MonoBehaviour {
+public class UILayer : MonoBehaviour, IUILayer {
 
 	private float _scale = 2.0f;
-	private float _appearRate = 0.02f;
+	private float _appearRate = 0.04f;
 
 	private float _outScale = 2.0f;
 	private float _normalScale = 1.0f;
@@ -17,20 +17,24 @@ public class UILayer : MonoBehaviour {
 	private int _dDirection = 0; // disappear direction
 
 	private bool _isCurrentLayer = false;
-	public bool IsCurrentLayer {
-		get {
-			return _isCurrentLayer;
-		}
-	}
+	public bool IsCurrentLayer { get { return _isCurrentLayer; } }
 	
 
-	internal void Build(ShortcutSettings sSettings) {
+	public void Build(ShortcutSettings sSettings) {
 		gameObject.transform.localScale = Vector3.one * _scale;
+
+		if (sSettings.Type == ShortcutType.Arc) { // 회전 보정
+			gameObject.transform.localRotation = Quaternion.FromToRotation (Vector3.down, Vector3.forward);
+		} 
+
 	}
 
 
 
 	public void AppearLayer(int direction) {
+
+		ShortcutUtil.CurrentLayerObj = gameObject;
+
 		gameObject.SetActive (true);
 		_aDirection = direction;
 		if (direction > 0) {
@@ -38,7 +42,7 @@ public class UILayer : MonoBehaviour {
 		} 
         else {
 			_scale = _inScale;
-		}
+		} 
 
 		_isCurrentLayer = true;
         _appearAnimFlag = true;
@@ -52,6 +56,7 @@ public class UILayer : MonoBehaviour {
 		_isCurrentLayer = false;
         _disappearAnimFlag = true;
 	}
+
 
 	void Update() {
 		if (_appearAnimFlag) {

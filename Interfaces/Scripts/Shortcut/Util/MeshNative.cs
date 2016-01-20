@@ -47,6 +47,8 @@ public static class MeshNative {
 	public static void BuildRectangleMesh(MeshBuilder meshBuilder, 
 	                                      float width,
 	                                      float height, 
+	                                      float wStart,
+	                                      float hStart,
 	                                      float amount) {
 		float fullW;
 		float fullH;
@@ -59,17 +61,14 @@ public static class MeshNative {
 			fullW = width*amount;
 			fullH = height-(width-fullW);
 		}
-		
-		float halfW = fullW/2f;
-		float halfH = fullH/2f;
-		
+
 		meshBuilder.Resize(4, 6);
 		meshBuilder.ResetIndices();
 		
-		meshBuilder.AddVertex(new Vector3( halfW,  halfH, 0));
-		meshBuilder.AddVertex(new Vector3( halfW, -halfH, 0)); 
-		meshBuilder.AddVertex(new Vector3(-halfW, -halfH, 0));
-		meshBuilder.AddVertex(new Vector3(-halfW,  halfH, 0));
+		meshBuilder.AddVertex(new Vector3(fullW,  fullH, 0));
+		meshBuilder.AddVertex(new Vector3(fullW, fullH*hStart, 0)); 
+		meshBuilder.AddVertex(new Vector3(fullW*wStart, fullH*hStart, 0));
+		meshBuilder.AddVertex(new Vector3(fullW*wStart, fullH, 0));
 		
 		meshBuilder.AddTriangle(0, 1, 2);
 		meshBuilder.AddTriangle(0, 2, 3);

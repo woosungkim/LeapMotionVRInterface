@@ -7,5 +7,4 @@
     usercustom,
     grabbinghand,
     fliphand,
-    Null
 }

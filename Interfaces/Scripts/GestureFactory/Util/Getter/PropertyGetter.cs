@@ -114,98 +114,98 @@ public static class PropertyGetter {
         switch(ob._gestureType)
         {
             case GestureType.swipe:
-                Swipe_Gesture temp1 = ob as Swipe_Gesture;
-                if (temp1._usingHand == UsingHand.All)
+                Swipe_Gesture tempSwipe = ob as Swipe_Gesture;
+                if (tempSwipe._usingHand == UsingHand.All)
                 {
                     return true;
                 }
-                else if ((temp1._usingHand == UsingHand.Left) && (temp1.Hands.Frontmost.IsLeft))
+                else if ((tempSwipe._usingHand == UsingHand.Left) && (tempSwipe.Hands.Frontmost.IsLeft))
                 {
                     return true;
                 }
-                else if ((temp1._usingHand == UsingHand.Right) && temp1.Hands.Frontmost.IsRight)
+                else if ((tempSwipe._usingHand == UsingHand.Right) && tempSwipe.Hands.Frontmost.IsRight)
                 {
                     return true;
                 }
                 return false;
             case GestureType.circle:
-                Circle_Gesture temp2 = ob as Circle_Gesture;
+                Circle_Gesture tempCircle = ob as Circle_Gesture;
 
-                if (temp2._usingHand == UsingHand.All)
+                if (tempCircle._usingHand == UsingHand.All)
                 {
                     return true;
                 }
-                else if ((temp2._usingHand == UsingHand.Left) && (temp2.Hands.Frontmost.IsLeft))
+                else if ((tempCircle._usingHand == UsingHand.Left) && (tempCircle.Hands.Frontmost.IsLeft))
                 {
                     return true;
                 }
-                else if ((temp2._usingHand == UsingHand.Right) && temp2.Hands.Frontmost.IsRight)
+                else if ((tempCircle._usingHand == UsingHand.Right) && tempCircle.Hands.Frontmost.IsRight)
                 {
                     return true;
                 }
                 return false;
 
             case GestureType.keytab:
-                KeyTap_Gesture temp3 = ob as KeyTap_Gesture;
+                KeyTap_Gesture tempKeytab = ob as KeyTap_Gesture;
 
-                if (temp3._usingHand == UsingHand.All)
+                if (tempKeytab._usingHand == UsingHand.All)
                 {
                     return true;
                 }
-                else if ((temp3._usingHand == UsingHand.Left) && (temp3.Hands.Frontmost.IsLeft))
+                else if ((tempKeytab._usingHand == UsingHand.Left) && (tempKeytab.Hands.Frontmost.IsLeft))
                 {
                     return true;
                 }
-                else if ((temp3._usingHand == UsingHand.Right) && temp3.Hands.Frontmost.IsRight)
+                else if ((tempKeytab._usingHand == UsingHand.Right) && tempKeytab.Hands.Frontmost.IsRight)
                 {
                     return true;
                 }
                 return false;
 
             case GestureType.screentab:
-                ScreenTap_Gesture temp4 = ob as ScreenTap_Gesture;
+                ScreenTap_Gesture tempScreenTab = ob as ScreenTap_Gesture;
 
-                if (temp4._usingHand == UsingHand.All)
+                if (tempScreenTab._usingHand == UsingHand.All)
                 {
                     return true;
                 }
-                else if ((temp4._usingHand == UsingHand.Left) && (temp4.Hands.Frontmost.IsLeft))
+                else if ((tempScreenTab._usingHand == UsingHand.Left) && (tempScreenTab.Hands.Frontmost.IsLeft))
                 {
                     return true;
                 }
-                else if ((temp4._usingHand == UsingHand.Right) && temp4.Hands.Frontmost.IsRight)
+                else if ((tempScreenTab._usingHand == UsingHand.Right) && tempScreenTab.Hands.Frontmost.IsRight)
                 {
                     return true;
                 }
                 return false;
             case GestureType.grabbinghand:
-                GrabbingHand_Gesture temp5 = ob as GrabbingHand_Gesture;
+                GrabbingHand_Gesture tempGrabbingHand = ob as GrabbingHand_Gesture;
 
-                if (temp5._usingHand == UsingHand.All)
+                if (tempGrabbingHand._usingHand == UsingHand.All)
                 {
                     return true;
                 }
-                else if ((temp5._usingHand == UsingHand.Left) && (temp5.Hands.Frontmost.IsLeft))
+                else if ((tempGrabbingHand._usingHand == UsingHand.Left) && (tempGrabbingHand.Hands.Frontmost.IsLeft))
                 {
                     return true;
                 }
-                else if ((temp5._usingHand == UsingHand.Right) && temp5.Hands.Frontmost.IsRight)
+                else if ((tempGrabbingHand._usingHand == UsingHand.Right) && tempGrabbingHand.Hands.Frontmost.IsRight)
                 {
                     return true;
                 }
                 return false;
             case GestureType.fliphand:
-                FlipHand_Gesture temp6 = ob as FlipHand_Gesture;
+                FlipHand_Gesture tempFlipHand = ob as FlipHand_Gesture;
 
-                if (temp6._usingHand == UsingHand.All)
+                if (tempFlipHand._usingHand == UsingHand.All)
                 {
                     return true;
                 }
-                else if ((temp6._usingHand == UsingHand.Left) && (temp6.Hands.Frontmost.IsLeft))
+                else if ((tempFlipHand._usingHand == UsingHand.Left) && (tempFlipHand.Hands.Frontmost.IsLeft))
                 {
                     return true;
                 }
-                else if ((temp6._usingHand == UsingHand.Right) && temp6.Hands.Frontmost.IsRight)
+                else if ((tempFlipHand._usingHand == UsingHand.Right) && tempFlipHand.Hands.Frontmost.IsRight)
                 {
                     return true;
                 }
@@ -220,18 +220,18 @@ public static class PropertyGetter {
     {
         if(ob._gestureType == GestureType.circle)
         {
-            Circle_Gesture temp = ob as Circle_Gesture;
+            Circle_Gesture tempCircle = ob as Circle_Gesture;
 
-            if (temp._circle_gesture.Pointable.Direction.AngleTo(temp.GetNormal()) <= 3.14 / 2)
+            if (tempCircle._circle_gesture.Pointable.Direction.AngleTo(tempCircle.GetNormal()) <= 3.14 / 2)
             {
-                temp._isClockwise = 1;
+                tempCircle._isClockwise = 1;
             }
             else
             {
-                temp._isClockwise = -1;
+                tempCircle._isClockwise = -1;
             }
 
-            return temp._isClockwise;
+            return tempCircle._isClockwise;
         }
 
         return 0;

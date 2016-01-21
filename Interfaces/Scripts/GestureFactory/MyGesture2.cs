@@ -12,6 +12,7 @@ public class MyGesture2 : Swipe_Gesture {
 
     public override void DoAction()
     {
+        switcher = Switcher.GetInstance();
         switcher.switchCameraToAR();
         /*
         GameObject VR = GameObject.Find("VRGesture");

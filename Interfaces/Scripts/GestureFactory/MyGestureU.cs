@@ -4,8 +4,8 @@ using Leap;
 
 public class MyGestureU : UserGesture {
 
-    public int _direction = 0;
-    public float _length = 0;
+    private int _direction = 0;
+    private float _length = 0;
     Switcher _switcher = null;
 
     public override bool SetConfig()

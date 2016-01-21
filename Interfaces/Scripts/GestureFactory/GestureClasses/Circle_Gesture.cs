@@ -25,7 +25,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
     
 
     //-------------------------------------------------
-
+    //User Setting Area
     public CircleDirection CircleDirection;
     [Range(0,2)]
     public float MinProgress;
@@ -78,7 +78,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         UnCheck();
     }
 
-
+    //Method for checking circle gesture direction
     protected int IsClockWise()
     {
         if(_circle_gesture.Pointable.Direction.AngleTo(this.GetNormal()) <= 3.14/2)
@@ -93,6 +93,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         return _isClockwise;
     }
 
+    //Virtual method for gesture checking.
     public virtual void CheckGesture()
     {
         _lastFrame = _leap_controller.Frame(0);
@@ -122,7 +123,6 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
                         {
                             int direc = PropertyGetter.IsClockWise(this);
                             this._endProgress = _circle_gesture.Progress;
-                            //print("stop progress : " + this._endProgress);
                             if (this._endProgress >= this.MinProgress && direc == _useDirection)
                             {
                                 this._isChecked = true;
@@ -141,7 +141,6 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
                 {
                     int direc = this.IsClockWise();
                     this._endProgress = _circle_gesture.Progress;
-                  //  print("update progress : " + this._endProgress);
                     if (this._endProgress >= this.MinProgress && direc == _useDirection)
                     {
                         this._isChecked = true;
@@ -165,16 +164,19 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
        
     }
 
+    //Handler method.
     public virtual void DoAction()
     {
         print("핸들러 만들어라 이 자식아");
     }
 
+    //Method for off the gesture enable flag.
     public virtual void UnCheck()
     {
         _isChecked = false;
     }
 
+    //Method for setting leap controller and gesture configurations.
     protected void SetGestureCondition()
     {
         _gestureType = GestureType.circle;
@@ -182,7 +184,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         GestureSetting.SetGestureCondition(this, MountType, CircleDirection, MinProgress, UseArea, UsingHand);      
     }
 
- 
+    //Method for check which hand does user use.
     public bool IsEnableGestureHand()
     {
         if (PropertyGetter.IsEnableGestureHand(this))
@@ -191,12 +193,14 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         { return false; }
     }
 
+    //Mothod for setting value of circle gesture valid state.
     protected bool SetMinProgress(float times)
     {
         this.MinProgress = times;
         return true;
     }
 
+    //Getter of pointable object of gesture object.
     protected Pointable GetPointable()
     {
         if(_circle_gesture != null)
@@ -211,6 +215,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         
     }
 
+    //Getter of circle gesture object's progress.
     protected float GetProgress()
     {
         if(_circle_gesture != null)
@@ -225,6 +230,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         
     }
 
+    //Getter of gesture normal vector.
     public  Vector GetNormal()
     {
         if(_circle_gesture != null)
@@ -238,6 +244,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         }
     }
 
+    //Getter of valid list of hand objects.
     protected HandList GetHandList()
     {
         if(_circle_gesture != null)
@@ -252,6 +259,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         
     }
 
+    //Getter of valid list of finger object
     protected FingerList GetFingerList()
     {
         if(_circle_gesture != null)

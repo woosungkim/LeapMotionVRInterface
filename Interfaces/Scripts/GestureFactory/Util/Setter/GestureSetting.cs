@@ -12,24 +12,24 @@ public static class GestureSetting {
 
         if (ob._gestureType == GestureType.circle)
         {
-            Circle_Gesture temp = ob as Circle_Gesture;
+            Circle_Gesture tempCircle = ob as Circle_Gesture;
 
-            temp._mountType = mountType;
+            tempCircle._mountType = mountType;
        
-            temp._useArea = useArea;
-            temp._state = Gesture.GestureState.STATE_INVALID;
-            temp._isChecked = false;
-            temp._isClockwise = -1;
-            temp._usingHand = usingHand;
-            temp._isPlaying = false;
-            temp.MinProgress = progress;
+            tempCircle._useArea = useArea;
+            tempCircle._state = Gesture.GestureState.STATE_INVALID;
+            tempCircle._isChecked = false;
+            tempCircle._isClockwise = -1;
+            tempCircle._usingHand = usingHand;
+            tempCircle._isPlaying = false;
+            tempCircle.MinProgress = progress;
             if(circleDirection == CircleDirection.Clockwise)
             {
-                temp._useDirection = 1;
+                tempCircle._useDirection = 1;
             }
             else
             {
-                temp._useDirection = -1;
+                tempCircle._useDirection = -1;
             }
 
         }
@@ -42,82 +42,82 @@ public static class GestureSetting {
 
         if (ob._gestureType == GestureType.swipe)
         {
-            Swipe_Gesture temp = ob as Swipe_Gesture;
+            Swipe_Gesture tempSwipe = ob as Swipe_Gesture;
 
-            temp._mountType = temp.MountType;
+            tempSwipe._mountType = tempSwipe.MountType;
 
-            temp._isChecked = false;
-            temp._direction = Vector.Zero;
-            temp._state = Gesture.GestureState.STATE_INVALID;
-            temp._isPlaying = false;
-            temp.Sensitivity = sensitivity;
-            temp._useArea = useArea;
-            temp._usingHand = usingHand;
+            tempSwipe._isChecked = false;
+            tempSwipe._direction = Vector.Zero;
+            tempSwipe._state = Gesture.GestureState.STATE_INVALID;
+            tempSwipe._isPlaying = false;
+            tempSwipe.Sensitivity = sensitivity;
+            tempSwipe._useArea = useArea;
+            tempSwipe._usingHand = usingHand;
 
-            if (temp._mountType == MountType.HeadMount)
+            if (tempSwipe._mountType == MountType.HeadMount)
             {
                 if (swipeDirection == SwipeDirection.GoLeft)
                 {
-                    temp.UseAxis = 'x';
-                    temp._useDirection = -1;
+                    tempSwipe.UseAxis = 'x';
+                    tempSwipe._useDirection = -1;
                 }
                 else if (swipeDirection == SwipeDirection.GoRight)
                 {
-                    temp.UseAxis = 'x';
-                    temp._useDirection = 1;
+                    tempSwipe.UseAxis = 'x';
+                    tempSwipe._useDirection = 1;
                 }
                 else if (swipeDirection == SwipeDirection.GoDown)
                 {
-                    temp.UseAxis = 'z';
-                    temp._useDirection = 1;
+                    tempSwipe.UseAxis = 'z';
+                    tempSwipe._useDirection = 1;
                 }
                 else if (swipeDirection == SwipeDirection.GoUp)
                 {
-                    temp.UseAxis = 'z';
-                    temp._useDirection = -1;
+                    tempSwipe.UseAxis = 'z';
+                    tempSwipe._useDirection = -1;
                 }
                 else if (swipeDirection == SwipeDirection.GoStraight)
                 {
-                    temp.UseAxis = 'y';
-                    temp._useDirection = 1;
+                    tempSwipe.UseAxis = 'y';
+                    tempSwipe._useDirection = 1;
                 }
                 else
                 {
-                    temp.UseAxis = 'y';
-                    temp._useDirection = -1;
+                    tempSwipe.UseAxis = 'y';
+                    tempSwipe._useDirection = -1;
                 }
             }
             else
             {
                 if (swipeDirection == SwipeDirection.GoLeft)
                 {
-                    temp.UseAxis = 'x';
-                    temp._useDirection = -1;
+                    tempSwipe.UseAxis = 'x';
+                    tempSwipe._useDirection = -1;
                 }
                 else if (swipeDirection == SwipeDirection.GoRight)
                 {
-                    temp.UseAxis = 'x';
-                    temp._useDirection = 1;
+                    tempSwipe.UseAxis = 'x';
+                    tempSwipe._useDirection = 1;
                 }
                 else if (swipeDirection == SwipeDirection.GoDown)
                 {
-                    temp.UseAxis = 'y';
-                    temp._useDirection = 1;
+                    tempSwipe.UseAxis = 'y';
+                    tempSwipe._useDirection = 1;
                 }
                 else if (swipeDirection == SwipeDirection.GoUp)
                 {
-                    temp.UseAxis = 'y';
-                    temp._useDirection = -1;
+                    tempSwipe.UseAxis = 'y';
+                    tempSwipe._useDirection = -1;
                 }
                 else if (swipeDirection == SwipeDirection.GoStraight)
                 {
-                    temp.UseAxis = 'z';
-                    temp._useDirection = 1;
+                    tempSwipe.UseAxis = 'z';
+                    tempSwipe._useDirection = 1;
                 }
                 else
                 {
-                    temp.UseAxis = 'z';
-                    temp._useDirection = -1;
+                    tempSwipe.UseAxis = 'z';
+                    tempSwipe._useDirection = -1;
                 }
             }
            
@@ -132,42 +132,42 @@ public static class GestureSetting {
 
         if (ob._gestureType == GestureType.keytab)
         {
-            KeyTap_Gesture temp = ob as KeyTap_Gesture;
+            KeyTap_Gesture tempKeyTab = ob as KeyTap_Gesture;
 
-            temp._mountType = temp.MountType;
+            tempKeyTab._mountType = tempKeyTab.MountType;
 
-            temp._useArea = useArea;
-            temp._isChecked = false;
-            temp._usingHand = usingHand;
+            tempKeyTab._useArea = useArea;
+            tempKeyTab._isChecked = false;
+            tempKeyTab._usingHand = usingHand;
 
         }
         else if(ob._gestureType == GestureType.screentab)
         {
-            ScreenTap_Gesture temp = ob as ScreenTap_Gesture;
+            ScreenTap_Gesture tempScreenTab = ob as ScreenTap_Gesture;
 
-            temp._mountType = temp.MountType;
+            tempScreenTab._mountType = tempScreenTab.MountType;
 
-            temp._useArea = useArea;
-            temp._isChecked = false;
-            temp._usingHand = usingHand;
+            tempScreenTab._useArea = useArea;
+            tempScreenTab._isChecked = false;
+            tempScreenTab._usingHand = usingHand;
         }
         else if(ob._gestureType == GestureType.grabbinghand)
         {
-            GrabbingHand_Gesture temp = ob as GrabbingHand_Gesture;
+            GrabbingHand_Gesture tempGrabbingHand = ob as GrabbingHand_Gesture;
 
-            temp._isChecked = false;
-            temp._mountType = mountType;
-            temp._useArea = useArea;
-            temp._usingHand = usingHand;
+            tempGrabbingHand._isChecked = false;
+            tempGrabbingHand._mountType = mountType;
+            tempGrabbingHand._useArea = useArea;
+            tempGrabbingHand._usingHand = usingHand;
         }
         else if (ob._gestureType == GestureType.fliphand)
         {
-            FlipHand_Gesture temp = ob as FlipHand_Gesture;
+            FlipHand_Gesture tempFlipHand = ob as FlipHand_Gesture;
 
-            temp._isChecked = false;
-            temp._mountType = mountType;
-            temp._useArea = useArea;
-            temp._usingHand = usingHand;
+            tempFlipHand._isChecked = false;
+            tempFlipHand._mountType = mountType;
+            tempFlipHand._useArea = useArea;
+            tempFlipHand._usingHand = usingHand;
         }
     }
 

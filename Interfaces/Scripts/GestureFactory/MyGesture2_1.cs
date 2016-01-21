@@ -13,6 +13,7 @@ public class MyGesture2_1 : Swipe_Gesture {
     
     public override void DoAction()
     {
+        switcher = Switcher.GetInstance();
         switcher.switchCameraToVR();
       
     }

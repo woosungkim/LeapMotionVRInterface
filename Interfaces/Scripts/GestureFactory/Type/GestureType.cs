@@ -5,5 +5,7 @@
     keytab,
     screentab,
     usercustom,
+    grabbinghand,
+    fliphand,
     Null
 }

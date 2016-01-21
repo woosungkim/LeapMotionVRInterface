@@ -4,9 +4,9 @@ using Leap;
 
 public static class WhichSide{
 
-	public static bool capturedSide(Hand hand, UseArea useArea, bool isHeadMount)
+	public static bool capturedSide(Hand hand, UseArea useArea, MountType mountType)
     {
-        if (!isHeadMount)
+        if (mountType == MountType.TableMount)
         {
             Vector position = hand.PalmPosition;
             Vector3 unityPosition = position.ToUnity();

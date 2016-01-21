@@ -13,7 +13,7 @@ public class MyGestureU1 : UserGesture {
 
     }
 
-    protected override void DoAction()
+    public void DoAction()
     {
         //base.DoAction();
         if (IsUpward)

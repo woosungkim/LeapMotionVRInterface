@@ -14,6 +14,13 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     
     protected GestureList _gestures;
     protected FingerList _fingers;
+    public MountType MountType;
+    public UsingHand UsingHand;
+    public UseArea UseArea;
+
+
+    public UsingHand _usingHand
+    { get; set; }
 
     public MountType _mountType
     { get; set; }
@@ -27,9 +34,6 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     public HandList Hands
     { get; set; }
 
-    public bool _isRight
-    { get; set; }
-
     public Controller _leap_controller
     { get; set; }
 
@@ -39,11 +43,10 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     public bool _isChecked
     { get; set; }
 
-    public bool _isPlaying
-    { get; set; }
-
-    public bool _isHeadMount
-    { get; set; }
+    public virtual void Start()
+    {
+        this.SetGestureCondition();
+    }
 
     public virtual void Update()
     {
@@ -61,7 +64,7 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         this.Hands = this._lastFrame.Hands;
         this._gestures = this._lastFrame.Gestures();
         
-        if(!this._isChecked)
+        if((!this._isChecked) && IsEnableGestureHand())
         {
             foreach (Hand hand in Hands)
             {
@@ -70,11 +73,10 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
                 foreach (Gesture gesture in _gestures)
                 {
 
-                    if ((gesture.Type == Gesture.GestureType.TYPE_KEY_TAP) && WhichSide.capturedSide(hand, _useArea, _isHeadMount))
+                    if ((gesture.Type == Gesture.GestureType.TYPE_KEY_TAP) && WhichSide.capturedSide(hand, _useArea, _mountType))
                     {
                         _keytab_gesture = new KeyTapGesture(gesture);
                         this.GetDirection();
-                        this.AnyHand();
                         this.GetPointable();
                         this.GetPosition();
                        
@@ -89,7 +91,8 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
 
             }
         }
-        else if(this._isChecked)
+
+        if(this._isChecked)
         {
             DoAction();
         }
@@ -100,7 +103,7 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         this._isChecked = false;
     }
 
-    protected virtual void DoAction()
+    public virtual void DoAction()
     {
         print("Please code this method");
     }
@@ -109,25 +112,13 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     {
         _gestureType = GestureType.keytab;
         _leap_controller = ControllerSetter.SetConfig(_gestureType);
-        GestureSetting.SetGestureCondition(this);
+        GestureSetting.SetGestureCondition(this, MountType, UseArea, UsingHand);
     }
 
-    protected void SetGestureCondition(UseArea useArea)
-    {
-        _gestureType = GestureType.keytab;
-        _leap_controller = ControllerSetter.SetConfig(_gestureType);
-        GestureSetting.SetGestureCondition(this, useArea);
-    }
 
-    public bool AnyHand()
+    public bool IsEnableGestureHand()
     {
-        if (PropertyGetter.AnyHand(this))
-        { return _isRight; }
-        else
-        {
-            print("AnyHand() : This object is not valid");
-            return false;
-        }
+        return PropertyGetter.IsEnableGestureHand(this);
     }
 
     protected virtual Vector GetDirection()

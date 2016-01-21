@@ -17,8 +17,9 @@ public interface IGesture
     void UnCheck();
 
     // Function of getting hand which side user used.
-    bool AnyHand();
+    bool IsEnableGestureHand();
 
+    void DoAction();
     /*
     // Set flag of VR mode.
     void SetMount();
@@ -31,42 +32,22 @@ public interface IGesture
     { get; set; }
    
     Controller _leap_controller
-    {
-        get;
-        set;
-    }
+    { get; set; }
 
     HandList Hands
-    {
-        get;
-        set;
-    }
+    { get; set; }
 
     Frame _lastFrame
-    {
-        get;
-        set;
-    }
+    { get; set; }
 
     UseArea _useArea
     { get; set; }
 
     bool _isChecked
-    {
-        get;
-        set;
-    }
+    { get; set; }
 
-    bool _isRight
-    {
-        get;
-        set;
-    }
+    UsingHand _usingHand
+    { get; set; }
 
-    bool _isHeadMount
-    {
-        get;
-        set;
-    }
 }
 

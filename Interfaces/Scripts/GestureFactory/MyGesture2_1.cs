@@ -8,18 +8,10 @@ public class MyGesture2_1 : Swipe_Gesture {
 
     Switcher switcher = null;
 
-    // Use this for initialization
-    void Start () {
-        switcher = Switcher.GetInstance();
-       
-        //SetConfig();
-        SetGestureCondition('z', -1, UseArea.All);
-    }
-
     // Update is called once per frame
   
     
-    protected override void DoAction()
+    public override void DoAction()
     {
         switcher.switchCameraToVR();
       

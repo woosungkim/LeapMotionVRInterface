@@ -28,11 +28,12 @@ public static class ControllerSetter {
     {
         
         Controller _leap_controller = new Controller();
-        _leap_controller.EnableGesture(UseGestureType(gestureType));
+        
         
         switch(gestureType)
         {
-            case GestureType.swipe: 
+            case GestureType.swipe:
+                _leap_controller.EnableGesture(Gesture.GestureType.TYPE_SWIPE);
                 _leap_controller.Config.SetFloat("Gesture.Swipe.MinLength", 140);
                 _leap_controller.Config.SetFloat("Gesture.Swipe.MinVelocity", 1000);
                 break;
@@ -42,6 +43,7 @@ public static class ControllerSetter {
                 _leap_controller.Config.SetFloat("Gesture.Circle.MinArc", 4.71f);
                 break;
             case GestureType.keytab:
+                _leap_controller.EnableGesture(Gesture.GestureType.TYPE_KEY_TAP);
                 _leap_controller.Config.SetFloat("Gesture.KeyTap.MinDownVelocity", 50f);
                 _leap_controller.Config.SetFloat("Gesture.KeyTap.HistorySeconds", 0.1f);
                 _leap_controller.Config.SetFloat("Gesture.KeyTap.MinDistance", 3.0f);
@@ -52,6 +54,10 @@ public static class ControllerSetter {
                 _leap_controller.Config.SetFloat("Gesture.ScreenTap.HistorySeconds", 0.1f);
                 _leap_controller.Config.SetFloat("Gesture.ScreenTap.MinDistance", 5.0f);
                 break;
+            case GestureType.grabbinghand:
+                return _leap_controller;
+            case GestureType.fliphand:
+                return _leap_controller;
             default: break;
         }
         _leap_controller.Config.Save();

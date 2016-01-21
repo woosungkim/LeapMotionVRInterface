@@ -11,6 +11,8 @@ public class UserGesture : MonoBehaviour, IUserGesture {
     protected bool IsUpward = false;//true면 손바닥이 위방향, false면 아래방향.
     protected Frame tFrame;
 
+    public MountType MountType;
+    
     public MountType _mountType
     { get; set; }
 
@@ -18,6 +20,9 @@ public class UserGesture : MonoBehaviour, IUserGesture {
     { get; set; }
 
     public UseArea _useArea
+    { get; set; }
+
+    public UsingHand _usingHand
     { get; set; }
 
     public Controller _leap_controller
@@ -32,14 +37,9 @@ public class UserGesture : MonoBehaviour, IUserGesture {
     public bool _isChecked
     { get; set; }
 
-    public bool _isRight
-    { get; set; }
-
     public bool _isPlaying
     { get; set; }
 
-    public bool _isHeadMount
-    { get; set; }
 
     void Start()
     {
@@ -75,7 +75,7 @@ public class UserGesture : MonoBehaviour, IUserGesture {
         Hand hand = Hands.Frontmost;
 
        
-        AnyHand();
+        IsEnableGestureHand();
         IsGrabbingHand();
         PalmDirection();
         this._isChecked = GestureCondition();
@@ -85,6 +85,8 @@ public class UserGesture : MonoBehaviour, IUserGesture {
             DoAction();
         }
     }
+
+  
 
     public void IsGrabbingHand()
     {
@@ -123,7 +125,7 @@ public class UserGesture : MonoBehaviour, IUserGesture {
         return _isChecked;
     }
 
-    protected virtual void DoAction()
+    public void DoAction()
     {
         print("Please make your Gesture Handler.");
     }
@@ -133,7 +135,7 @@ public class UserGesture : MonoBehaviour, IUserGesture {
         _isChecked = !_isChecked;
     }
 
-    public virtual bool AnyHand()
+    public virtual bool IsEnableGestureHand()
     {
         if(this.Hands.IsEmpty)
         {
@@ -145,13 +147,6 @@ public class UserGesture : MonoBehaviour, IUserGesture {
   
     public void SetMount()
     {
-        if (_mountType == MountType.HeadMount)
-        {
-            _isHeadMount = true;
-        }
-        else
-        {
-            _isHeadMount = false;
-        }
+        this._mountType = this.MountType;
     }
 }

@@ -13,6 +13,13 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     protected GestureList _gestures;
     protected FingerList _fingers;
 
+    public MountType MountType;
+    public UseArea UseArea;
+    public UsingHand UsingHand;
+
+    public UsingHand _usingHand
+    { get; set; }
+
     public MountType _mountType
     { get; set; }
 
@@ -20,9 +27,6 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     { get; set; }
 
     public UseArea _useArea
-    { get; set; }
-
-    public bool _isRight
     { get; set; }
 
     public Controller _leap_controller
@@ -37,11 +41,10 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     public bool _isChecked
     { get; set; }
 
-    public bool _isPlaying
-    { get; set; }
-
-    public bool _isHeadMount
-    { get; set; }
+    public virtual void Start()
+    {
+        this.SetGestureCondition();
+    }
 
     public virtual void Update()
     {
@@ -58,7 +61,7 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         Hands = _lastFrame.Hands;
         _gestures = _lastFrame.Gestures();
 
-        if(!this._isChecked)
+        if((!this._isChecked) && IsEnableGestureHand())
         {
             foreach (Hand hand in Hands)
             {
@@ -66,12 +69,12 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
 
                 foreach (Gesture gesture in _gestures)
                 {
-                    if ((gesture.Type == Gesture.GestureType.TYPE_SCREEN_TAP) && WhichSide.capturedSide(hand, _useArea, _isHeadMount))
+                    if ((gesture.Type == Gesture.GestureType.TYPE_SCREEN_TAP) && WhichSide.capturedSide(hand, _useArea, this._mountType ))
                     {
                         _screentap_gesture = new ScreenTapGesture(gesture);
 
                         this.GetDirection();
-                        this.AnyHand();
+                        this.IsEnableGestureHand();
                         this.GetPointable();
                         this.GetPosition();
 
@@ -96,32 +99,19 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         _isChecked = false;
     }
 
-    public bool AnyHand()
+    public bool IsEnableGestureHand()
     {
-        if (PropertyGetter.AnyHand(this))
-        { return _isRight; }
-        else
-        {
-            print("AnyHand() : This object is not valid");
-            return false;
-        }
+        return PropertyGetter.IsEnableGestureHand(this);
     }
 
     protected void SetGestureCondition()
     {
-        _gestureType = GestureType.keytab;
+        _gestureType = GestureType.screentab;
         _leap_controller = ControllerSetter.SetConfig(_gestureType);
-        GestureSetting.SetGestureCondition(this);
+        GestureSetting.SetGestureCondition(this, MountType, UseArea, UsingHand);
     }
 
-    protected void SetGestureCondition(UseArea useArea)
-    {
-        _gestureType = GestureType.keytab;
-        _leap_controller = ControllerSetter.SetConfig(_gestureType);
-        GestureSetting.SetGestureCondition(this, useArea);
-    }
-
-    protected virtual void DoAction()
+    public virtual void DoAction()
     {
         print("Please code this method");
     }

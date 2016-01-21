@@ -16,7 +16,7 @@ public class MyGestureU2 : UserGesture
 
     }
 
-    protected override void DoAction()
+    public void DoAction()
     {
         //base.DoAction();
         _switcher.switchCameraToVR();

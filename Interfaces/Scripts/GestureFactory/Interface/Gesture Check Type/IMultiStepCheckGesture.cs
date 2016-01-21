@@ -11,4 +11,5 @@ public interface IMultiStepCheckGesture : IGesture
     Gesture.GestureState _state
     { get; set; }
 
+
 }

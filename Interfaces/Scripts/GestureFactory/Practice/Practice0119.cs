@@ -3,16 +3,9 @@ using System.Collections;
 
 public class Practice0119 : Swipe_Gesture {
 
-    bool result;
-	// Use this for initialization
-	void Start () {
-        SetGestureCondition('x', 1, 0);
-	}
-
-    protected override void DoAction()
+    public override void DoAction()
     {
-        result = AnyHand();
-        print(result);
-        print("check");
+        GameObject cube = GameObject.Find("Cube");
+        cube.GetComponent<Renderer>().material.color = Color.red;
     }
 }

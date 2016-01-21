@@ -10,7 +10,6 @@ public class ShortcutController : MonoBehaviour {
 
 	private bool isFirst = true;
 
-
 	void Awake () {
 		if (!CheckInspector ()) {
 			print ("Check inspector factors");
@@ -41,22 +40,6 @@ public class ShortcutController : MonoBehaviour {
 		Vector3 pos = new Vector3 (_ShortcutSettings.XPosition, _ShortcutSettings.YPosition, ComputeZPos (_ShortcutSettings.XPosition, _ShortcutSettings.YPosition));
 		gameObject.transform.position = Camera.main.ViewportToWorldPoint (pos);
 
-		// xz 평면 회전 보정
-		//Vector3 relative = transform.InverseTransformPoint (_Camera.transform.position);
-		//float angle = Mathf.Atan2 (relative.x, relative.z) * Mathf.Rad2Deg;
-		//if (_ShortcutSettings.Type == ShortcutType.Arc) {
-		//	gameObject.transform.localRotation = Quaternion.Euler (new Vector3 (180 - angle, 0, 0));
-		//} 
-		//else if (_ShortcutSettings.Type == ShortcutType.Stick) {
-			//gameObject.transform.localRotation = Quaternion.Euler (new Vector3 (360-angle, 180, 180));
-		//}
-
-		// yz 평면 회전 보정
-		//angle = Mathf.Atan2 (relative.y, relative.z) * Mathf.Rad2Deg;
-		//if (_ShortcutSettings.Type == ShortcutType.Stick) {
-		//	gameObject.transform.localRotation = Quaternion.Euler (new Vector3 (0, 180-angle, 0));
-		//} 
-
 	}
 
 	private float ComputeZPos(float x, float y) {
@@ -68,19 +51,23 @@ public class ShortcutController : MonoBehaviour {
 
 	/* Appear this shortcut. */
 	public void Appear() {
-		if (isFirst) {
-			// item hierarchy build
-			_ItemHierarchy.Build (_ShortcutSettings, gameObject);
-			isFirst = false;
-		} 
-		else {
-			_ItemHierarchy.Appear ();
-		}
+
+			if (isFirst) {
+				// item hierarchy build
+				_ItemHierarchy.Build (_ShortcutSettings, gameObject);
+				isFirst = false;
+			} 
+			else {
+				_ItemHierarchy.Appear ();
+			}
+
+
 	}
-
-
+	
 	/* DisAppear this shortcut. */
 	public void Disappear() {
+
 		_ItemHierarchy.Disappear ();
 	}
+
 }

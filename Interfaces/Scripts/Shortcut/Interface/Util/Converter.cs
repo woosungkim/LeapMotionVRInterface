@@ -9,15 +9,33 @@ public static class Converter {
 	{
 		if (hand.IsRight) {
 			switch (fingerType) {
-			case Finger.FingerType.TYPE_THUMB: return PointerType.RightThumb;
-			case Finger.FingerType.TYPE_INDEX: return PointerType.RightIndex;
-			case Finger.FingerType.TYPE_MIDDLE: return PointerType.RightMiddle;
-			case Finger.FingerType.TYPE_RING: return PointerType.RightRing;
-			case Finger.FingerType.TYPE_PINKY: return PointerType.RightPinky;
+			case Finger.FingerType.TYPE_THUMB:
+				return PointerType.RightThumb;
+			case Finger.FingerType.TYPE_INDEX:
+				return PointerType.RightIndex;
+			case Finger.FingerType.TYPE_MIDDLE:
+				return PointerType.RightMiddle;
+			case Finger.FingerType.TYPE_RING:
+				return PointerType.RightRing;
+			case Finger.FingerType.TYPE_PINKY:
+				return PointerType.RightPinky;
+			}
+		} else if (hand.IsLeft) {
+			switch (fingerType) {
+			case Finger.FingerType.TYPE_THUMB:
+				return PointerType.LeftThumb;
+			case Finger.FingerType.TYPE_INDEX:
+				return PointerType.LeftIndex;
+			case Finger.FingerType.TYPE_MIDDLE:
+				return PointerType.LeftMiddle;
+			case Finger.FingerType.TYPE_RING:
+				return PointerType.LeftRing;
+			case Finger.FingerType.TYPE_PINKY:
+				return PointerType.LeftPinky;
 			}
 		}
 		
-		return PointerType.Null;
+		return PointerType.NULL;
 		
 	}
 

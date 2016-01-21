@@ -8,7 +8,10 @@ public class ShortcutController : MonoBehaviour {
 	public ItemHierarchy _ItemHierarchy;
 	public Transform _Camera;
 
-	private bool isFirst = true;
+	private bool _isFirst = true;
+
+	private bool _isAppearing = false;
+	public bool IsAppearing { get { return _isAppearing; } set { _isAppearing = value; } }
 
 	void Awake () {
 		if (!CheckInspector ()) {
@@ -51,23 +54,27 @@ public class ShortcutController : MonoBehaviour {
 
 	/* Appear this shortcut. */
 	public void Appear() {
+		_isAppearing = true;
 
-			if (isFirst) {
-				// item hierarchy build
-				_ItemHierarchy.Build (_ShortcutSettings, gameObject);
-				isFirst = false;
-			} 
-			else {
-				_ItemHierarchy.Appear ();
-			}
+		if (_isFirst) {
+			// item hierarchy build
+			_ItemHierarchy.Build (_ShortcutSettings, gameObject);
+			_isFirst = false;
+		} 
+		else {
+			_ItemHierarchy.Appear ();
+		}
 
 
 	}
 	
 	/* DisAppear this shortcut. */
 	public void Disappear() {
+		_isAppearing = false;
 
 		_ItemHierarchy.Disappear ();
 	}
+
+
 
 }

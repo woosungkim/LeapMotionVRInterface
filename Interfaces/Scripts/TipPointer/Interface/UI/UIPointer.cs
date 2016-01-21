@@ -8,12 +8,10 @@ public class UIPointer : MonoBehaviour {
 	
 	private PointerType _type;
 
-	private Color _colorNormal;
-	private Color _colorHighlighted;
+	private Color _color;
 	private float _radiusNormal;
 	private float _radiusHighlighted;
-	private float _thicknessNormal;
-	private float _thicknessHighlighted;
+	private float _thickness;
 
 
 	MeshBuilder _meshBuilder;
@@ -24,12 +22,10 @@ public class UIPointer : MonoBehaviour {
 	internal void Build(PointerSettings pSettings, PointerType type) {
 		_type = type;
 
-		_colorNormal = pSettings.ColorNormal;
-		_colorHighlighted = pSettings.ColorHighlighted;
+		_color = pSettings.Color;
 		_radiusNormal = pSettings.RadiusNormal;
 		_radiusHighlighted = pSettings.RadiusHighlighted;
-		_thicknessNormal = pSettings.ThicknessNormal;
-		_thicknessHighlighted = pSettings.ThicknessHighlighted;
+		_thickness = pSettings.Thickness;
 
 		_pointerObj = new GameObject ("Pointer");
 		_pointerObj.transform.SetParent (gameObject.transform, false);
@@ -49,7 +45,7 @@ public class UIPointer : MonoBehaviour {
 	void Update () {
 	
 		float maxProg = InteractionManager.GetPointerHighlightProgress(_type); 
-		float thick = Mathf.Lerp (_thicknessNormal, _thicknessHighlighted, maxProg);
+		float thick = Mathf.Lerp (_thickness, _thickness, maxProg);
 		float scale = Mathf.Lerp(_radiusNormal, _radiusHighlighted, maxProg);
 		
 		BuildMesh (thick);
@@ -65,6 +61,7 @@ public class UIPointer : MonoBehaviour {
 		MeshNative.BuildArcMesh (_meshBuilder, (1 - thickness) / 2.0f, 0.5f, 0, (float)Math.PI * 2, 30);
 
 		_meshBuilder.Commit ();
+		_meshBuilder.CommitColors (_color);
 	}
 
 

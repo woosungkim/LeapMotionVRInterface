@@ -6,5 +6,10 @@ public enum PointerType {
 	RightMiddle,
 	RightRing,
 	RightPinky,
-	Null
+	LeftThumb,
+	LeftIndex,
+	LeftMiddle,
+	LeftRing,
+	LeftPinky,
+	NULL
 }

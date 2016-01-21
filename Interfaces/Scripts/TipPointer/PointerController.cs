@@ -57,6 +57,9 @@ public class PointerController : MonoBehaviour {
 		HandList hands = frame.Hands;
 
 		if (hands.Count == 0) {
+			foreach (PointerType type in _PointerSettings.PointerUsed) {
+				InteractionManager.SetPointerPos (type, Vector3.one*9999.0f);
+			}
 			pointersObj.SetActive (false);
 		}
 		else {

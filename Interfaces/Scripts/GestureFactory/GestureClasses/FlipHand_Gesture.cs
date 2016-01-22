@@ -7,9 +7,12 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     [HideInInspector]
     public FlipHand_Gesture _fliphand_gesture;
     [HideInInspector]
+    public PalmDirection _palmDirection;
+    [HideInInspector]
     public MountType MountType;
     public UseArea UseArea;
     public UsingHand UsingHand;
+    public PalmDirection PalmDirection;
 
     public UsingHand _usingHand
     { get; set; }
@@ -60,7 +63,7 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
             foreach (Hand hand in Hands)
             {
 
-                if (WhichSide.capturedSide(hand, _useArea, _mountType) && IsPalmDownWard(hand))
+                if (WhichSide.capturedSide(hand, _useArea, _mountType) && IsCorrectHandDirection(hand))
                 {
                     this._isChecked = true;
                     break;
@@ -89,7 +92,7 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     {
         _gestureType = GestureType.fliphand;
         _leap_controller = ControllerSetter.SetConfig(_gestureType);
-        GestureSetting.SetGestureCondition(this, MountType, UseArea, UsingHand);
+        GestureSetting.SetGestureCondition(this, MountType, UseArea, UsingHand, PalmDirection);
     }
 
     public virtual void DoAction()
@@ -98,21 +101,35 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     }
 
 
-    public virtual bool IsPalmDownWard(Hand hand)
+    public virtual bool IsCorrectHandDirection(Hand hand)
     {
         Hand tHand = hand;
 
         float pitch = tHand.Direction.Pitch;
         float yaw = tHand.Direction.Yaw;
         float roll = tHand.PalmNormal.Roll;
-
-        if (roll > -0.5f && roll < 0.5f)
+        
+        if(_palmDirection == PalmDirection.DownWard)
         {
-            return true;
+            if (roll > -0.5f && roll < 0.5f)
+            {
+                return true;
+            }
+            else if (roll > 2.5f && roll < 3.5)
+            {
+                return false;
+            }
         }
-        else if (roll > 2.5f && roll < 3.5)
+        else
         {
-            return false;
+            if (roll > -0.5f && roll < 0.5f)
+            {
+                return false;
+            }
+            else if (roll > 2.5f && roll < 3.5)
+            {
+                return true;
+            }
         }
 
         return false;

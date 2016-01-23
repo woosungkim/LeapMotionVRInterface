@@ -15,6 +15,7 @@ public class UIItemLabel : MonoBehaviour, IUILabel {
 	private string _fontName;
 	private int _size;
 	private Color _color;
+	private TextAlignType _textAlignment;
 
 	public string Label { 
 		get { return textObj.GetComponent<Text> ().text; }
@@ -38,7 +39,7 @@ public class UIItemLabel : MonoBehaviour, IUILabel {
 		set { _color = value;
 			_text.color = _color; }
 	}
-	
+
 	public void Awake() {
 		canvasGroupObj = new GameObject ("CanvasGroup");
 		canvasGroupObj.transform.SetParent(gameObject.transform, false);
@@ -63,10 +64,7 @@ public class UIItemLabel : MonoBehaviour, IUILabel {
 		textObj.transform.SetParent (canvasObj.transform, false);
 		
 		_text = textObj.AddComponent<Text> ();
-		
-		
-		_text.GetComponent<Text> ().alignment = TextAnchor.MiddleLeft;
-		
+
 		/*********************************************************/
 		
 		//_text.material = ShortcutUtil.GetTextMaterial (_text.material);
@@ -75,8 +73,8 @@ public class UIItemLabel : MonoBehaviour, IUILabel {
 		
 	}
 	
-	public void SetAttributes(string text, string font, int size, Color color) {
-		textObj.GetComponent<Text>().text = "  " + text;
+	public void SetAttributes(string text, string font, int size, Color color, float width) {
+		textObj.GetComponent<Text>().text = text;
 		
 		_fontName = font;
 		_text.font = Resources.Load<Font> ("Fonts/"+_fontName);
@@ -86,8 +84,24 @@ public class UIItemLabel : MonoBehaviour, IUILabel {
 		
 		_color = color;
 		_text.color = _color;
+
+		_text.rectTransform.sizeDelta = new Vector2 ((100.0f+width)*0.8f, 100.0f);
 	}
 	
-	
+	public void SetTextAlignment(TextAlignType alignType) {
+		_textAlignment = alignType;
+
+		if (alignType == TextAlignType.Left) {
+			_text.alignment = TextAnchor.MiddleLeft;
+		} else if (alignType == TextAlignType.Center) {
+			_text.alignment = TextAnchor.MiddleCenter;
+		} else if (alignType == TextAlignType.Right) {
+			_text.alignment = TextAnchor.MiddleRight;
+		}
+	}
+
+	public void RotateText(Vector3 rot) {
+		_text.rectTransform.Rotate (rot);
+	}
 
 }

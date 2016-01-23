@@ -8,6 +8,8 @@ public class ShortcutController : MonoBehaviour {
 	public ItemHierarchy _ItemHierarchy;
 	public Transform _Camera;
 
+	private float _distanceFromMainCamera = 0.5f;
+
 	private bool _isFirst = true;
 
 	private bool _isAppearing = false;
@@ -19,8 +21,13 @@ public class ShortcutController : MonoBehaviour {
 			return;
 		}
 		_ShortcutSettings.ItemSettings = _ItemSettings;
+		_distanceFromMainCamera = _ShortcutSettings.DistanceFromMainCamera;
 
 		PutInsideOfMainCamera ();
+
+		if (_ShortcutSettings.AutoStart) {
+			Appear();
+		}
 	}
 
 
@@ -40,15 +47,18 @@ public class ShortcutController : MonoBehaviour {
 	private void PutInsideOfMainCamera() {
 		gameObject.transform.SetParent (_Camera.transform, false);
 
-		Vector3 pos = new Vector3 (_ShortcutSettings.XPosition, _ShortcutSettings.YPosition, ComputeZPos (_ShortcutSettings.XPosition, _ShortcutSettings.YPosition));
+
+		Vector3 pos = new Vector3 (_ShortcutSettings.XPosition, Mathf.Lerp (-0.5f, 1.5f,_ShortcutSettings.YPosition), ComputeZPos (_ShortcutSettings.XPosition, _ShortcutSettings.YPosition));
+
 		gameObject.transform.position = Camera.main.ViewportToWorldPoint (pos);
+		gameObject.transform.localScale = Vector3.one*_distanceFromMainCamera;
 
 	}
 
 	private float ComputeZPos(float x, float y) {
-		float d = 1.0f;
+		float d = _distanceFromMainCamera;
 
-		return Mathf.Sqrt ((d * d) - ((x-0.5f) * (x-0.5f)) - ((y-0.5f) * (y-0.5f)));
+		return Mathf.Sqrt (Mathf.Abs((d * d) - ((x-0.5f) * (x-0.5f)) - ((y-0.5f) * (y-0.5f))));
 	}
 
 

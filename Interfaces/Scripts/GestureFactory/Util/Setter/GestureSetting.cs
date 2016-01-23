@@ -160,7 +160,15 @@ public static class GestureSetting {
             tempGrabbingHand._useArea = useArea;
             tempGrabbingHand._usingHand = usingHand;
         }
-        else if (ob._gestureType == GestureType.fliphand)
+       
+    }
+
+    public static void SetGestureCondition<T>(T ob, MountType mountType, UseArea useArea, UsingHand usingHand, PalmDirection palmDirection) where T : IGesture
+    {
+        string t = ob.GetType().ToString();
+
+        
+        if (ob._gestureType == GestureType.fliphand)
         {
             FlipHand_Gesture tempFlipHand = ob as FlipHand_Gesture;
 
@@ -168,7 +176,9 @@ public static class GestureSetting {
             tempFlipHand._mountType = mountType;
             tempFlipHand._useArea = useArea;
             tempFlipHand._usingHand = usingHand;
+            tempFlipHand._palmDirection = palmDirection;
         }
+
     }
 
 }

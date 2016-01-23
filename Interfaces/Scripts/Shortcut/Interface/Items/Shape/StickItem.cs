@@ -21,7 +21,7 @@ public class StickItem : ShapeItem {
 	
 	
 	private float _selectProg = 0.0f;
-	private float _selectSpeed = 0.02f;
+	private float _selectSpeed = 1.0f;
 	private bool _isSelected = false;
 	
 	public override void Build (ShortcutSettings sSettings, GameObject parentObj)
@@ -49,24 +49,33 @@ public class StickItem : ShapeItem {
 					// register this item pos to interaction manager
 					InteractionManager.SetItemPos (_id, Camera.main.WorldToViewportPoint(centerObj.transform.position));
 
+					float deltaSelectSpeed = _selectSpeed*Time.deltaTime;
 					/***** focus, select ui update *****/
 					float progress = InteractionManager.GetItemHighlightProgress (_id);
+
+					// set now progress
+					InteractionManager.SetItemProg(_id, progress);
 
 					float focusStart = _iSettings.FocusStart;; // trigger focus percent = 80%
 					if (progress > focusStart) { // is focusing
 						float focusProg = Mathf.Lerp (0, 1, progress - focusStart);
 
 						// focus, select event process
-						if (focusProg == 1) {// all focus, is selecting
+						if (focusProg == 1 && _isNearestItem) {// all focus, is selecting
 							if (_selectProg < 1.0f) {
-								_selectProg += _selectSpeed;
+								_selectProg += deltaSelectSpeed;
 							}
 
 							// item click evnet
 							if (_selectProg >= 1.0f) {
 								_selectProg = 1.0f;
-								if (!_isSelected) { // select action is triggered just once
-									_isSelected = true;
+
+								if (_execType == ActionExecType.Once) {
+									if (!_isSelected) { // select action is triggered just once
+										_isSelected = true;
+										_selectableItem.SelectAction();
+									}
+								} else if (_execType == ActionExecType.DuringSelecting) {
 									_selectableItem.SelectAction();
 								}
 							}
@@ -79,10 +88,19 @@ public class StickItem : ShapeItem {
 						else {
 							_selectProg = 0.0f;
 							_isSelected = false;
-							// focus ui update
-							_uiStickItemBg.UpdateMesh (_width, _height, 0.0f, focusProg, _backgroundColor);
-							_uiStickItemFs.UpdateMesh (_width, (_height*focusProg), 0.0f, 0.0f, _focusingColor);
-							_uiStickItemSt.UpdateMesh (_width, _height, 1.0f, 1.0f, _selectingColor);
+							if (_isNearestItem) {
+								_selectProg = 0.05f;
+								_uiStickItemBg.UpdateMesh (_width, _height, 0.0f, focusProg, _backgroundColor);
+								_uiStickItemFs.UpdateMesh (_width, (_height*focusProg), 0.0f, (0.05f/focusProg), _focusingColor);
+								_uiStickItemSt.UpdateMesh (_width, _height*0.05f, 0.0f, 0.0f, _selectingColor);
+
+							} else {
+								// focus ui update
+								_uiStickItemBg.UpdateMesh (_width, _height, 0.0f, focusProg, _backgroundColor);
+								_uiStickItemFs.UpdateMesh (_width, (_height*focusProg), 0.0f, 0.0f, _focusingColor);
+								_uiStickItemSt.UpdateMesh (_width, _height, 1.0f, 1.0f, _selectingColor);
+
+							}
 
 						}
 					}
@@ -137,13 +155,13 @@ public class StickItem : ShapeItem {
 		// build item label ui
 		labelObj = new GameObject ("Label");
 		labelObj.transform.SetParent (rendererObj.transform, false);
-		labelObj.transform.localPosition = new Vector3(0, _sSettings.ItemHeight/2, 0);
+		labelObj.transform.localPosition = new Vector3(_sSettings.ItemWidth/2-0.1f, _sSettings.ItemHeight/2, 0);
 		labelObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.down);
 		labelObj.transform.localScale = new Vector3(1, 1, 1);
 
 		UIItemLabel _uiItemLabel = labelObj.AddComponent<UIItemLabel>();
-		_uiItemLabel.SetAttributes (_label, _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
-
+		_uiItemLabel.SetAttributes (_label, _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor, (_sSettings.ItemWidth-0.2f)*500.0f);
+		_uiItemLabel.SetTextAlignment (_textAlignment);
 
 		// each types ui
 		switch (_itemType) {
@@ -155,7 +173,7 @@ public class StickItem : ShapeItem {
 			labelHasChildObj.transform.localScale = new Vector3(1, 1, 1);
 			
 			UIHasChild uiLabelHasChild = labelHasChildObj.AddComponent<UIHasChild>();
-			uiLabelHasChild.SetAttributes (">", _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
+			uiLabelHasChild.SetAttributes ("▶", _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
 			
 			break;
 		case (ItemType.NormalButton) :

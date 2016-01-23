@@ -10,5 +10,7 @@ public class WSClick : EventScript {
 		GameObject cube = GameObject.Find ("Cube");
 		
 		cube.GetComponent<Renderer> ().material.color = Color.red;
+
+		print ("우성 클릭");
 	}
 }

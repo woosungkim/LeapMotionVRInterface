@@ -5,8 +5,13 @@ public class ShortcutSettings : MonoBehaviour {
 	
 	public string ShortcutName = "";
 
-	[Range(0,1)]
-	public float XPosition = 0.5f, YPosition = 0.5f;
+	public bool AutoStart = false;
+
+	[Range(0.3f, 1.0f)]
+	public float DistanceFromMainCamera = 0.5f;
+
+	[Range(0.0f,1.0f)]
+	public float XPosition = 0.0f, YPosition = 0.0f;
 
 	public ShortcutType Type = ShortcutType.Arc;
 

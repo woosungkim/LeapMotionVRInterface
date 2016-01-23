@@ -38,7 +38,16 @@ public class StickLayer : ItemLayer {
 			cancelItem._ItemType = ItemType.NormalButton;
 			cancelItem.IsCancelItem = true;
 			
-			cancelItem.Build (_sSettings, uiCancelItemObj);                                    
+			cancelItem.Build (_sSettings, uiCancelItemObj);         
+
+			ShortcutItem[] newItems = new ShortcutItem[items.Length+1];
+			
+			for (int i=0; i<items.Length; i++) {
+				newItems[i] = items[i];
+			}
+			newItems[items.Length] = cancelItem;
+			
+			items = newItems;
 		}
 
 	}

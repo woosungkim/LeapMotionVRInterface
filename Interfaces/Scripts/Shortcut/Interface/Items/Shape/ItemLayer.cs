@@ -31,7 +31,6 @@ public abstract class ItemLayer : MonoBehaviour, IItemLayer {
 		}
 	}
 
-
 	public void Build(ShortcutSettings sSettings, GameObject parentObj) {
 		_sSettings = sSettings;
 		_iSettings = sSettings.ItemSettings;
@@ -49,6 +48,37 @@ public abstract class ItemLayer : MonoBehaviour, IItemLayer {
 		_uiLayer.Build (_sSettings);
 		_uiLayer.AppearLayer(_curLevel-_prevLevel);
 
+	}
+
+	// select nearest item;
+	void Update() {
+		if (items != null && _uiLayer != null) {
+			if (_uiLayer.IsCurrentLayer) {
+				int nearestItemIdx = 0;
+				float nearestProg = 0.0f;
+
+				// find nearest item
+				for (int i=0; i<items.Length; i++) {
+					int itemId = items[i].Id;
+					float prog = InteractionManager.GetItemProg(itemId);
+					
+					if (prog > nearestProg) {
+						nearestProg = prog;
+						nearestItemIdx = i;
+					}
+				}
+
+				// signal to item
+				for (int i=0; i<items.Length; i++) {
+					if (i == nearestItemIdx) {
+						items[i].Item.IsNearestItem = true;
+					} else {
+						items[i].Item.IsNearestItem = false;
+					}
+				}
+
+			}
+		} 
 	}
 	
 }

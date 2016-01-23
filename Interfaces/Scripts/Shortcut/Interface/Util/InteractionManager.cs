@@ -9,25 +9,22 @@ public static class InteractionManager {
 	
 	static Dictionary<PointerType, Vector3> _pointerPosDict = new Dictionary<PointerType, Vector3>();
 	static Dictionary<int, Vector3> _itemPosDict = new Dictionary<int, Vector3> ();
+	static Dictionary<int, float> _progressDict = new Dictionary<int, float> ();
 
-	public static bool HasPointer(PointerType type) 
-	{
+	/*******************************************************************/
+	public static bool HasPointer(PointerType type) {
 		if (_pointerPosDict.ContainsKey (type))
 			return true;
 		return false;
 	}
-
-	public static void SetPointerPos(PointerType type, Vector3 pos)
-	{
+	public static void SetPointerPos(PointerType type, Vector3 pos) {
 		if (_pointerPosDict.ContainsKey (type)) {
 			_pointerPosDict [type] = pos;
 		} else {
 			_pointerPosDict.Add (type, pos);
 		}
 	}
-
-	public static Vector3 GetPointerPos(PointerType type)
-	{
+	public static Vector3 GetPointerPos(PointerType type) {
 		if (_pointerPosDict.ContainsKey (type)) {
 			return _pointerPosDict[type];
 		} else {
@@ -35,25 +32,20 @@ public static class InteractionManager {
 		}
 	}
 
-
-	public static bool HasItemId(int id) 
-	{
+	/*******************************************************************/
+	public static bool HasItemId(int id) {
 		if (_itemPosDict.ContainsKey (id))
 			return true;
 		return false;
 	}
-
-	public static void SetItemPos(int id, Vector3 pos)
-	{
+	public static void SetItemPos(int id, Vector3 pos) {
 		if (_itemPosDict.ContainsKey (id)) {
 			_itemPosDict [id] = pos;
 		} else {
 			_itemPosDict.Add (id, pos);
 		}
 	}
-
-	public static Vector3 GetItemPos(int id)
-	{
+	public static Vector3 GetItemPos(int id) {
 		if (_itemPosDict.ContainsKey (id)) {
 			return _itemPosDict[id];
 		} else {
@@ -61,7 +53,28 @@ public static class InteractionManager {
 		}
 	}
 
+	/*******************************************************************/
+	public static bool HasProgId(int id) {
+		if (_progressDict.ContainsKey (id))
+			return true;
+		return false;
+	}
+	public static void SetItemProg(int id, float prog) {
+		if (_progressDict.ContainsKey (id)) {
+			_progressDict [id] = prog;
+		} else {
+			_progressDict.Add (id, prog);
+		}
+	}
+	public static float GetItemProg(int id) {
+		if (_progressDict.ContainsKey (id)) {
+			return _progressDict[id];
+		} else {
+			return 0.0f;
+		}
+	}
 
+	/*******************************************************************/
 	public static float findNearestPointerDistance(Vector3 pos) {
 		float nearestDis = 999.0f;
 

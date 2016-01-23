@@ -18,10 +18,22 @@ public class ShortcutSettingsEditor : Editor {
 
 		_sSettings.ShortcutName = EditorGUILayout.TextField ("Shortcut Name", _sSettings.ShortcutName);
 
+		_sSettings.AutoStart = EditorGUILayout.Toggle ("Auto Start", _sSettings.AutoStart);
+
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel ("Distance From MainCamera");
+		_sSettings.DistanceFromMainCamera = EditorGUILayout.Slider (_sSettings.DistanceFromMainCamera, 0.3f, 1.0f, null);
+		EditorGUILayout.EndHorizontal ();
+
+		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.PrefixLabel ("X Position");
 		_sSettings.XPosition = EditorGUILayout.Slider (_sSettings.XPosition, 0.0f, 1.0f, null);
+		EditorGUILayout.EndHorizontal ();
+
+		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.PrefixLabel ("Y Position");
 		_sSettings.YPosition = EditorGUILayout.Slider (_sSettings.YPosition, 0.0f, 1.0f, null);
+		EditorGUILayout.EndHorizontal ();
 
 		_sSettings.Type = (ShortcutType)EditorGUILayout.EnumPopup ("Shortcut Type", _sSettings.Type);
 

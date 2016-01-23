@@ -11,7 +11,7 @@ public class ArcLayer : ItemLayer {
 			_uiItemObj.transform.SetParent(_uiLayerObj.transform, false);
 			
 			_uiItemObj.transform.localRotation = Quaternion.Euler (0, _sSettings.EachItemDegree*i, 0);
-			
+
 			items[i].Layer = gameObject.GetComponent<ShortcutItemLayer>();
 			items[i].Build(_sSettings, _uiItemObj);
 		}
@@ -22,12 +22,23 @@ public class ArcLayer : ItemLayer {
 			uiCancelItemObj.transform.localRotation = Quaternion.Euler (0, _sSettings.EachItemDegree*items.Length, 0);
 			
 			ShortcutItem cancelItem = uiCancelItemObj.AddComponent<ShortcutItem>();
+
 			cancelItem.Layer = gameObject.GetComponent<ShortcutItemLayer>();
 			cancelItem._Label = _iSettings.CancelItemLabel;
 			cancelItem._ItemType = ItemType.NormalButton;
 			cancelItem.IsCancelItem = true;
 			
-			cancelItem.Build (_sSettings, uiCancelItemObj);                                    
+			cancelItem.Build (_sSettings, uiCancelItemObj);    
+
+			ShortcutItem[] newItems = new ShortcutItem[items.Length+1];
+
+			for (int i=0; i<items.Length; i++) {
+				newItems[i] = items[i];
+			}
+			newItems[items.Length] = cancelItem;
+
+			items = newItems;
+
 		}
 	}
 

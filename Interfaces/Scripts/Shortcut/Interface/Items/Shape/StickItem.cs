@@ -23,6 +23,8 @@ public class StickItem : ShapeItem {
 	private float _selectProg = 0.0f;
 	private float _selectSpeed = 1.0f;
 	private bool _isSelected = false;
+
+	private StickShortcutDirection _direction;
 	
 	public override void Build (ShortcutSettings sSettings, GameObject parentObj)
 	{
@@ -32,6 +34,8 @@ public class StickItem : ShapeItem {
 
 		_width = _sSettings.ItemWidth;
 		_height = _sSettings.ItemHeight;
+
+		_direction = sSettings.Direction;
 
 		// rendering
 		Rendering ();
@@ -80,9 +84,15 @@ public class StickItem : ShapeItem {
 								}
 							}
 							// select up update
-							_uiStickItemBg.UpdateMesh (_width, _height, 1.0f, 1.0f, _backgroundColor);
-							_uiStickItemFs.UpdateMesh (_width, _height, 0.0f, _selectProg, _focusingColor);
-							_uiStickItemSt.UpdateMesh (_width, (_height*_selectProg), 0.0f, 0.0f, _selectingColor);
+							if (_direction == StickShortcutDirection.Horizontal) {
+								_uiStickItemBg.UpdateMesh (_width, _height, 1.0f, 1.0f, _backgroundColor);
+								_uiStickItemFs.UpdateMesh (_width, _height, 0.0f, _selectProg, _focusingColor);
+								_uiStickItemSt.UpdateMesh (_width, (_height*_selectProg), 0.0f, 0.0f, _selectingColor);
+							} else if (_direction == StickShortcutDirection.Vertical) {
+								_uiStickItemBg.UpdateMesh (_width, _height, 1.0f, 1.0f, _backgroundColor);
+								_uiStickItemFs.UpdateMesh (_width, _height, _selectProg, 0.0f, _focusingColor);
+								_uiStickItemSt.UpdateMesh ((_width*_selectProg), _height, 0.0f, 0.0f, _selectingColor);
+							}
 
 						}
 						else {
@@ -90,15 +100,28 @@ public class StickItem : ShapeItem {
 							_isSelected = false;
 							if (_isNearestItem) {
 								_selectProg = 0.05f;
-								_uiStickItemBg.UpdateMesh (_width, _height, 0.0f, focusProg, _backgroundColor);
-								_uiStickItemFs.UpdateMesh (_width, (_height*focusProg), 0.0f, (0.05f/focusProg), _focusingColor);
-								_uiStickItemSt.UpdateMesh (_width, _height*0.05f, 0.0f, 0.0f, _selectingColor);
+								if (_direction == StickShortcutDirection.Horizontal) {
+									_uiStickItemBg.UpdateMesh (_width, _height, 0.0f, focusProg, _backgroundColor);
+									_uiStickItemFs.UpdateMesh (_width, (_height*focusProg), 0.0f, (0.05f/focusProg), _focusingColor);
+									_uiStickItemSt.UpdateMesh (_width, _height*0.05f, 0.0f, 0.0f, _selectingColor);
+								} else if (_direction == StickShortcutDirection.Vertical) {
+									_uiStickItemBg.UpdateMesh (_width, _height, focusProg, 0.0f, _backgroundColor);
+									_uiStickItemFs.UpdateMesh ((_width*focusProg), _height, (0.05f/focusProg), 0.0f, _focusingColor);
+									_uiStickItemSt.UpdateMesh (_width*0.05f, _height, 0.0f, 0.0f, _selectingColor);
+								}
+
 
 							} else {
 								// focus ui update
-								_uiStickItemBg.UpdateMesh (_width, _height, 0.0f, focusProg, _backgroundColor);
-								_uiStickItemFs.UpdateMesh (_width, (_height*focusProg), 0.0f, 0.0f, _focusingColor);
-								_uiStickItemSt.UpdateMesh (_width, _height, 1.0f, 1.0f, _selectingColor);
+								if (_direction == StickShortcutDirection.Horizontal) {
+									_uiStickItemBg.UpdateMesh (_width, _height, 0.0f, focusProg, _backgroundColor);
+									_uiStickItemFs.UpdateMesh (_width, (_height*focusProg), 0.0f, 0.0f, _focusingColor);
+									_uiStickItemSt.UpdateMesh (_width, _height, 1.0f, 1.0f, _selectingColor);
+								} else if (_direction == StickShortcutDirection.Vertical) {
+									_uiStickItemBg.UpdateMesh (_width, _height, focusProg, 0.0f, _backgroundColor);
+									_uiStickItemFs.UpdateMesh ((_width*focusProg), _height, 0.0f, 0.0f, _focusingColor);
+									_uiStickItemSt.UpdateMesh (_width, _height, 1.0f, 1.0f, _selectingColor);
+								}
 
 							}
 
@@ -168,12 +191,19 @@ public class StickItem : ShapeItem {
 		case (ItemType.Parent) :
 			GameObject labelHasChildObj = new GameObject ("HasChildArrow");
 			labelHasChildObj.transform.SetParent (rendererObj.transform, false);
-			labelHasChildObj.transform.localPosition = new Vector3(_sSettings.ItemWidth, _sSettings.ItemHeight/2, 0);
-			labelHasChildObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.down);
-			labelHasChildObj.transform.localScale = new Vector3(1, 1, 1);
-			
+			if (_direction == StickShortcutDirection.Horizontal) {
+				labelHasChildObj.transform.localPosition = new Vector3(_sSettings.ItemWidth/2, _sSettings.ItemHeight*0.9f, 0);
+				labelHasChildObj.transform.localRotation = Quaternion.FromToRotation(Vector3.down, Vector3.forward);
+				labelHasChildObj.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
+			} else if (_direction == StickShortcutDirection.Vertical) {
+				labelHasChildObj.transform.localPosition = new Vector3(_sSettings.ItemWidth*0.9f, _sSettings.ItemHeight/2, 0);
+				labelHasChildObj.transform.localRotation = Quaternion.FromToRotation(Vector3.down, Vector3.forward);
+				labelHasChildObj.transform.localScale = new Vector3(1, 1, 1);
+			}
+
 			UIHasChild uiLabelHasChild = labelHasChildObj.AddComponent<UIHasChild>();
-			uiLabelHasChild.SetAttributes ("▶", _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
+			uiLabelHasChild.SetAttributes ((_direction == StickShortcutDirection.Horizontal)?"▲":"▶", _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
 			
 			break;
 		case (ItemType.NormalButton) :

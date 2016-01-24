@@ -54,14 +54,13 @@ public class UIHasChild : MonoBehaviour, IUILabel {
 		Canvas canvas = canvasObj.AddComponent<Canvas> ();
 		canvas.renderMode = RenderMode.WorldSpace;
 		
-		canvasObj.GetComponent<RectTransform>().pivot = new Vector2(0.6f, 0.5f);
+		canvasObj.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 		/*********************************************************/
 		
 		textObj = new GameObject ("Text");
 		textObj.transform.SetParent (canvasObj.transform, false);
 		
 		_text = textObj.AddComponent<Text> ();
-		_text.text = ">";
 		
 		_text.GetComponent<Text> ().alignment = TextAnchor.MiddleCenter;
 		

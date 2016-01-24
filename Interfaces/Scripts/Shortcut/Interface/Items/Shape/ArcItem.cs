@@ -164,8 +164,9 @@ public class ArcItem : ShapeItem {
 		_uiItemLabel.SetAttributes (_label, _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor, (_sSettings.Thickness-0.2f)*500.0f);
 		_uiItemLabel.SetTextAlignment (_textAlignment);
 
+		print (gameObject.transform.eulerAngles);
 		// rotate text for easy read
-		if (gameObject.transform.eulerAngles.z >= 89.0f && gameObject.transform.eulerAngles.z <= 91.0f) {
+		if (gameObject.transform.eulerAngles.z >= 0.0f && gameObject.transform.eulerAngles.z <= 180.0f) {
 			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, 180.0f));
 		}
 

@@ -15,6 +15,8 @@ public class PointerController : MonoBehaviour {
 			new Dictionary<PointerType, GameObject>();
 
 	private GameObject pointersObj;
+	private GameObject leftHandObj;
+	private GameObject rightHandObj;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +26,11 @@ public class PointerController : MonoBehaviour {
 
 		pointersObj = new GameObject("Pointers");
 		pointersObj.transform.SetParent (gameObject.transform, false);
-	
+		leftHandObj = new GameObject ("Left Hand");
+		leftHandObj.transform.SetParent (pointersObj.transform, false);
+		rightHandObj = new GameObject ("Right Hand");
+		rightHandObj.transform.SetParent (pointersObj.transform, false);
+
 
 		// 사용하기로 설정한 포인터타입에만 포인터를 생성한다.
 		foreach (PointerType type in _PointerSettings.PointerUsed) {
@@ -32,10 +38,21 @@ public class PointerController : MonoBehaviour {
 			if (InteractionManager.HasPointer (type)) {
 				continue;
 			}
-			
+
+
 			// 포인터 객체를 만들고 사전에 추가 후 빌드한다.
 			GameObject pointerObj = new GameObject ("Pointer_" + type);
-			pointerObj.transform.SetParent (pointersObj.transform, false);
+
+			if (type == PointerType.LeftThumb ||
+			    type == PointerType.LeftIndex ||
+			    type == PointerType.LeftMiddle ||
+			    type == PointerType.LeftRing ||
+			    type == PointerType.LeftPinky) {
+				pointerObj.transform.SetParent (leftHandObj.transform, false);
+			} else {
+				pointerObj.transform.SetParent (rightHandObj.transform, false);
+			}
+
 			
 			_pointerDict.Add (type, pointerObj);
 			InteractionManager.SetPointerPos (type, Vector3.one*9999.0f);
@@ -56,16 +73,26 @@ public class PointerController : MonoBehaviour {
 		Frame frame = _controller.Frame (0);
 		HandList hands = frame.Hands;
 
-		if (hands.Count == 0) {
-			foreach (PointerType type in _PointerSettings.PointerUsed) {
-				InteractionManager.SetPointerPos (type, Vector3.one*9999.0f);
-			}
-			pointersObj.SetActive (false);
+		foreach (PointerType type in _PointerSettings.PointerUsed) {
+			InteractionManager.SetPointerPos (type, Vector3.one*9999.0f);
 		}
-		else {
-			pointersObj.SetActive (true);
-		}
+		//leftHandObj.SetActive (false);
+		//rightHandObj.SetActive (false);
+		                 
+		// 
+		bool leftHandOn = false;
+		bool rightHandOn = false;
+
 		foreach (Hand hand in hands) {
+			if (hand.IsLeft) {
+				leftHandOn = true;
+				leftHandObj.SetActive(true);
+			}
+			if (hand.IsRight) {
+				rightHandOn = true;
+				rightHandObj.SetActive(true);
+			}
+
 			FingerList fingers = hand.Fingers;
 			
 			foreach (Finger finger in fingers) {
@@ -98,6 +125,14 @@ public class PointerController : MonoBehaviour {
 					}
 				}
 			}
+
+			if (!leftHandOn) {
+				leftHandObj.SetActive(false);
+			}
+			if (!rightHandOn) {
+				rightHandObj.SetActive(false);
+			}
+
 		}
 
 	}

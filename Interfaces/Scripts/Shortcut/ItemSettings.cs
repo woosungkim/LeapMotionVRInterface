@@ -13,7 +13,7 @@ public class ItemSettings : MonoBehaviour {
 	public Color FocusingColor = new Color (0.5f, 0.5f, 0.5f, 0.5f);
 	public Color SelectingColor = new Color (0.8f, 0.8f, 0.8f, 0.5f);
 	
-	public float SelectSpeed = 0.02f;
+	public float SelectSpeed = 1.0f;
 	public float FocusStart = 0.9f;
 
 }

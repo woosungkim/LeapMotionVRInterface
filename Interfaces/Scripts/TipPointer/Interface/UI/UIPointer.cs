@@ -47,7 +47,7 @@ public class UIPointer : MonoBehaviour {
 		float maxProg = InteractionManager.GetPointerHighlightProgress(_type); 
 		float thick = Mathf.Lerp (_thickness, _thickness, maxProg);
 		float scale = Mathf.Lerp(_radiusNormal, _radiusHighlighted, maxProg);
-		
+
 		BuildMesh (thick);
 		
 		_pointerObj.transform.localScale = Vector3.one*scale;

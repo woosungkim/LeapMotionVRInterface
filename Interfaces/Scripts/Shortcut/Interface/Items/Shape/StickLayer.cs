@@ -34,7 +34,7 @@ public class StickLayer : ItemLayer {
 
 			ShortcutItem cancelItem = uiCancelItemObj.AddComponent<ShortcutItem>();
 			cancelItem.Layer = gameObject.GetComponent<ShortcutItemLayer>();
-			cancelItem._Label = _sSettings.CancelItemLabel;
+			cancelItem._Label = _cancelItemLabel;
 			cancelItem._ItemType = ItemType.NormalButton;
 			cancelItem.IsCancelItem = true;
 			

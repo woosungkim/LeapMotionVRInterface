@@ -61,7 +61,7 @@ public class StickItem : ShapeItem {
 					InteractionManager.SetItemProg(_id, progress);
 
 					float focusStart = _sSettings.FocusStart;; // trigger focus percent = 80%
-					if (progress > focusStart) { // is focusing
+					if (progress > focusStart && !_curLayer.UILayer.IsAnimating) { // is focusing
 						float focusProg = Mathf.Lerp (0, 1, progress - focusStart);
 
 						// focus, select event process
@@ -185,6 +185,15 @@ public class StickItem : ShapeItem {
 		UIItemLabel _uiItemLabel = labelObj.AddComponent<UIItemLabel>();
 		_uiItemLabel.SetAttributes (_label, _sSettings.TextFont, _sSettings.TextSize, _sSettings.TextColor, (_sSettings.ItemWidth-0.2f)*500.0f);
 		_uiItemLabel.SetTextAlignment (_textAlignment);
+
+		// rotate text for easy read
+		if (_textRotation == TextRotationType.Left) {
+			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, 90.0f));
+		} else if (_textRotation == TextRotationType.Upsidedown) {
+			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, 180.0f));
+		} else if (_textRotation == TextRotationType.Right) {
+			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, -90.0f));
+		} 
 
 		// each types ui
 		switch (_itemType) {

@@ -65,9 +65,9 @@ public class ShortcutSettingsEditor : Editor {
 		EditorGUILayout.LabelField ("");
 		EditorGUILayout.LabelField ("Color Settings", headingStyle );
 		
-		_sSettings.BackgroundColor = EditorGUILayout.ColorField ("Background Color", _sSettings.BackgroundColor);
-		_sSettings.FocusingColor = EditorGUILayout.ColorField ("Focusing Color", _sSettings.FocusingColor);
-		_sSettings.SelectingColor = EditorGUILayout.ColorField ("Selecting Color", _sSettings.SelectingColor);
+		_sSettings.BackgroundColor = EditorGUILayout.ColorField ("Item Background Color", _sSettings.BackgroundColor);
+		_sSettings.FocusingColor = EditorGUILayout.ColorField ("Item Focusing Color", _sSettings.FocusingColor);
+		_sSettings.SelectingColor = EditorGUILayout.ColorField ("Item Selecting Color", _sSettings.SelectingColor);
 
 
 

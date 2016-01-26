@@ -58,7 +58,7 @@ public class ArcItem : ShapeItem {
 					InteractionManager.SetItemProg(_id, progress);
 
 					float focusStart = _sSettings.FocusStart; // trigger focus percent = 80%
-					if (progress > focusStart) { // is focusing
+					if (progress > focusStart && !_curLayer.UILayer.IsAnimating) { // is focusing
 						float focusProg = Mathf.Lerp (0, 1, progress - focusStart);
 						
 						// focus, select event process
@@ -165,9 +165,13 @@ public class ArcItem : ShapeItem {
 		_uiItemLabel.SetTextAlignment (_textAlignment);
 
 		// rotate text for easy read
-		if (gameObject.transform.eulerAngles.z >= 0.0f && gameObject.transform.eulerAngles.z <= 180.0f) {
+		if (_textRotation == TextRotationType.Upright) {
+			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, -90.0f));
+		} else if (_textRotation == TextRotationType.Upsidedown) {
+			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, 90.0f));
+		} else if (_textRotation == TextRotationType.Right) {
 			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, 180.0f));
-		}
+		} 
 
 		// each type's ui
 		switch (_itemType) {

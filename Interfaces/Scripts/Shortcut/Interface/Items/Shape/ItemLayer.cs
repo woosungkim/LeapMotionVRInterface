@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class ItemLayer : MonoBehaviour, IItemLayer {
 	
 	protected string _layerName = "";
+	protected string _cancelItemLabel = "";
 	
 	protected bool _appearAnimFlag = false;
 	
@@ -18,7 +19,9 @@ public abstract class ItemLayer : MonoBehaviour, IItemLayer {
 	
 	protected ShortcutItem[] items;
 
+	public string CancelItemLabel { get { return _cancelItemLabel; } set { _cancelItemLabel = value; } }
 	public string LayerName { get { return _layerName; } set { _layerName = value; } }
+
 	// interface implementation
 	public int Level { get { return _curLevel; } set { _curLevel = value; } }
 	public UILayer UILayer { get { return _uiLayer; } set {	_uiLayer = value; } }

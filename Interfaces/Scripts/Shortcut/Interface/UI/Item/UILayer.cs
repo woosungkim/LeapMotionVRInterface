@@ -20,7 +20,9 @@ public class UILayer : MonoBehaviour, IUILayer {
 
 	private bool _isCurrentLayer = false;
 	public bool IsCurrentLayer { get { return _isCurrentLayer; } }
-	
+
+	private bool _isAnimating = false;
+	public bool IsAnimating { get { return _isAnimating; } }
 
 	public void Build(ShortcutSettings sSettings) {
 		_appearRate = sSettings.AppearAnimSpeed;
@@ -48,6 +50,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 
 		_isCurrentLayer = true;
         _appearAnimFlag = true;
+
+		_isAnimating = true;
 	}
 
 	public void DisappearLayer(int direction) {
@@ -57,6 +61,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 
 		_isCurrentLayer = false;
         _disappearAnimFlag = true;
+
+		_isAnimating = true;
 	}
 
 
@@ -82,6 +88,7 @@ public class UILayer : MonoBehaviour, IUILayer {
 			
 			if (_scale <= _normalScale) {
 				_appearAnimFlag = false;
+				_isAnimating = false;
 			}
 		} 
 		else {
@@ -95,6 +102,7 @@ public class UILayer : MonoBehaviour, IUILayer {
 			gameObject.transform.localScale = Vector3.one * _scale;
 			if (_scale >= _normalScale) {
 				_appearAnimFlag = false;
+				_isAnimating = false;
 			}
 		}
 	}
@@ -106,6 +114,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 
 			if (_scale <= _inScale) {
 				_disappearAnimFlag = false;
+				_isAnimating = false;
+
 				gameObject.SetActive(false);
 			}
 		}
@@ -115,6 +125,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 			
 			if (_scale >= _outScale) {
 				_disappearAnimFlag = false;
+				_isAnimating = false;
+
 				gameObject.SetActive(false);
 			}
 		}

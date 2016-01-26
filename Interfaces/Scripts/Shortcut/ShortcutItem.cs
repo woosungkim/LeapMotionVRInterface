@@ -5,9 +5,12 @@ public class ShortcutItem : MonoBehaviour {
 	
 	public string _Label = "Item";
 	public ItemType _ItemType = ItemType.NormalButton;
+	public TextRotationType _TextRotation = TextRotationType.Upright;
 	public TextAlignType _TextAlignment = TextAlignType.Center;
+	public string _CancelItemLabel = "Cancel";
 	public EventScript _Action = null;
 	public ActionExecType _ExecType = ActionExecType.Once;
+
 	
 	private int _id;
 	private ShapeItem _item;
@@ -55,6 +58,8 @@ public class ShortcutItem : MonoBehaviour {
 		_item.ExecType = _ExecType;
 		_item.Layer = _curLayer;
 		_item.TextAlignment = _TextAlignment;
+		_item.TextRotation = _TextRotation;
+		_item.CancelItemLabel = _CancelItemLabel;
 		if (_isCancelItem) {
 			_item.IsCancelItem = true;
 		}

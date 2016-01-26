@@ -10,10 +10,13 @@ public class ParentItem : MonoBehaviour, IParentItem {
 
 	private ShortcutItemLayer _nextLayer = null;
 
-	/*********************************************************************/
+	private string _cancelItemLabel = "";
 
+	/*********************************************************************/
+	
 	public ShortcutItemLayer Layer { get { return _curLayer; } set { _curLayer = value;	} }
 	public GameObject ItemObject { get { return _itemObject; } set { _itemObject = value; } }
+	public string CancelItemLabel { get { return _cancelItemLabel; } set { _cancelItemLabel = value; } }
 
 	/*********************************************************************/
 
@@ -25,7 +28,6 @@ public class ParentItem : MonoBehaviour, IParentItem {
 	public void SelectAction() {
 
 		if (_nextLayer == null) {
-			print ("build parent");
 			_nextLayer = Getter.GetChildLayerFromGameObject (_itemObject);
 			if (_nextLayer == null) {
 				print ("layer find error");
@@ -39,6 +41,7 @@ public class ParentItem : MonoBehaviour, IParentItem {
 
 			_nextLayer.Level = _curLayer.Level+1;
 			_nextLayer.PrevLayer = _curLayer;
+			_nextLayer.CancelItemLabel = _cancelItemLabel;
 
 			_nextLayer.Build (_sSettings, _itemObject);
 

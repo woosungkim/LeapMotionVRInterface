@@ -7,12 +7,14 @@ public class NormalButtonItem : MonoBehaviour, INormalButtonItem {
 	private EventScript _action;
 
 	private bool _isCancelItem = false;
+	private string _cancelItemLabel = "";
 
 	/*********************************************************************/
 
 	public ShortcutItemLayer Layer { get { return _curLayer; } set { _curLayer = value;	} }
 	public EventScript Action { get { return _action; } set { _action = value; } }
 	public bool IsCancelItem { get { return _isCancelItem; } set { _isCancelItem = value; } }
+	public string CancelItemLabel { get { return _cancelItemLabel; } set { _cancelItemLabel = value; } }
 
 	/*********************************************************************/
 

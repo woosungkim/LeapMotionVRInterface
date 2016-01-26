@@ -30,7 +30,7 @@ public class StickItem : ShapeItem {
 	{
 		base.Build (sSettings, parentObj);
 		
-		_selectSpeed = _iSettings.SelectSpeed;
+		_selectSpeed = _sSettings.SelectSpeed;
 
 		_width = _sSettings.ItemWidth;
 		_height = _sSettings.ItemHeight;
@@ -60,7 +60,7 @@ public class StickItem : ShapeItem {
 					// set now progress
 					InteractionManager.SetItemProg(_id, progress);
 
-					float focusStart = _iSettings.FocusStart;; // trigger focus percent = 80%
+					float focusStart = _sSettings.FocusStart;; // trigger focus percent = 80%
 					if (progress > focusStart) { // is focusing
 						float focusProg = Mathf.Lerp (0, 1, progress - focusStart);
 
@@ -183,7 +183,7 @@ public class StickItem : ShapeItem {
 		labelObj.transform.localScale = new Vector3(1, 1, 1);
 
 		UIItemLabel _uiItemLabel = labelObj.AddComponent<UIItemLabel>();
-		_uiItemLabel.SetAttributes (_label, _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor, (_sSettings.ItemWidth-0.2f)*500.0f);
+		_uiItemLabel.SetAttributes (_label, _sSettings.TextFont, _sSettings.TextSize, _sSettings.TextColor, (_sSettings.ItemWidth-0.2f)*500.0f);
 		_uiItemLabel.SetTextAlignment (_textAlignment);
 
 		// each types ui
@@ -203,7 +203,7 @@ public class StickItem : ShapeItem {
 			}
 
 			UIHasChild uiLabelHasChild = labelHasChildObj.AddComponent<UIHasChild>();
-			uiLabelHasChild.SetAttributes ((_direction == StickShortcutDirection.Horizontal)?"▲":"▶", _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
+			uiLabelHasChild.SetAttributes ((_direction == StickShortcutDirection.Horizontal)?"▲":"▶", _sSettings.TextFont, _sSettings.TextSize, _sSettings.TextColor);
 			
 			break;
 		case (ItemType.NormalButton) :

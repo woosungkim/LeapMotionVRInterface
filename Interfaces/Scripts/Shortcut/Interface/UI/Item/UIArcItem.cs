@@ -5,7 +5,6 @@ using System;
 public class UIArcItem : MonoBehaviour, IUIArcItem {
 
     ShortcutSettings _sSettings;
-	ItemSettings _iSettings;
 	
 	private float _innerRadius;
 	private float _outerRadius;
@@ -22,7 +21,6 @@ public class UIArcItem : MonoBehaviour, IUIArcItem {
 	{
 		// variables setting
         _sSettings = sSettings;
-		_iSettings = sSettings.ItemSettings;
 
 		float toDegree = 180 / (float)Mathf.PI;
 		float eachItemAngle = _sSettings.EachItemDegree / toDegree;

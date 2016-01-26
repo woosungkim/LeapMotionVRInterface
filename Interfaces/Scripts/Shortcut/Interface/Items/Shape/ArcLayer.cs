@@ -24,7 +24,7 @@ public class ArcLayer : ItemLayer {
 			ShortcutItem cancelItem = uiCancelItemObj.AddComponent<ShortcutItem>();
 
 			cancelItem.Layer = gameObject.GetComponent<ShortcutItemLayer>();
-			cancelItem._Label = _iSettings.CancelItemLabel;
+			cancelItem._Label = _sSettings.CancelItemLabel;
 			cancelItem._ItemType = ItemType.NormalButton;
 			cancelItem.IsCancelItem = true;
 			

@@ -7,7 +7,8 @@ using Leap;
 public class PointerController : MonoBehaviour {
 
 	public PointerSettings _PointerSettings;
-	public Transform _Camera;
+
+	private Camera _Camera;
 
 	private Controller _controller;
 
@@ -20,6 +21,8 @@ public class PointerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		_Camera = Camera.main;
+
 		gameObject.transform.SetParent (_Camera.transform, false);
 
 		_controller = new Controller ();
@@ -107,17 +110,17 @@ public class PointerController : MonoBehaviour {
 
 						if (_PointerSettings.MountType == MountType.TableMount) {
 							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
-							pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 						} else if (_PointerSettings.MountType == MountType.HeadMount) {
 							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
-							pointerTransform.position = Camera.main.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
 						}
 						//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 						
 						pointerTransform.localRotation = Quaternion.identity;
 						
 						
-						Vector3 camWorld = _Camera.TransformPoint (Vector3.zero);
+						Vector3 camWorld = _Camera.transform.TransformPoint (Vector3.zero);
 						Vector3 camLocal = pointerTransform.InverseTransformPoint (camWorld);
 						
 						pointerTransform.localRotation = Quaternion.FromToRotation (Vector3.down, camLocal);
@@ -125,14 +128,13 @@ public class PointerController : MonoBehaviour {
 					}
 				}
 			}
+		}
 
-			if (!leftHandOn) {
-				leftHandObj.SetActive(false);
-			}
-			if (!rightHandOn) {
-				rightHandObj.SetActive(false);
-			}
-
+		if (!leftHandOn) {
+			leftHandObj.SetActive(false);
+		}
+		if (!rightHandOn) {
+			rightHandObj.SetActive(false);
 		}
 
 	}

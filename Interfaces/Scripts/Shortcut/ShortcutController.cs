@@ -4,9 +4,10 @@ using System.Collections;
 public class ShortcutController : MonoBehaviour {
 
 	public ShortcutSettings _ShortcutSettings;
-	public ItemSettings _ItemSettings;
 	public ItemHierarchy _ItemHierarchy;
-	public Transform _Camera;
+
+
+	private Camera _Camera;
 
 	private float _distanceFromMainCamera = 0.5f;
 
@@ -16,11 +17,12 @@ public class ShortcutController : MonoBehaviour {
 	public bool IsAppearing { get { return _isAppearing; } set { _isAppearing = value; } }
 
 	void Awake () {
+		_Camera = Camera.main;
+
 		if (!CheckInspector ()) {
 			print ("Check inspector factors");
 			return;
 		}
-		_ShortcutSettings.ItemSettings = _ItemSettings;
 		_distanceFromMainCamera = _ShortcutSettings.DistanceFromMainCamera;
 
 		PutInsideOfMainCamera ();
@@ -34,7 +36,6 @@ public class ShortcutController : MonoBehaviour {
 	/* Check all Inspector factors are valid. */
 	private bool CheckInspector() {
 		if (_ShortcutSettings == null ||
-		    _ItemSettings == null ||
 		    _ItemHierarchy == null ||
 		    _Camera == null) {
 			return false; 
@@ -47,10 +48,9 @@ public class ShortcutController : MonoBehaviour {
 	private void PutInsideOfMainCamera() {
 		gameObject.transform.SetParent (_Camera.transform, false);
 
-
 		Vector3 pos = new Vector3 (_ShortcutSettings.XPosition, Mathf.Lerp (-0.5f, 1.5f,_ShortcutSettings.YPosition), ComputeZPos (_ShortcutSettings.XPosition, _ShortcutSettings.YPosition));
 
-		gameObject.transform.position = Camera.main.ViewportToWorldPoint (pos);
+		gameObject.transform.position =_Camera.ViewportToWorldPoint (pos);
 		gameObject.transform.localScale = Vector3.one*_distanceFromMainCamera;
 
 	}
@@ -74,8 +74,6 @@ public class ShortcutController : MonoBehaviour {
 		else {
 			_ItemHierarchy.Appear ();
 		}
-
-
 	}
 	
 	/* DisAppear this shortcut. */

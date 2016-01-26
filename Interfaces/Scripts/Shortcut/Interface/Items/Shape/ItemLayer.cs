@@ -8,7 +8,6 @@ public abstract class ItemLayer : MonoBehaviour, IItemLayer {
 	protected bool _appearAnimFlag = false;
 	
 	protected ShortcutSettings _sSettings;
-	protected ItemSettings _iSettings;
 	protected GameObject _parentObj;
 	
 	protected GameObject _uiLayerObj;
@@ -33,7 +32,6 @@ public abstract class ItemLayer : MonoBehaviour, IItemLayer {
 
 	public void Build(ShortcutSettings sSettings, GameObject parentObj) {
 		_sSettings = sSettings;
-		_iSettings = sSettings.ItemSettings;
 		_parentObj = parentObj;
 
 		items = Getter.GetChildItemsFromGameObject (gameObject);

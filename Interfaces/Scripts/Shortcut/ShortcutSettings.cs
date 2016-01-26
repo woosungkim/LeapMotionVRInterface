@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class ShortcutSettings : MonoBehaviour {
-	
-	public string ShortcutName = "";
 
 	public bool AutoStart = false;
 
@@ -25,8 +23,24 @@ public class ShortcutSettings : MonoBehaviour {
 	public float ItemWidth = 0.3f;
 	public float ItemHeight = 0.3f;
 
-	//
-	private ItemSettings _itemSettings;
-	public ItemSettings ItemSettings { get { return _itemSettings; } set { _itemSettings = value; }	}
+	// color
+	public Color BackgroundColor = new Color (0.1f, 0.1f, 0.1f, 0.5f);
+	public Color FocusingColor = new Color (0.5f, 0.5f, 0.5f, 0.5f);
+	public Color SelectingColor = new Color (0.8f, 0.8f, 0.8f, 0.5f);
+
+	// item Settings
+	public string TextFont = "Tahoma";
+	public Color TextColor = Color.black;
+	public int TextSize = 20;
+	
+	public string CancelItemLabel = "Cancel";
+
+
+
+	// interaction Settings
+	public float AppearAnimSpeed = 4.0f;
+	public float SelectSpeed = 2.0f;
+	public float FocusStart = 0.9f;
+
 
 }

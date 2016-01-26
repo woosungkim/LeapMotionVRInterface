@@ -4,7 +4,7 @@ using System.Collections;
 public class UILayer : MonoBehaviour, IUILayer {
 
 	private float _scale = 2.0f;
-	private float _appearRate = 0.04f;
+	private float _appearRate = 4f;
 
 	private float _outScale = 2.0f;
 	private float _normalScale = 1.0f;
@@ -23,6 +23,7 @@ public class UILayer : MonoBehaviour, IUILayer {
 	
 
 	public void Build(ShortcutSettings sSettings) {
+		_appearRate = sSettings.AppearAnimSpeed;
 		gameObject.transform.localScale = Vector3.one * _scale;
 
 		if (sSettings.Type == ShortcutType.Arc) { // 회전 보정
@@ -76,7 +77,7 @@ public class UILayer : MonoBehaviour, IUILayer {
 				gameObject.SetActive (false);
 				gameObject.SetActive (true);
 			}
-			_scale -= _appearRate;
+			_scale -= (_appearRate * Time.deltaTime);
 			gameObject.transform.localScale = Vector3.one * _scale;
 			
 			if (_scale <= _normalScale) {
@@ -89,7 +90,7 @@ public class UILayer : MonoBehaviour, IUILayer {
 				gameObject.SetActive (true);
 			}
 
-			_scale += _appearRate;
+			_scale += (_appearRate * Time.deltaTime);
 
 			gameObject.transform.localScale = Vector3.one * _scale;
 			if (_scale >= _normalScale) {
@@ -100,7 +101,7 @@ public class UILayer : MonoBehaviour, IUILayer {
 
 	void DisappearAnimation() {
 		if (_dDirection > 0) {
-			_scale -= _appearRate;
+			_scale -= (_appearRate * Time.deltaTime);
 			gameObject.transform.localScale = Vector3.one * _scale;
 
 			if (_scale <= _inScale) {
@@ -109,7 +110,7 @@ public class UILayer : MonoBehaviour, IUILayer {
 			}
 		}
 		else {
-			_scale += _appearRate;
+			_scale += (_appearRate * Time.deltaTime);
 			gameObject.transform.localScale = Vector3.one * _scale;
 			
 			if (_scale >= _outScale) {

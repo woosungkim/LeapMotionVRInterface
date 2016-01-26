@@ -28,7 +28,7 @@ public class ArcItem : ShapeItem {
 	{
 		base.Build (sSettings, parentObj);
 
-		_selectSpeed = _iSettings.SelectSpeed;
+		_selectSpeed = _sSettings.SelectSpeed;
 
 		_innerRadius = _sSettings.InnerRadius;
 		_outerRadius = _sSettings.InnerRadius + _sSettings.Thickness;
@@ -57,7 +57,7 @@ public class ArcItem : ShapeItem {
 					// set now progress
 					InteractionManager.SetItemProg(_id, progress);
 
-					float focusStart = _iSettings.FocusStart; // trigger focus percent = 80%
+					float focusStart = _sSettings.FocusStart; // trigger focus percent = 80%
 					if (progress > focusStart) { // is focusing
 						float focusProg = Mathf.Lerp (0, 1, progress - focusStart);
 						
@@ -161,10 +161,9 @@ public class ArcItem : ShapeItem {
 		labelObj.transform.localScale = new Vector3(1, 1, 1);
 		
 		UIItemLabel _uiItemLabel = labelObj.AddComponent<UIItemLabel>();
-		_uiItemLabel.SetAttributes (_label, _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor, (_sSettings.Thickness-0.2f)*500.0f);
+		_uiItemLabel.SetAttributes (_label, _sSettings.TextFont, _sSettings.TextSize, _sSettings.TextColor, (_sSettings.Thickness-0.2f)*500.0f);
 		_uiItemLabel.SetTextAlignment (_textAlignment);
 
-		print (gameObject.transform.eulerAngles);
 		// rotate text for easy read
 		if (gameObject.transform.eulerAngles.z >= 0.0f && gameObject.transform.eulerAngles.z <= 180.0f) {
 			_uiItemLabel.RotateText(new Vector3(0.0f, 0.0f, 180.0f));
@@ -175,12 +174,12 @@ public class ArcItem : ShapeItem {
 		case (ItemType.Parent) :
 			GameObject labelHasChildObj = new GameObject ("HasChildArrow");
 			labelHasChildObj.transform.SetParent (rendererObj.transform, false);
-			labelHasChildObj.transform.localPosition = new Vector3(0, 0, _sSettings.InnerRadius+_sSettings.Thickness);
+			labelHasChildObj.transform.localPosition = new Vector3(0, 0, (_sSettings.InnerRadius+_sSettings.Thickness)*0.95f);
 			labelHasChildObj.transform.localRotation = Quaternion.FromToRotation(Vector3.back, Vector3.right);
 			labelHasChildObj.transform.localScale = new Vector3(1, 1, 1);
 			
 			UIHasChild uiLabelHasChild = labelHasChildObj.AddComponent<UIHasChild>();
-			uiLabelHasChild.SetAttributes ("▶", _iSettings.TextFont, _iSettings.TextSize, _iSettings.TextColor);
+			uiLabelHasChild.SetAttributes ("▶", _sSettings.TextFont, _sSettings.TextSize, _sSettings.TextColor);
 
 			break;
 		case (ItemType.NormalButton) :

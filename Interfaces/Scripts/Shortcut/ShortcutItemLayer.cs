@@ -4,8 +4,6 @@ using System.Collections;
 public class ShortcutItemLayer : MonoBehaviour {
 
 	public string _LayerName = "";
-	
-	private ItemSettings _iSettings;
 
 	private ItemLayer _itemLayer;
 	private int _level = 1;

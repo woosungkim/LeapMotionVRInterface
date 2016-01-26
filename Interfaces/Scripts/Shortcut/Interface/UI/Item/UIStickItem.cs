@@ -5,7 +5,6 @@ using System;
 public class UIStickItem : MonoBehaviour {
 	
 	ShortcutSettings _sSettings;
-	ItemSettings _iSettings;
 
 	// for rectangle mesh
 	private float _width;
@@ -23,9 +22,6 @@ public class UIStickItem : MonoBehaviour {
 	{
 		// variables setting
 		_sSettings = sSettings;
-		_iSettings = sSettings.ItemSettings;
-
-
 
 		gameObject.AddComponent<MeshRenderer> ();
 		

@@ -6,17 +6,23 @@ using System.Collections;
 public class ShortcutSettingsEditor : Editor {
 
 	ShortcutSettings _sSettings;
-
+	
 	void OnEnable() {
 		_sSettings = target as ShortcutSettings; 
 	}
 
 
 	public override void OnInspectorGUI() {
+
+		GUIStyle headingStyle = new GUIStyle(GUI.skin.label);
+		headingStyle.fontStyle = FontStyle.Bold;
+		headingStyle.fontSize = 14;
+
 		EditorGUILayout.BeginVertical ();
-
-
-		_sSettings.ShortcutName = EditorGUILayout.TextField ("Shortcut Name", _sSettings.ShortcutName);
+	
+		// layout settings
+		EditorGUILayout.LabelField ("");
+		EditorGUILayout.LabelField ("Layout Settings", headingStyle);
 
 		_sSettings.AutoStart = EditorGUILayout.Toggle ("Auto Start", _sSettings.AutoStart);
 
@@ -35,19 +41,54 @@ public class ShortcutSettingsEditor : Editor {
 		_sSettings.YPosition = EditorGUILayout.Slider (_sSettings.YPosition, 0.0f, 1.0f, null);
 		EditorGUILayout.EndHorizontal ();
 
-		_sSettings.Type = (ShortcutType)EditorGUILayout.EnumPopup ("Shortcut Type", _sSettings.Type);
+
+		// type settings
+		EditorGUILayout.LabelField ("");
+		EditorGUILayout.LabelField ("Type Settings", headingStyle );
+		//if (typeListFold = EditorGUILayout.Foldout (typeListFold, "Type Settings")) {
+		_sSettings.Type = (ShortcutType)EditorGUILayout.EnumPopup ("Type", _sSettings.Type);
 
 		if (_sSettings.Type == ShortcutType.Arc) {
 			_sSettings.InnerRadius = EditorGUILayout.FloatField ("Inner Radius", _sSettings.InnerRadius);
 			_sSettings.Thickness = EditorGUILayout.FloatField ("Thickness", _sSettings.Thickness);
 			_sSettings.EachItemDegree = EditorGUILayout.FloatField ("Each Item Degree", _sSettings.EachItemDegree);
-
+			
 		} else if (_sSettings.Type == ShortcutType.Stick) {
 			_sSettings.Direction = (StickShortcutDirection)EditorGUILayout.EnumPopup ("Direction", _sSettings.Direction);
 			_sSettings.ItemWidth = EditorGUILayout.FloatField ("Each Item Width", _sSettings.ItemWidth);
 			_sSettings.ItemHeight = EditorGUILayout.FloatField ("Each Item Height", _sSettings.ItemHeight);
-
+			 
 		}
+		//}
+
+		// UI Settings
+		EditorGUILayout.LabelField ("");
+		EditorGUILayout.LabelField ("Color Settings", headingStyle );
+		
+		_sSettings.BackgroundColor = EditorGUILayout.ColorField ("Background Color", _sSettings.BackgroundColor);
+		_sSettings.FocusingColor = EditorGUILayout.ColorField ("Focusing Color", _sSettings.FocusingColor);
+		_sSettings.SelectingColor = EditorGUILayout.ColorField ("Selecting Color", _sSettings.SelectingColor);
+
+
+
+		// Item Settings 
+		EditorGUILayout.LabelField ("");
+		EditorGUILayout.LabelField ("Text Settings", headingStyle );
+
+		_sSettings.TextFont = EditorGUILayout.TextField ("Font Name", _sSettings.TextFont);
+		_sSettings.TextColor = EditorGUILayout.ColorField ("Text Color", _sSettings.TextColor);
+		_sSettings.TextSize = EditorGUILayout.IntField ("Text Size", _sSettings.TextSize);
+
+
+
+		// Interaction Settings 
+		EditorGUILayout.LabelField ("");
+		EditorGUILayout.LabelField ("Interaction Settings", headingStyle );
+
+		_sSettings.AppearAnimSpeed = EditorGUILayout.FloatField ("Appear Animation Speed", _sSettings.AppearAnimSpeed);
+		_sSettings.SelectSpeed = EditorGUILayout.FloatField ("Select Speed", _sSettings.SelectSpeed);
+		_sSettings.FocusStart = EditorGUILayout.FloatField ("Focus Start", _sSettings.FocusStart);
+
 
 		EditorGUILayout.EndVertical ();
 

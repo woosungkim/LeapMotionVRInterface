@@ -18,7 +18,6 @@ public abstract class ShapeItem : MonoBehaviour, IShapeItem {
     protected ISelectableItem _selectableItem;
 
     protected ShortcutSettings _sSettings;
-    protected ItemSettings _iSettings;
     protected GameObject _parentObj;
 
     protected Color _backgroundColor;
@@ -46,12 +45,11 @@ public abstract class ShapeItem : MonoBehaviour, IShapeItem {
 		// variables setting
 
 		_sSettings = sSettings;
-		_iSettings = _sSettings.ItemSettings;
 		_parentObj = parentObj;
 		
-		_backgroundColor = _iSettings.BackgroundColor;
-		_focusingColor = _iSettings.FocusingColor;
-		_selectingColor = _iSettings.SelectingColor;
+		_backgroundColor = _sSettings.BackgroundColor;
+		_focusingColor = _sSettings.FocusingColor;
+		_selectingColor = _sSettings.SelectingColor;
 
 		// build item as per itemtype
 		BuildItemAsPerType ();

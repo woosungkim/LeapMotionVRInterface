@@ -1,4 +1,5 @@
-﻿public enum GestureType
+﻿//This is value indicating type of gesture.
+public enum GestureType
 {
     swipe,
     circle,

@@ -7,7 +7,6 @@ public class GrabbingHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     protected bool IsGrab;
     [HideInInspector]
     public GrabbingHand _grabbinghand_gesture;
-    [HideInInspector]
     public MountType MountType;
     public UseArea UseArea;
     public UsingHand UsingHand;
@@ -83,7 +82,7 @@ public class GrabbingHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
 
     public bool IsEnableGestureHand()
     {
-        return PropertyGetter.IsEnableGestureHand(this);
+        return WhichSide.IsEnableGestureHand(this);
     }
 
     protected void SetGestureCondition()

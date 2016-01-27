@@ -11,28 +11,15 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
     public float _progress;
     [HideInInspector]
     public int _useDirection = 0;
+
     protected Vector _normal;
-    
-    protected Pointable _pointable;
+    public Pointable _pointable;
     protected float _radius;
     public CircleGesture _circle_gesture = null;
-
-    
     protected GestureList _gestures;
     protected FingerList _fingers;
     protected float _startProgress;
     protected float _endProgress;
-    
-
-    //-------------------------------------------------
-    //User Setting Area
-    public CircleDirection CircleDirection;
-    [Range(0,2)]
-    public float MinProgress;
-    public MountType MountType;
-    public UsingHand UsingHand;
-    public UseArea UseArea;
-    //------------------------------------------------
 
     public Gesture.GestureState _state
     { get; set; }
@@ -63,6 +50,16 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
 
     public bool _isPlaying
     { get; set; }
+
+    //-------------------------------------------------
+    //User Setting Area
+    public CircleDirection CircleDirection;
+    [Range(0,2)]
+    public float MinProgress;
+    public MountType MountType;
+    public UsingHand UsingHand;
+    public UseArea UseArea;
+    //------------------------------------------------
 
     public virtual void Start()
     {
@@ -99,75 +96,67 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         _lastFrame = _leap_controller.Frame(0);
         Hands = _lastFrame.Hands;
         _gestures = _lastFrame.Gestures();
+        Hand hand = Hands.Frontmost;
 
-        if(IsEnableGestureHand())
+        if (WhichSide.IsEnableGestureHand(this))
         {
-            foreach (Hand hand in Hands)
+            foreach (Gesture gesture in _gestures)
             {
-                foreach (Gesture gesture in _gestures)
+                _fingers = hand.Fingers;
+                if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE)
                 {
-                    _fingers = hand.Fingers;
-                    if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE)
+                    
+
+                    _circle_gesture = new CircleGesture(gesture);
+                    if (!_isPlaying && (gesture.State == Gesture.GestureState.STATE_START) && WhichSide.capturedSide(hand, _useArea, _mountType))
                     {
-                        print("Circle Gesture");
+                        _isPlaying = !_isPlaying;
+                        this._startProgress = _circle_gesture.Progress;
+                    }
 
-                        _circle_gesture = new CircleGesture(gesture);
-                        this.IsEnableGestureHand();
-                        if (!_isPlaying && (gesture.State == Gesture.GestureState.STATE_START) && WhichSide.capturedSide(hand, _useArea, _mountType))
+                    if (_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
+                    {
+                        int direc = PropertyGetter.IsClockWise(this);
+                        this._endProgress = _circle_gesture.Progress;
+                        if (this._endProgress >= this.MinProgress && direc == _useDirection)
                         {
-                            _isPlaying = !_isPlaying;
-                            this._startProgress = _circle_gesture.Progress;
-                        }
-
-                        if (_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
-                        {
-                            int direc = PropertyGetter.IsClockWise(this);
-                            this._endProgress = _circle_gesture.Progress;
-                            if (this._endProgress >= this.MinProgress && direc == _useDirection)
-                            {
-                                this._isChecked = true;
-                                this._isPlaying = !this._isPlaying;
-                            }
-                            this._state = gesture.State;
-
-                            break;
+                            this._isChecked = true;
+                            this._isPlaying = !this._isPlaying;
                         }
                         this._state = gesture.State;
 
+                        break;
                     }
+                    this._state = gesture.State;
                 }
-
-                if (_isPlaying && _state == Gesture.GestureState.STATE_UPDATE)
-                {
-                    int direc = this.IsClockWise();
-                    this._endProgress = _circle_gesture.Progress;
-                    if (this._endProgress >= this.MinProgress && direc == _useDirection)
-                    {
-                        this._isChecked = true;
-                        this._isPlaying = !this._isPlaying;
-                    }
-                }
-
-                if (!this._isPlaying || this._isChecked)
-                {
-                    break;
-                }
-
             }
+
+            if (_isPlaying && _state == Gesture.GestureState.STATE_UPDATE)
+            {
+                int direc = this.IsClockWise();
+                this._endProgress = _circle_gesture.Progress;
+                if (this._endProgress >= this.MinProgress && direc == _useDirection)
+                {
+                    this._isChecked = true;
+                    this._isPlaying = !this._isPlaying;
+                }
+            }
+
         }
-        
+
+
         if (_isChecked)
         {
-            print(this.MinProgress);
+
             DoAction();
         }
-       
+
     }
 
     //Handler method.
     public virtual void DoAction()
     {
-        print("핸들러 만들어라 이 자식아");
+        print("Please override this method");
     }
 
     //Method for off the gesture enable flag.
@@ -184,15 +173,6 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         GestureSetting.SetGestureCondition(this, MountType, CircleDirection, MinProgress, UseArea, UsingHand);      
     }
 
-    //Method for check which hand does user use.
-    public bool IsEnableGestureHand()
-    {
-        if (PropertyGetter.IsEnableGestureHand(this))
-        { return true; }
-        else
-        { return false; }
-    }
-
     //Mothod for setting value of circle gesture valid state.
     protected bool SetMinProgress(float times)
     {
@@ -203,16 +183,7 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
     //Getter of pointable object of gesture object.
     protected Pointable GetPointable()
     {
-        if(_circle_gesture != null)
-        {
-            _pointable = _circle_gesture.Pointable;
-            return _pointable;
-        }
-        else
-        {
-            return null;
-        }
-        
+        return PropertyGetter.GetPointable(this);
     }
 
     //Getter of circle gesture object's progress.

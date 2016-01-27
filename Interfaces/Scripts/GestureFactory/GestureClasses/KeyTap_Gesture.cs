@@ -7,11 +7,9 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     public KeyTapGesture _keytab_gesture;
 
     public Vector _direction;
-    protected Pointable _pointable;
-    protected Vector _position;
+    public Pointable _pointable;
+    public Vector _position;
     protected float _progress;
-
-    
     protected GestureList _gestures;
     protected FingerList _fingers;
     public MountType MountType;
@@ -63,36 +61,30 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         this._lastFrame = this._leap_controller.Frame(0);
         this.Hands = this._lastFrame.Hands;
         this._gestures = this._lastFrame.Gestures();
-        
-        if((!this._isChecked) && IsEnableGestureHand())
+        Hand hand = this.Hands.Frontmost;
+
+        if ((!this._isChecked) && WhichSide.IsEnableGestureHand(this))
         {
-            foreach (Hand hand in Hands)
+            this._fingers = hand.Fingers;
+
+            foreach (Gesture gesture in _gestures)
             {
-                this._fingers = hand.Fingers;
 
-                foreach (Gesture gesture in _gestures)
+                if ((gesture.Type == Gesture.GestureType.TYPE_KEY_TAP) && WhichSide.capturedSide(hand, _useArea, _mountType))
                 {
+                    _keytab_gesture = new KeyTapGesture(gesture);
+                    this.GetDirection();
+                    this.GetPointable();
+                    this.GestureInvokePosition();
 
-                    if ((gesture.Type == Gesture.GestureType.TYPE_KEY_TAP) && WhichSide.capturedSide(hand, _useArea, _mountType))
-                    {
-                        _keytab_gesture = new KeyTapGesture(gesture);
-                        this.GetDirection();
-                        this.GetPointable();
-                        this.GetPosition();
-                       
-                        this._isChecked = true;
-                        break;
-                        
-                    }
+                    this._isChecked = true;
+                    break;
+
                 }
-
-                if (this._isChecked)
-                { break; }
-
             }
         }
 
-        if(this._isChecked)
+        if (this._isChecked)
         {
             DoAction();
         }
@@ -105,7 +97,7 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
 
     public virtual void DoAction()
     {
-        print("Please code this method");
+        print("Please override this method");
     }
 
     protected void SetGestureCondition()
@@ -115,71 +107,33 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         GestureSetting.SetGestureCondition(this, MountType, UseArea, UsingHand);
     }
 
-
-    public bool IsEnableGestureHand()
-    {
-        return PropertyGetter.IsEnableGestureHand(this);
-    }
-
     protected virtual Vector GetDirection()
     {
-
-        print(PropertyGetter.GetDirection(this));
-        return this._direction;
+        return PropertyGetter.GetDirection(this);
     }
 
     protected HandList GetHandList()
     {
         if(_keytab_gesture != null)
-        {
-            return Hands;
-        }
-        else
-        {
-            return new HandList();
-        }
-        
+        { return Hands; }
+        else{ return new HandList(); }
     }
 
     protected FingerList GetFingerList()
     {
         if(_keytab_gesture != null)
-        {
-            return _fingers;
-        }
-        else
-        {
-            return new FingerList();
-        }
-        
+        { return _fingers; }
+        else{ return new FingerList(); }
     }
 
     protected Pointable GetPointable()
     {
-        if(_keytab_gesture != null)
-        {
-            _pointable = _keytab_gesture.Pointable;
-            return _pointable;
-        }
-        else
-        {
-            return null;
-        }
-        
+        return PropertyGetter.GetPointable(this);
     }
 
-    protected Vector GetPosition()
+    protected Vector GestureInvokePosition()
     {
-        if(_keytab_gesture != null)
-        {
-            _position = _keytab_gesture.Position;
-            return _position;
-        }
-        else
-        {
-            return null;
-        }
-        
+        return PropertyGetter.GetGestureInvokePosition(this);
     }
 
 }

@@ -8,7 +8,6 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     public FlipHand_Gesture _fliphand_gesture;
     [HideInInspector]
     public PalmDirection _palmDirection;
-    [HideInInspector]
     public MountType MountType;
     public UseArea UseArea;
     public UsingHand UsingHand;
@@ -85,7 +84,7 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
 
     public bool IsEnableGestureHand()
     {
-        return PropertyGetter.IsEnableGestureHand(this);
+        return WhichSide.IsEnableGestureHand(this);
     }
 
     protected void SetGestureCondition()
@@ -104,9 +103,6 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     public virtual bool IsCorrectHandDirection(Hand hand)
     {
         Hand tHand = hand;
-
-        float pitch = tHand.Direction.Pitch;
-        float yaw = tHand.Direction.Yaw;
         float roll = tHand.PalmNormal.Roll;
         
         if(_palmDirection == PalmDirection.DownWard)

@@ -2,16 +2,20 @@
 using System.Collections;
 using Leap;
 
+// This static class calculate gesture's value.
+// The value calculdated by method is the common elements to Gesture.
+// The other methods are not need operations are defined in each gesture classes. 
 public static class PropertyGetter {
-
+    
+    //This static method is calculate gesture's direction.
+    //We provide only base vector of x,y,z axis.
+    //If you want to get more complicated value, modify this method or define new method in your gesture script.
 	public static Vector GetDirection<T>(T ob) where T : IGesture
     {
-        string t = ob.GetType().ToString();
-        
-        if(ob._gestureType == GestureType.swipe)
+        if(ob._gestureType == GestureType.swipe) 
         {
             Swipe_Gesture temp = ob as Swipe_Gesture;
-            if (temp._swipe_gestrue != null)
+            if (temp._swipe_gestrue != null)// If gesture instance is valid.
             {
                 Vector tempDirection = temp._swipe_gestrue.Direction;
                 float x = Mathf.Abs(tempDirection.x);
@@ -34,9 +38,9 @@ public static class PropertyGetter {
                 }
                 return temp._direction;
             }
-            else
+            else//If gesture instance is not valid of other error, return zero vector.
             {
-                return new Vector(1,0,0);
+                return new Vector(0,0,0);
             }
         }
         else if (ob._gestureType == GestureType.keytab)
@@ -68,7 +72,7 @@ public static class PropertyGetter {
             }
             else
             {
-                return null;
+                return new Vector(0,0,0);
             }
         }
         else if (ob._gestureType == GestureType.screentab)
@@ -100,122 +104,18 @@ public static class PropertyGetter {
             }
             else
             {
-                return null;
+                return new Vector(0,0,0);
             }
         }
         else
         {
-            return null;
+            return new Vector(0,0,0);//I
         }
     }
 
-    public static bool IsEnableGestureHand<T>(T ob) where T : IGesture
-    {
-        switch(ob._gestureType)
-        {
-            case GestureType.swipe:
-                Swipe_Gesture tempSwipe = ob as Swipe_Gesture;
-                if (tempSwipe._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempSwipe._usingHand == UsingHand.Left) && (tempSwipe.Hands.Frontmost.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempSwipe._usingHand == UsingHand.Right) && tempSwipe.Hands.Frontmost.IsRight)
-                {
-                    return true;
-                }
-                return false;
-            case GestureType.circle:
-                Circle_Gesture tempCircle = ob as Circle_Gesture;
-
-                if (tempCircle._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempCircle._usingHand == UsingHand.Left) && (tempCircle.Hands.Frontmost.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempCircle._usingHand == UsingHand.Right) && tempCircle.Hands.Frontmost.IsRight)
-                {
-                    return true;
-                }
-                return false;
-
-            case GestureType.keytab:
-                KeyTap_Gesture tempKeytab = ob as KeyTap_Gesture;
-
-                if (tempKeytab._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempKeytab._usingHand == UsingHand.Left) && (tempKeytab.Hands.Frontmost.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempKeytab._usingHand == UsingHand.Right) && tempKeytab.Hands.Frontmost.IsRight)
-                {
-                    return true;
-                }
-                return false;
-
-            case GestureType.screentab:
-                ScreenTap_Gesture tempScreenTab = ob as ScreenTap_Gesture;
-
-                if (tempScreenTab._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempScreenTab._usingHand == UsingHand.Left) && (tempScreenTab.Hands.Frontmost.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempScreenTab._usingHand == UsingHand.Right) && tempScreenTab.Hands.Frontmost.IsRight)
-                {
-                    return true;
-                }
-                return false;
-            case GestureType.grabbinghand:
-                GrabbingHand_Gesture tempGrabbingHand = ob as GrabbingHand_Gesture;
-
-                if (tempGrabbingHand._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempGrabbingHand._usingHand == UsingHand.Left) && (tempGrabbingHand.Hands.Frontmost.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempGrabbingHand._usingHand == UsingHand.Right) && tempGrabbingHand.Hands.Frontmost.IsRight)
-                {
-                    return true;
-                }
-                return false;
-            case GestureType.fliphand:
-                FlipHand_Gesture tempFlipHand = ob as FlipHand_Gesture;
-
-                if (tempFlipHand._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempFlipHand._usingHand == UsingHand.Left) && (tempFlipHand.Hands.Frontmost.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempFlipHand._usingHand == UsingHand.Right) && tempFlipHand.Hands.Frontmost.IsRight)
-                {
-                    return true;
-                }
-                return false;
-            default:
-                return false;
-        }
-    }
-
-
+    //For circle gesture, direction is clockwise.
+    //All gesture object has pointable object. Using this, you can get angle element.
+    //Using angle value in the caluculation can be determinded move in any direction.
     public static int IsClockWise<T>(T ob) where T : IGesture
     {
         if(ob._gestureType == GestureType.circle)
@@ -224,16 +124,88 @@ public static class PropertyGetter {
 
             if (tempCircle._circle_gesture.Pointable.Direction.AngleTo(tempCircle.GetNormal()) <= 3.14 / 2)
             {
-                tempCircle._isClockwise = 1;
+                tempCircle._isClockwise = 1; // If direction is clock wise.
             }
             else
             {
-                tempCircle._isClockwise = -1;
+                tempCircle._isClockwise = -1; // If direction is counter clock wise.
             }
 
             return tempCircle._isClockwise;
         }
 
         return 0;
+    }
+
+    // Method for getting gesture's pointable object.
+    public static Pointable GetPointable<T>(T ob) where T : IGesture
+    {
+        if(ob._gestureType == GestureType.circle)
+        {
+            Circle_Gesture tempCircle = ob as Circle_Gesture;
+            tempCircle._pointable = tempCircle._circle_gesture.Pointable;
+            return tempCircle._pointable;
+        }
+        else if(ob._gestureType == GestureType.swipe)
+        {
+            Swipe_Gesture tempSwipe = ob as Swipe_Gesture;
+            tempSwipe._pointable = tempSwipe._swipe_gestrue.Pointable;
+            return tempSwipe._pointable;
+        }
+        else if(ob._gestureType == GestureType.keytab)
+        {
+            KeyTap_Gesture tempKeyTab = ob as KeyTap_Gesture;
+            tempKeyTab._pointable = tempKeyTab._keytab_gesture.Pointable;
+            return tempKeyTab._pointable;
+
+        }
+        else if(ob._gestureType == GestureType.screentab)
+        {
+            ScreenTap_Gesture tempScreenTab = ob as ScreenTap_Gesture;
+            tempScreenTab._pointable = tempScreenTab._screentap_gesture.Pointable;
+            return tempScreenTab._pointable;
+        }
+        else
+        {
+            return new Pointable();
+        }
+    }
+
+    // Someone who may also be required where it originated gesture.
+    // If you use this value, possibility arise up about new gesture of another pattern.
+    public static Vector GetGestureInvokePosition<T>(T ob) where T : IGesture
+    {
+        if (ob._gestureType == GestureType.swipe)
+        {
+            Swipe_Gesture tempSwipe = ob as Swipe_Gesture;
+            if (tempSwipe._swipe_gestrue != null)
+            {
+                tempSwipe._position = tempSwipe._swipe_gestrue.Position;
+                return tempSwipe._position;
+            }
+        }
+        else if (ob._gestureType == GestureType.keytab)
+        {
+            KeyTap_Gesture tempKeyTab = ob as KeyTap_Gesture;
+            if(tempKeyTab._keytab_gesture!=null)
+            {
+                tempKeyTab._position = tempKeyTab._keytab_gesture.Position;
+                return tempKeyTab._position;
+            }
+            
+
+        }
+        else if (ob._gestureType == GestureType.screentab)
+        {
+            ScreenTap_Gesture tempScreenTab = ob as ScreenTap_Gesture;
+            if(tempScreenTab._screentap_gesture!=null)
+            {
+                tempScreenTab._position = tempScreenTab._screentap_gesture.Position;
+                return tempScreenTab._position;
+            }
+        }
+        
+        return new Vector(0,0,0);
+        
     }
 }

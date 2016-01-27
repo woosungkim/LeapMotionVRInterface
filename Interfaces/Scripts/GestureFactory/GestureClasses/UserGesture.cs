@@ -10,9 +10,10 @@ public class UserGesture : MonoBehaviour, IUserGesture {
     protected bool IsGrab = false;
     protected bool IsUpward = false;//true면 손바닥이 위방향, false면 아래방향.
     protected Frame tFrame;
+    protected Hand hand;
 
     public MountType MountType;
-    
+    public UsingHand UsingHand;
     public MountType _mountType
     { get; set; }
 
@@ -59,9 +60,11 @@ public class UserGesture : MonoBehaviour, IUserGesture {
 	// Update is called once per frame
     public virtual bool SetConfig()
     {
+        this._gestureType = GestureType.usercustom;
         _leap_controller = new Controller();
-        this.SetMount();
         this._useArea = UseArea.All;
+        this._mountType = MountType;
+        this._usingHand = UsingHand;
 
         return true;
     }
@@ -72,13 +75,13 @@ public class UserGesture : MonoBehaviour, IUserGesture {
         tFrame = _leap_controller.Frame(5);
         Hands = _lastFrame.Hands;
         Fingers = _lastFrame.Fingers;
-        Hand hand = Hands.Frontmost;
+        hand = Hands.Frontmost;
 
+        if(WhichSide.IsEnableGestureHand(this) && WhichSide.capturedSide(hand,_useArea,_mountType))
+        {
+            this._isChecked = GestureCondition();
+        }
        
-        IsEnableGestureHand();
-        IsGrabbingHand();
-        PalmDirection();
-        this._isChecked = GestureCondition();
 
         if(_isChecked)
         {
@@ -86,46 +89,13 @@ public class UserGesture : MonoBehaviour, IUserGesture {
         }
     }
 
-  
-
-    public void IsGrabbingHand()
-    {
-        if (Hands.Frontmost.GrabStrength == 1)
-        {
-            IsGrab = true;
-        }
-        else
-        {
-            IsGrab = false;
-        }
-    }
-
-    public virtual void PalmDirection()
-    {
-        Hand tempHand = Hands.Frontmost;
-       
-        float pitch = tempHand.Direction.Pitch;
-        float yaw = tempHand.Direction.Yaw;
-        float roll = tempHand.PalmNormal.Roll;
-
-        if( roll > -0.5f && roll < 0.5f )
-        {
-            IsUpward = false;
-        }
-        else if( roll > 2.5f && roll < 3.5)
-        {
-            IsUpward = true;
-        }
-       
-    }
-
-    protected virtual bool GestureCondition()
+    public virtual bool GestureCondition()
     {
 
         return _isChecked;
     }
 
-    public void DoAction()
+    public virtual void DoAction()
     {
         print("Please make your Gesture Handler.");
     }
@@ -135,18 +105,4 @@ public class UserGesture : MonoBehaviour, IUserGesture {
         _isChecked = !_isChecked;
     }
 
-    public virtual bool IsEnableGestureHand()
-    {
-        if(this.Hands.IsEmpty)
-        {
-            return false;
-        }
-        return false;
-    }
-
-  
-    public void SetMount()
-    {
-        this._mountType = this.MountType;
-    }
 }

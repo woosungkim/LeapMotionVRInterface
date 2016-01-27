@@ -7,8 +7,8 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
 {
     public ScreenTapGesture _screentap_gesture;
     public Vector _direction;
-    protected Pointable _pointable;
-    protected Vector _position;
+    public Pointable _pointable;
+    public Vector _position;
 
     protected GestureList _gestures;
     protected FingerList _fingers;
@@ -60,35 +60,32 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         _lastFrame = _leap_controller.Frame(0);
         Hands = _lastFrame.Hands;
         _gestures = _lastFrame.Gestures();
+        Hand hand = Hands.Frontmost;
 
-        if((!this._isChecked) && IsEnableGestureHand())
+        if ((!this._isChecked) && WhichSide.IsEnableGestureHand(this))
         {
-            foreach (Hand hand in Hands)
+
+            this._fingers = hand.Fingers;
+
+            foreach (Gesture gesture in _gestures)
             {
-                this._fingers = hand.Fingers;
-
-                foreach (Gesture gesture in _gestures)
+                if ((gesture.Type == Gesture.GestureType.TYPE_SCREEN_TAP) && WhichSide.capturedSide(hand, _useArea, this._mountType))
                 {
-                    if ((gesture.Type == Gesture.GestureType.TYPE_SCREEN_TAP) && WhichSide.capturedSide(hand, _useArea, this._mountType ))
-                    {
-                        _screentap_gesture = new ScreenTapGesture(gesture);
+                    _screentap_gesture = new ScreenTapGesture(gesture);
 
-                        this.GetDirection();
-                        this.IsEnableGestureHand();
-                        this.GetPointable();
-                        this.GetPosition();
+                    this.GetDirection();
+                    this.GetPointable();
+                    this.GetGestureInvokePosition();
 
-                        this._isChecked = true;
-                        break;
-                    }
+                    this._isChecked = true;
+                    break;
                 }
-
-                if (this._isChecked)
-                { break; }
             }
+
+
         }
-       
-        if(this._isChecked)
+
+        if (this._isChecked)
         {
             DoAction();
         }
@@ -97,11 +94,6 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
     public virtual void UnCheck()
     {
         _isChecked = false;
-    }
-
-    public bool IsEnableGestureHand()
-    {
-        return PropertyGetter.IsEnableGestureHand(this);
     }
 
     protected void SetGestureCondition()
@@ -113,66 +105,37 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
 
     public virtual void DoAction()
     {
-        print("Please code this method");
+        print("Please override this method");
     }
 
 
     protected virtual Vector GetDirection()
     {
-
-        print(PropertyGetter.GetDirection(this));
-        return this._direction;
+        return PropertyGetter.GetDirection(this);
     }
 
-    protected Vector GetPosition()
+    protected Vector GetGestureInvokePosition()
     {
-        if(_screentap_gesture != null)
-        {
-            this._position = _screentap_gesture.Position;
-            return this._position;
-        }
-        else
-        {
-            return null;
-        }
+        return PropertyGetter.GetGestureInvokePosition(this);
     }
 
     protected Pointable GetPointable()
     {
-        if(_screentap_gesture != null)
-        {
-            this._pointable = _screentap_gesture.Pointable;
-            return this._pointable;
-        }
-        else
-        {
-            return null;
-        }
-        
+        return PropertyGetter.GetPointable(this);
     }
 
     protected HandList GetHandList()
     {
         if(_screentap_gesture != null)
-        {
-            return Hands;
-        }
-        else
-        {
-            return new HandList();
-        }
+        { return Hands; }
+        else{ return new HandList(); }
     }
 
     protected FingerList GetFingerList()
     {
         if(_screentap_gesture != null)
-        {
-            return _fingers;
-        }
-        else
-        {
-            return new FingerList();
-        }
+        { return _fingers; }
+        else{ return new FingerList(); }
     }
 }
 

@@ -3,8 +3,7 @@ using System.Collections;
 
 public interface IUserGesture : IGesture {
 
+    //User custom method that set gesture & controller options.
     bool SetConfig();
-    void SetMount();
-    void IsGrabbingHand();
-    void PalmDirection();
+   
 }

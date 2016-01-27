@@ -19,9 +19,17 @@ public class PointerController : MonoBehaviour {
 	private GameObject leftHandObj;
 	private GameObject rightHandObj;
 
+	private bool _isAppearing = false;
+	public bool IsAppearing { get { return _isAppearing; } set { _isAppearing = value; } }
+
 	// Use this for initialization
 	void Start () {
 		_Camera = Camera.main;
+
+		if (_PointerSettings.AutoStart)
+			_isAppearing = true;
+		else
+			_isAppearing = false;
 
 		gameObject.transform.SetParent (_Camera.transform, false);
 
@@ -86,45 +94,47 @@ public class PointerController : MonoBehaviour {
 		bool leftHandOn = false;
 		bool rightHandOn = false;
 
-		foreach (Hand hand in hands) {
-			if (hand.IsLeft) {
-				leftHandOn = true;
-				leftHandObj.SetActive(true);
-			}
-			if (hand.IsRight) {
-				rightHandOn = true;
-				rightHandObj.SetActive(true);
-			}
-
-			FingerList fingers = hand.Fingers;
-			
-			foreach (Finger finger in fingers) {
-				PointerType type = Converter.ConvertType(hand, finger.Type);
+		if (_isAppearing) {
+			foreach (Hand hand in hands) {
+				if (hand.IsLeft) {
+					leftHandOn = true;
+					leftHandObj.SetActive(true);
+				}
+				if (hand.IsRight) {
+					rightHandOn = true;
+					rightHandObj.SetActive(true);
+				}
 				
-				if (type != null) {
-					if (_pointerDict.ContainsKey(type)) {
-						GameObject pointerObj = _pointerDict[type];
-						
-						Transform pointerTransform = pointerObj.transform;
-						
-
-						if (_PointerSettings.MountType == MountType.TableMount) {
-							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
-							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
-						} else if (_PointerSettings.MountType == MountType.HeadMount) {
-							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
-							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+				FingerList fingers = hand.Fingers;
+				
+				foreach (Finger finger in fingers) {
+					PointerType type = Converter.ConvertType(hand, finger.Type);
+					
+					if (type != null) {
+						if (_pointerDict.ContainsKey(type)) {
+							GameObject pointerObj = _pointerDict[type];
+							
+							Transform pointerTransform = pointerObj.transform;
+							
+							
+							if (_PointerSettings.MountType == MountType.TableMount) {
+								InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+								pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+							} else if (_PointerSettings.MountType == MountType.HeadMount) {
+								InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+								pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+							}
+							//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+							
+							pointerTransform.localRotation = Quaternion.identity;
+							
+							
+							Vector3 camWorld = _Camera.transform.TransformPoint (Vector3.zero);
+							Vector3 camLocal = pointerTransform.InverseTransformPoint (camWorld);
+							
+							pointerTransform.localRotation = Quaternion.FromToRotation (Vector3.down, camLocal);
+							
 						}
-						//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
-						
-						pointerTransform.localRotation = Quaternion.identity;
-						
-						
-						Vector3 camWorld = _Camera.transform.TransformPoint (Vector3.zero);
-						Vector3 camLocal = pointerTransform.InverseTransformPoint (camWorld);
-						
-						pointerTransform.localRotation = Quaternion.FromToRotation (Vector3.down, camLocal);
-						
 					}
 				}
 			}
@@ -139,6 +149,12 @@ public class PointerController : MonoBehaviour {
 
 	}
 
+	public void Appear() {
+		_isAppearing = true;
+	}
 
-
+	public void Disappear() {
+		_isAppearing = false;
+	}
+	
 }

@@ -24,7 +24,7 @@ public class ShortcutItemEditor : Editor {
 		_sItem._ItemType = (ItemType)EditorGUILayout.EnumPopup ("Item Type", _sItem._ItemType);
 
 		if (_sItem._ItemType == ItemType.NormalButton) {
-			_sItem._Action = (EventScript)EditorGUILayout.ObjectField ("Action Script", _sItem._Action, typeof(EventScript), true);
+			_sItem._Action = (EventScript)EditorGUILayout.ObjectField ("Handler Object", _sItem._Action, typeof(EventScript), true);
 			_sItem._ExecType = (ActionExecType)EditorGUILayout.EnumPopup ("Action Execute Type", _sItem._ExecType);
 		} else if (_sItem._ItemType == ItemType.Parent) {
 			_sItem._CancelItemLabel = EditorGUILayout.TextField ("Cancel Item Label", _sItem._CancelItemLabel);

@@ -87,7 +87,7 @@ public class ShortcutSettingsEditor : Editor {
 
 		_sSettings.AppearAnimSpeed = EditorGUILayout.FloatField ("Appear Animation Speed", _sSettings.AppearAnimSpeed);
 		_sSettings.SelectSpeed = EditorGUILayout.FloatField ("Select Speed", _sSettings.SelectSpeed);
-		_sSettings.FocusStart = EditorGUILayout.FloatField ("Focus Start", _sSettings.FocusStart);
+		_sSettings.FocusStart = EditorGUILayout.FloatField ("Select Start Distance", _sSettings.FocusStart);
 
 
 		EditorGUILayout.EndVertical ();

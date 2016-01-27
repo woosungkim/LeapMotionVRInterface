@@ -43,11 +43,12 @@ public class UIPointer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-		float maxProg = InteractionManager.GetPointerHighlightProgress(_type); 
-		float thick = Mathf.Lerp (_thickness, _thickness, maxProg);
-		float scale = Mathf.Lerp(_radiusNormal, _radiusHighlighted, maxProg);
 
+		float maxProg = InteractionManager.GetPointerHighlightProgress(_type);
+        //print(maxProg);
+		float thick = Mathf.Lerp (_thickness, _thickness, maxProg);
+        float scale = Mathf.Lerp(_radiusHighlighted, _radiusNormal, maxProg);
+		//print (maxProg);
 		BuildMesh (thick);
 		
 		_pointerObj.transform.localScale = Vector3.one*scale;

@@ -103,30 +103,34 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     public virtual bool IsCorrectHandDirection(Hand hand)
     {
         Hand tHand = hand;
+
         float roll = tHand.PalmNormal.Roll;
-        
-        if(_palmDirection == PalmDirection.DownWard)
+
+
+
+        if (_palmDirection == PalmDirection.DownWard)
         {
-            if (roll > -0.5f && roll < 0.5f)
+            if (Mathf.Abs(roll) < 0.6)
             {
                 return true;
             }
-            else if (roll > 2.5f && roll < 3.5)
+            else if (Mathf.Abs(roll) > 2.5)
             {
                 return false;
             }
         }
         else
         {
-            if (roll > -0.5f && roll < 0.5f)
-            {
-                return false;
-            }
-            else if (roll > 2.5f && roll < 3.5)
+            if (Mathf.Abs(roll) > 2.5)
             {
                 return true;
             }
+            else if (Mathf.Abs(roll) < 0.6)
+            {
+                return false;
+            }
         }
+
 
         return false;
     }

@@ -42,6 +42,7 @@ public class StickItem : ShapeItem {
 		
 		// interaction setting
 		InteractionManager.SetItemPos (_id, Camera.main.WorldToViewportPoint (centerObj.transform.position));
+		InteractionManager.SetInterStart (_id, _sSettings.FocusStart);
 	}
 	
 	

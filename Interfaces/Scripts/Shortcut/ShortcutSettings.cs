@@ -40,7 +40,7 @@ public class ShortcutSettings : MonoBehaviour {
 	// interaction Settings
 	public float AppearAnimSpeed = 4.0f;
 	public float SelectSpeed = 2.0f;
-	public float FocusStart = 0.9f;
+	public float FocusStart = 0.1f;
 
 
 }

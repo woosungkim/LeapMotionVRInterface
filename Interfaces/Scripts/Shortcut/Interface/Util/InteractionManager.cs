@@ -9,6 +9,7 @@ public static class InteractionManager {
 	
 	static Dictionary<PointerType, Vector3> _pointerPosDict = new Dictionary<PointerType, Vector3>();
 	static Dictionary<int, Vector3> _itemPosDict = new Dictionary<int, Vector3> ();
+    static Dictionary<int, float> _interactionStartDict = new Dictionary<int, float> ();
 	static Dictionary<int, float> _progressDict = new Dictionary<int, float> ();
 
 	/*******************************************************************/
@@ -53,7 +54,29 @@ public static class InteractionManager {
 		}
 	}
 
-	/*******************************************************************/
+    /*******************************************************************/
+
+    public static bool HasInterStartId(int id) {
+        if (_interactionStartDict.ContainsKey (id)) 
+			return true;
+		return false;
+    }
+	public static void SetInterStart(int id, float val) { 
+		if (_interactionStartDict.ContainsKey (id)) {
+			_interactionStartDict [id] = val;
+		} else {
+			_interactionStartDict.Add(id, val);
+		}
+	}
+	public static float GetInterStart(int id) {
+		if (_interactionStartDict.ContainsKey (id)) {
+			return _interactionStartDict [id];
+		} else {
+			return -1.0f;
+		}
+	}
+	
+    /*******************************************************************/
 	public static bool HasProgId(int id) {
 		if (_progressDict.ContainsKey (id))
 			return true;
@@ -70,20 +93,30 @@ public static class InteractionManager {
 		if (_progressDict.ContainsKey (id)) {
 			return _progressDict[id];
 		} else {
-			return 0.0f;
+			return -1.0f;
 		}
 	}
 
 	/*******************************************************************/
-	public static float findNearestPointerDistance(Vector3 pos) {
+	public static float findNearestPointerDistance(int id) {
 		float nearestDis = 999.0f;
 
 		foreach (PointerType type in _pointerPosDict.Keys) {
-			//nearestDis = Math.Min (nearestDis, Vector3.Distance(pos, _pointerPosDict[type]));
-			nearestDis = Math.Min (nearestDis, Vector2.Distance((Vector2)pos, (Vector2)_pointerPosDict[type]));
+			float intervalStart =  _interactionStartDict[id];
+			float intervalEnd = (_interactionStartDict[id]*3.0f);
+			float interval = intervalEnd - intervalStart;
+
+            float dis = Vector2.Distance((Vector2)_itemPosDict[id], (Vector2)_pointerPosDict[type]);
+           
+			if (intervalEnd > dis) {
+				dis -= intervalStart;
+				dis /= interval;
+                nearestDis = Math.Min (nearestDis, dis);
+				//Mathf.Lerp (0, 1, (1-nearestDis));
+            }
 			//Debug.Log ("Item : " + (Vector2)pos);
 		}
-
+		nearestDis = Mathf.Lerp (0, 1, nearestDis);
 
 		return nearestDis;
 	}
@@ -91,19 +124,31 @@ public static class InteractionManager {
 	public static float findNearestItemDistance(Vector3 pos) {
 		float nearestDis = 999.0f;
 
-		foreach (int key in _itemPosDict.Keys) {
-			nearestDis = Math.Min (nearestDis, Vector2.Distance((Vector2)pos, (Vector2)_itemPosDict[key])); 
-			//Debug.Log ("Pointer : " + (Vector2)pos);
+		foreach (int id in _itemPosDict.Keys) {
+			float intervalStart =  _interactionStartDict[id];
+			float intervalEnd = (_interactionStartDict[id]*3.0f);
+			float interval = intervalEnd - intervalStart;
+
+			float dis = Vector2.Distance((Vector2)pos, (Vector2)_itemPosDict[id]);
+
+			if (intervalEnd > dis) {
+				//float normDis   = Mathf.Lerp (intervalStart, intervalEnd, dis);
+				dis -= intervalStart;
+				dis /= interval;
+
+				nearestDis = (Math.Min (nearestDis, dis)); 
+			}
 		}
+
 		return nearestDis;
 	}
 
 
 
 	public static float GetItemHighlightProgress(int id) {
-		float nearestDis = findNearestPointerDistance (_itemPosDict [id]);
+		float nearestDis = findNearestPointerDistance (id);
 
-		return (TriggerDistance / nearestDis);
+		return (_interactionStartDict[id] / nearestDis);
 
 	}
 
@@ -111,7 +156,7 @@ public static class InteractionManager {
 
 		float nearestDis = findNearestItemDistance (_pointerPosDict [type]);
 
-		return (TriggerDistance / nearestDis);
+		return nearestDis;
 
 	}
 

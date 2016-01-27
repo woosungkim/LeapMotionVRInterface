@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PointerSettings : MonoBehaviour {
 
+	public bool AutoStart = true;
+
 	public MountType MountType = MountType.TableMount;
 
     public Color Color = new Color(1, 1, 1, 1);

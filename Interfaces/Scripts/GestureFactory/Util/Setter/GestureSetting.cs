@@ -66,12 +66,12 @@ public static class GestureSetting {
                 if (swipeDirection == SwipeDirection.GoLeft)
                 {
                     tempSwipe.UseAxis = 'x';
-                    tempSwipe._useDirection = -1;
+                    tempSwipe._useDirection = 1;
                 }
                 else if (swipeDirection == SwipeDirection.GoRight)
                 {
                     tempSwipe.UseAxis = 'x';
-                    tempSwipe._useDirection = 1;
+                    tempSwipe._useDirection = -1;
                 }
                 else if (swipeDirection == SwipeDirection.GoDown)
                 {
@@ -109,22 +109,22 @@ public static class GestureSetting {
                 else if (swipeDirection == SwipeDirection.GoDown)
                 {
                     tempSwipe.UseAxis = 'y';
-                    tempSwipe._useDirection = 1;
+                    tempSwipe._useDirection = -1;
                 }
                 else if (swipeDirection == SwipeDirection.GoUp)
                 {
                     tempSwipe.UseAxis = 'y';
-                    tempSwipe._useDirection = -1;
+                    tempSwipe._useDirection = 1;
                 }
                 else if (swipeDirection == SwipeDirection.GoStraight)
                 {
                     tempSwipe.UseAxis = 'z';
-                    tempSwipe._useDirection = 1;
+                    tempSwipe._useDirection = -1;
                 }
                 else
                 {
                     tempSwipe.UseAxis = 'z';
-                    tempSwipe._useDirection = -1;
+                    tempSwipe._useDirection = 1;
                 }
             }
         }

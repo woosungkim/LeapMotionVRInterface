@@ -18,18 +18,23 @@ public class PointerController : MonoBehaviour {
 	private GameObject pointersObj;
 	private GameObject leftHandObj;
 	private GameObject rightHandObj;
-
-	private bool _isAppearing = false;
-	public bool IsAppearing { get { return _isAppearing; } set { _isAppearing = value; } }
+	
+	private bool _isRightsAppearing = false;
+	public bool IsRightsAppearing { get { return _isRightsAppearing; } set { _isRightsAppearing = value; } }
+	private bool _isLeftsAppearing = false;
+	public bool IsLeftsAppearing { get { return _isLeftsAppearing; } set { _isLeftsAppearing = value; } }
 
 	// Use this for initialization
 	void Start () {
 		_Camera = Camera.main;
 
-		if (_PointerSettings.AutoStart)
-			_isAppearing = true;
-		else
-			_isAppearing = false;
+		if (_PointerSettings.AutoStart) {
+			_isLeftsAppearing = true;
+			_isRightsAppearing = true;
+		} else {
+			_isLeftsAppearing = false;
+			_isRightsAppearing = false;
+		}
 
 		gameObject.transform.SetParent (_Camera.transform, false);
 
@@ -94,51 +99,57 @@ public class PointerController : MonoBehaviour {
 		bool leftHandOn = false;
 		bool rightHandOn = false;
 
-		if (_isAppearing) {
-			foreach (Hand hand in hands) {
-				if (hand.IsLeft) {
-					leftHandOn = true;
-					leftHandObj.SetActive(true);
-				}
-				if (hand.IsRight) {
-					rightHandOn = true;
-					rightHandObj.SetActive(true);
-				}
+		foreach (Hand hand in hands) {
+			if (hand.IsLeft && _isLeftsAppearing) {
+				leftHandOn = true;
+				leftHandObj.SetActive(true);
+			}
+			if (hand.IsRight && _isRightsAppearing) {
+				rightHandOn = true;
+				rightHandObj.SetActive(true);
+			}
+
+			if (hand.IsLeft && !_isLeftsAppearing) {
+				continue;
+			}
+			if (hand.IsRight && !_isRightsAppearing) {
+				continue;
+			}
+			
+			FingerList fingers = hand.Fingers;
+			
+			foreach (Finger finger in fingers) {
+				PointerType type = Converter.ConvertType(hand, finger.Type);
 				
-				FingerList fingers = hand.Fingers;
-				
-				foreach (Finger finger in fingers) {
-					PointerType type = Converter.ConvertType(hand, finger.Type);
-					
-					if (type != null) {
-						if (_pointerDict.ContainsKey(type)) {
-							GameObject pointerObj = _pointerDict[type];
-							
-							Transform pointerTransform = pointerObj.transform;
-							
-							
-							if (_PointerSettings.MountType == MountType.TableMount) {
-								InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
-								pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
-							} else if (_PointerSettings.MountType == MountType.HeadMount) {
-								InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
-								pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
-							}
-							//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
-							
-							pointerTransform.localRotation = Quaternion.identity;
-							
-							
-							Vector3 camWorld = _Camera.transform.TransformPoint (Vector3.zero);
-							Vector3 camLocal = pointerTransform.InverseTransformPoint (camWorld);
-							
-							pointerTransform.localRotation = Quaternion.FromToRotation (Vector3.down, camLocal);
-							
+				if (type != null) {
+					if (_pointerDict.ContainsKey(type)) {
+						GameObject pointerObj = _pointerDict[type];
+						
+						Transform pointerTransform = pointerObj.transform;
+						
+						
+						if (_PointerSettings.MountType == MountType.TableMount) {
+							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+						} else if (_PointerSettings.MountType == MountType.HeadMount) {
+							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
 						}
+						//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+						
+						pointerTransform.localRotation = Quaternion.identity;
+						
+						
+						Vector3 camWorld = _Camera.transform.TransformPoint (Vector3.zero);
+						Vector3 camLocal = pointerTransform.InverseTransformPoint (camWorld);
+						
+						pointerTransform.localRotation = Quaternion.FromToRotation (Vector3.down, camLocal);
+						
 					}
 				}
 			}
 		}
+
 
 		if (!leftHandOn) {
 			leftHandObj.SetActive(false);
@@ -148,13 +159,19 @@ public class PointerController : MonoBehaviour {
 		}
 
 	}
-
-	public void Appear() {
-		_isAppearing = true;
+	
+	public void AppearRights() {
+		_isRightsAppearing = true;
+	}
+	public void AppearLefts() {
+		_isLeftsAppearing = true;
 	}
 
-	public void Disappear() {
-		_isAppearing = false;
+	public void DisappearRights() {
+		_isRightsAppearing = false;
+	}
+	public void DisappearLefts() {
+		_isLeftsAppearing = false;
 	}
 	
 }

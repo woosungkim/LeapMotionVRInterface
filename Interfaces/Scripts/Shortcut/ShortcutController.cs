@@ -65,8 +65,6 @@ public class ShortcutController : MonoBehaviour {
 	/* Appear this shortcut. */
 	public void Appear() {
 		if (!_isAppearing) {
-			_isAppearing = true;
-			
 			if (_isFirst) {
 				// item hierarchy build
 				_ItemHierarchy.Build (_ShortcutSettings, gameObject);
@@ -75,6 +73,7 @@ public class ShortcutController : MonoBehaviour {
 			else {
 				_ItemHierarchy.Appear ();
 			}
+			//_isAppearing = true;
 		}
 
 	}
@@ -82,9 +81,9 @@ public class ShortcutController : MonoBehaviour {
 	/* DisAppear this shortcut. */
 	public void Disappear() {
 		if (_isAppearing) {
-			_isAppearing = false;
-			
 			_ItemHierarchy.Disappear ();
+
+			//_isAppearing = false;
 		}
 
 	}

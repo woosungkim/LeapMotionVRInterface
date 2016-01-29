@@ -108,7 +108,7 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
 
 
 
-        if (_palmDirection == PalmDirection.DownWard)
+        if (_palmDirection == PalmDirection.ToLeapMotionDevice)
         {
             if (Mathf.Abs(roll) < 0.6)
             {

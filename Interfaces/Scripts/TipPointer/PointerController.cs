@@ -27,7 +27,9 @@ public class PointerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_Camera = Camera.main;
-
+		if (_Camera == null) {
+			print ("test");
+		}
 		if (_PointerSettings.AutoStart) {
 			_isLeftsAppearing = true;
 			_isRightsAppearing = true;
@@ -48,14 +50,20 @@ public class PointerController : MonoBehaviour {
 		rightHandObj.transform.SetParent (pointersObj.transform, false);
 
 
+		// 포인터의 중복설정을 확인한다.
+		for (int i=0; i<_PointerSettings.PointerUsed.Length-1; i++) {
+			for (int j=i+1; j<_PointerSettings.PointerUsed.Length;j++) {
+				if (_PointerSettings.PointerUsed[i] == _PointerSettings.PointerUsed[j]) {
+					print ("same pointers are detected");
+					return;
+				}
+			}
+		}
+
+
 		// 사용하기로 설정한 포인터타입에만 포인터를 생성한다.
 		foreach (PointerType type in _PointerSettings.PointerUsed) {
-			// 포인터의 중복설정을 확인한다.
-			if (InteractionManager.HasPointer (type)) {
-				continue;
-			}
-
-
+		
 			// 포인터 객체를 만들고 사전에 추가 후 빌드한다.
 			GameObject pointerObj = new GameObject ("Pointer_" + type);
 

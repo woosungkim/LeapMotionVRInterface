@@ -27,9 +27,7 @@ public class PointerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_Camera = Camera.main;
-		if (_Camera == null) {
-			print ("test");
-		}
+
 		if (_PointerSettings.AutoStart) {
 			_isLeftsAppearing = true;
 			_isRightsAppearing = true;

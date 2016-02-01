@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraTransitionHandlerVR : GrabbingHand_Gesture {
+public class CameraTransitionHandlerVR : GrabHand_Gesture {
 
     SwitcherHDCamera switcher;
 

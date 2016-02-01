@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraTransitionHandlerVRInf : GrabbingHand_Gesture {
+public class CameraTransitionHandlerVRInf : GrabHand_Gesture {
 
     SwitcherInfraredCamera switcher;
 

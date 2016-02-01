@@ -196,18 +196,18 @@ public static class WhichSide{
                     return true;
                 }
                 return false;
-            case GestureType.grabbinghand: // If GestureType is grabbing hand.
-                GrabbingHand_Gesture tempGrabbingHand = ob as GrabbingHand_Gesture;
+            case GestureType.grabhand: // If GestureType is grabbing hand.
+                GrabHand_Gesture tempGrabHand = ob as GrabHand_Gesture;
 
-                if (tempGrabbingHand._usingHand == UsingHand.All)
+                if (tempGrabHand._usingHand == UsingHand.All)
                 {
                     return true;
                 }
-                else if ((tempGrabbingHand._usingHand == UsingHand.Left) && (tempGrabbingHand.Hands.Frontmost.IsLeft))
+                else if ((tempGrabHand._usingHand == UsingHand.Left) && (tempGrabHand.Hands.Frontmost.IsLeft))
                 {
                     return true;
                 }
-                else if ((tempGrabbingHand._usingHand == UsingHand.Right) && tempGrabbingHand.Hands.Frontmost.IsRight)
+                else if ((tempGrabHand._usingHand == UsingHand.Right) && tempGrabHand.Hands.Frontmost.IsRight)
                 {
                     return true;
                 }

@@ -6,6 +6,6 @@ public enum GestureType
     keytab,
     screentab,
     usercustom,
-    grabbinghand,
+    grabhand,
     fliphand,
 }

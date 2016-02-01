@@ -159,17 +159,17 @@ public static class GestureSetting {
             tempScreenTab._mountType = tempScreenTab.MountType;
             tempScreenTab._usingHand = usingHand;
         }
-        else if (ob._gestureType == GestureType.grabbinghand)// If gesture type is grabbing hand.
+        else if (ob._gestureType == GestureType.grabhand)// If gesture type is grabbing hand.
         {
-            GrabbingHand_Gesture tempGrabbingHand = ob as GrabbingHand_Gesture;
+            GrabHand_Gesture tempGrabHand = ob as GrabHand_Gesture;
 
             /* Initiate gesture option */
-            tempGrabbingHand._isChecked = false;
+            tempGrabHand._isChecked = false;
 
             /* Initiate to user options. */
-            tempGrabbingHand._mountType = mountType;
-            tempGrabbingHand._useArea = useArea;
-            tempGrabbingHand._usingHand = usingHand;
+            tempGrabHand._mountType = mountType;
+            tempGrabHand._useArea = useArea;
+            tempGrabHand._usingHand = usingHand;
         }
        
     }

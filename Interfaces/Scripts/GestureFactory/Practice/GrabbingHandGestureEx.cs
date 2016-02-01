@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GrabbingHandGestureEx : GrabbingHand_Gesture {
+public class GrabbingHandGestureEx : GrabHand_Gesture {
 
     int n = 0;
     Color[] color = { Color.red, Color.blue, Color.cyan, Color.yellow, Color.green };

@@ -50,7 +50,7 @@ public static class ControllerSetter {
                 _leap_controller.Config.SetFloat("Gesture.ScreenTap.HistorySeconds", 0.1f);
                 _leap_controller.Config.SetFloat("Gesture.ScreenTap.MinDistance", 5.0f);
                 break;
-            case GestureType.grabbinghand://For grabbing hand gesture
+            case GestureType.grabhand://For grabbing hand gesture
                 return _leap_controller;
             case GestureType.fliphand://For flip hand gesture
                 return _leap_controller;

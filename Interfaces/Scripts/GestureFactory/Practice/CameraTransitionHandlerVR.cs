@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraTransitionHandlerVR : Swipe_Gesture {
+public class CameraTransitionHandlerVR : GrabbingHand_Gesture {
 
-    Switcher switcher;
+    SwitcherHDCamera switcher;
 
     public override void DoAction()
     {
-        print("check2");
-        switcher = Switcher.GetInstance();
+        switcher = SwitcherHDCamera.GetInstance();
         switcher.switchCameraToVR();
     }
 }

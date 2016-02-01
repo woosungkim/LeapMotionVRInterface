@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraTransitionHandlerAR : Swipe_Gesture {
+public class CameraTransitionHandlerAR : GrabbingHand_Gesture {
 
-    Switcher switcher;
+    SwitcherHDCamera switcher;
 
     public override void DoAction()
     {
-        print("check1");
-        switcher = Switcher.GetInstance();
+        switcher = SwitcherHDCamera.GetInstance();
         switcher.switchCameraToAR();
     }
 }

@@ -15,6 +15,6 @@ public class GrabbingHandGestureEx : GrabHand_Gesture {
         {
             n = 0;
         }
-        System.Threading.Thread.Sleep(100);
+       // System.Threading.Thread.Sleep(100);
     }
 }

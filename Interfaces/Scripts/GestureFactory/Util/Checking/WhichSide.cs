@@ -148,7 +148,7 @@ public static class WhichSide{
                 return false;
             case GestureType.circle: // If GestureType is circle.
                 Circle_Gesture tempCircle = ob as Circle_Gesture;
-
+                
                 if (tempCircle._usingHand == UsingHand.All)
                 {
                     return true;
@@ -165,7 +165,7 @@ public static class WhichSide{
 
             case GestureType.keytab:// If GestureType is keytab.
                 KeyTap_Gesture tempKeytab = ob as KeyTap_Gesture;
-
+                
                 if (tempKeytab._usingHand == UsingHand.All)
                 {
                     return true;
@@ -196,6 +196,7 @@ public static class WhichSide{
                     return true;
                 }
                 return false;
+           
             case GestureType.grabhand: // If GestureType is grabbing hand.
                 GrabHand_Gesture tempGrabHand = ob as GrabHand_Gesture;
 
@@ -203,13 +204,23 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempGrabHand._usingHand == UsingHand.Left) && (tempGrabHand.Hands.Frontmost.IsLeft))
+                else if ((tempGrabHand._usingHand == UsingHand.Left))
                 {
-                    return true;
+                    foreach(Hand hand in tempGrabHand.Hands)
+                    {
+                        if (hand.IsLeft)
+                            return true;
+                    }
+                    return false;
                 }
-                else if ((tempGrabHand._usingHand == UsingHand.Right) && tempGrabHand.Hands.Frontmost.IsRight)
+                else if ((tempGrabHand._usingHand == UsingHand.Right))
                 {
-                    return true;
+                    foreach(Hand hand in tempGrabHand.Hands)
+                    {
+                        if (hand.IsRight)
+                            return true;
+                    }
+                    return false;
                 }
                 return false;
             case GestureType.fliphand: // If GestureType is fliphand.

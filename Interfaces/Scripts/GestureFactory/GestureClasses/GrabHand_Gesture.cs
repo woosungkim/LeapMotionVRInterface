@@ -53,19 +53,19 @@ public class GrabHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     {
         _lastFrame = _leap_controller.Frame();
         Hands = _lastFrame.Hands;
-        
+        Hand hand = Hands.Frontmost;
         if(!this._isChecked && IsEnableGestureHand())
         {
           
-            foreach (Hand hand in Hands)
-            {
+            //foreach (Hand hand in Hands)
+           // {
               
                 if(WhichSide.capturedSide(hand, _useArea, _mountType) && IsGrabbingHand(hand))
                 {
                     this._isChecked = true;
-                    break;
+                   // break;
                 }
-            }
+           // }
         }
         
  

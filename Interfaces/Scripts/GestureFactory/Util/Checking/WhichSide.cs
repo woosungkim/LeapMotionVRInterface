@@ -204,23 +204,13 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempGrabHand._usingHand == UsingHand.Left))
+                else if ((tempGrabHand._usingHand == UsingHand.Left) && tempGrabHand.tempHand.IsLeft)
                 {
-                    foreach(Hand hand in tempGrabHand.Hands)
-                    {
-                        if (hand.IsLeft)
-                            return true;
-                    }
-                    return false;
+                    return true;
                 }
-                else if ((tempGrabHand._usingHand == UsingHand.Right))
+                else if ((tempGrabHand._usingHand == UsingHand.Right) && tempGrabHand.tempHand.IsRight)
                 {
-                    foreach(Hand hand in tempGrabHand.Hands)
-                    {
-                        if (hand.IsRight)
-                            return true;
-                    }
-                    return false;
+                    return true;
                 }
                 return false;
             case GestureType.fliphand: // If GestureType is fliphand.

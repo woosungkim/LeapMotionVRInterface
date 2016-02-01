@@ -5,6 +5,9 @@ using Leap;
 
 public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture 
 {
+    [HideInInspector]
+    public Hand tempHand;
+
     public ScreenTapGesture _screentap_gesture;
     public Vector _direction;
     public Pointable _pointable;
@@ -60,30 +63,35 @@ public class ScreenTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         _lastFrame = _leap_controller.Frame(0);
         Hands = _lastFrame.Hands;
         _gestures = _lastFrame.Gestures();
-        Hand hand = Hands.Frontmost;
 
-        if ((!this._isChecked) && WhichSide.IsEnableGestureHand(this))
+        foreach(Hand hand in Hands)
         {
-
-            this._fingers = hand.Fingers;
-
-            foreach (Gesture gesture in _gestures)
+            tempHand = hand;
+            _fingers = hand.Fingers;
+            if (WhichSide.IsEnableGestureHand(this))
             {
-                if ((gesture.Type == Gesture.GestureType.TYPE_SCREEN_TAP) && WhichSide.capturedSide(hand, _useArea, this._mountType))
+
+                foreach (Gesture gesture in _gestures)
                 {
-                    _screentap_gesture = new ScreenTapGesture(gesture);
+                    if ((gesture.Type == Gesture.GestureType.TYPE_SCREEN_TAP) && WhichSide.capturedSide(hand, _useArea, this._mountType))
+                    {
+                        _screentap_gesture = new ScreenTapGesture(gesture);
 
-                    this.GetDirection();
-                    this.GetPointable();
-                    this.GetGestureInvokePosition();
+                        this.GetDirection();
+                        this.GetPointable();
+                        this.GetGestureInvokePosition();
 
-                    this._isChecked = true;
-                    break;
+                        this._isChecked = true;
+                        break;
+                    }
                 }
+
+                if (this._isChecked)
+                    break;
+
             }
-
-
         }
+       
 
         if (this._isChecked)
         {

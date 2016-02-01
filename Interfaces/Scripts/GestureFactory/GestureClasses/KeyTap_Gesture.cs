@@ -4,6 +4,9 @@ using Leap;
 
 public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture 
 {
+    [HideInInspector]
+    public Hand tempHand;
+
     public KeyTapGesture _keytab_gesture;
 
     public Vector _direction;
@@ -61,29 +64,37 @@ public class KeyTap_Gesture : MonoBehaviour, ISingleStepCheckGesture
         this._lastFrame = this._leap_controller.Frame(0);
         this.Hands = this._lastFrame.Hands;
         this._gestures = this._lastFrame.Gestures();
-        Hand hand = this.Hands.Frontmost;
 
-        if ((!this._isChecked) && WhichSide.IsEnableGestureHand(this))
+        foreach(Hand hand in Hands)
         {
-            this._fingers = hand.Fingers;
+            tempHand = hand;
+            _fingers = hand.Fingers;
 
-            foreach (Gesture gesture in _gestures)
+            if (WhichSide.IsEnableGestureHand(this))
             {
+                this._fingers = hand.Fingers;
 
-                if ((gesture.Type == Gesture.GestureType.TYPE_KEY_TAP) && WhichSide.capturedSide(hand, _useArea, _mountType))
+                foreach (Gesture gesture in _gestures)
                 {
-                    _keytab_gesture = new KeyTapGesture(gesture);
-                    this.GetDirection();
-                    this.GetPointable();
-                    this.GestureInvokePosition();
 
-                    this._isChecked = true;
-                    break;
+                    if ((gesture.Type == Gesture.GestureType.TYPE_KEY_TAP) && WhichSide.capturedSide(hand, _useArea, _mountType))
+                    {
+                        _keytab_gesture = new KeyTapGesture(gesture);
+                        this.GetDirection();
+                        this.GetPointable();
+                        this.GestureInvokePosition();
 
+                        this._isChecked = true;
+                        break;
+
+                    }
                 }
             }
-        }
 
+            if (this._isChecked)
+                break;
+        }
+       
         if (this._isChecked)
         {
             DoAction();

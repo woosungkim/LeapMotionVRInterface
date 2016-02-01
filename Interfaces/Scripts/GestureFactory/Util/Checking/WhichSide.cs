@@ -137,11 +137,11 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempSwipe._usingHand == UsingHand.Left) && (tempSwipe.Hands.Frontmost.IsLeft)) //If UsingHand value is Left and captured hand side is left.
+                else if ((tempSwipe._usingHand == UsingHand.Left) && (tempSwipe.tempHand.IsLeft)) //If UsingHand value is Left and captured hand side is left.
                 {
                     return true;
                 }
-                else if ((tempSwipe._usingHand == UsingHand.Right) && tempSwipe.Hands.Frontmost.IsRight)//If UsingHand value is Right and captured hand side is Right.
+                else if ((tempSwipe._usingHand == UsingHand.Right) && tempSwipe.tempHand.IsRight)//If UsingHand value is Right and captured hand side is Right.
                 {
                     return true;
                 }
@@ -153,11 +153,11 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempCircle._usingHand == UsingHand.Left) && (tempCircle.Hands.Frontmost.IsLeft))
+                else if ((tempCircle._usingHand == UsingHand.Left) && (tempCircle.tempHand.IsLeft))
                 {
                     return true;
                 }
-                else if ((tempCircle._usingHand == UsingHand.Right) && tempCircle.Hands.Frontmost.IsRight)
+                else if ((tempCircle._usingHand == UsingHand.Right) && tempCircle.tempHand.IsRight)
                 {
                     return true;
                 }
@@ -170,11 +170,11 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempKeytab._usingHand == UsingHand.Left) && (tempKeytab.Hands.Frontmost.IsLeft))
+                else if ((tempKeytab._usingHand == UsingHand.Left) && (tempKeytab.tempHand.IsLeft))
                 {
                     return true;
                 }
-                else if ((tempKeytab._usingHand == UsingHand.Right) && tempKeytab.Hands.Frontmost.IsRight)
+                else if ((tempKeytab._usingHand == UsingHand.Right) && tempKeytab.tempHand.IsRight)
                 {
                     return true;
                 }
@@ -187,11 +187,11 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempScreenTab._usingHand == UsingHand.Left) && (tempScreenTab.Hands.Frontmost.IsLeft))
+                else if ((tempScreenTab._usingHand == UsingHand.Left) && (tempScreenTab.tempHand.IsLeft))
                 {
                     return true;
                 }
-                else if ((tempScreenTab._usingHand == UsingHand.Right) && tempScreenTab.Hands.Frontmost.IsRight)
+                else if ((tempScreenTab._usingHand == UsingHand.Right) && tempScreenTab.tempHand.IsRight)
                 {
                     return true;
                 }
@@ -220,11 +220,11 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempFlipHand._usingHand == UsingHand.Left) && (tempFlipHand.Hands.Frontmost.IsLeft))
+                else if ((tempFlipHand._usingHand == UsingHand.Left) && (tempFlipHand.tempHand.IsLeft))
                 {
                     return true;
                 }
-                else if ((tempFlipHand._usingHand == UsingHand.Right) && tempFlipHand.Hands.Frontmost.IsRight)
+                else if ((tempFlipHand._usingHand == UsingHand.Right) && (tempFlipHand.tempHand.IsRight))
                 {
                     return true;
                 }
@@ -236,11 +236,11 @@ public static class WhichSide{
                 {
                     return true;
                 }
-                else if ((tempUser._usingHand == UsingHand.Left) && (tempUser.Hands.Frontmost.IsLeft))
+                else if ((tempUser._usingHand == UsingHand.Left) && (tempUser.tempHand.IsLeft))
                 {
                     return true;
                 }
-                else if ((tempUser._usingHand == UsingHand.Right) && (tempUser.Hands.Frontmost.IsRight))
+                else if ((tempUser._usingHand == UsingHand.Right) && (tempUser.tempHand.IsRight))
                 {
                     return true;
                 }

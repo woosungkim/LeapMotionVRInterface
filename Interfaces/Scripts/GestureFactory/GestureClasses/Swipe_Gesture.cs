@@ -4,6 +4,9 @@ using Leap;
 
 public class Swipe_Gesture : MonoBehaviour, IMultiStepCheckGesture
 {
+    [HideInInspector]
+    public Hand tempHand;
+
     public Vector _direction;
     public SwipeGesture _swipe_gestrue;
     public Vector _position;
@@ -88,117 +91,124 @@ public class Swipe_Gesture : MonoBehaviour, IMultiStepCheckGesture
         _lastFrame = _leap_controller.Frame();
         Hands = _lastFrame.Hands;
         _gestures = _lastFrame.Gestures();
-        Hand hand = Hands.Frontmost;
 
-        if (WhichSide.IsEnableGestureHand(this))
+
+        foreach(Hand hand in Hands)
         {
-            foreach (Gesture gesture in _gestures)
+            tempHand = hand;
+            _fingers = hand.Fingers;
+            
+            if (WhichSide.IsEnableGestureHand(this))
             {
-
-                if (gesture.Type == Gesture.GestureType.TYPE_SWIPE)
+                foreach (Gesture gesture in _gestures)
                 {
-                    _swipe_gestrue = new SwipeGesture(gesture);
 
-                    if (!_isPlaying && gesture.State == Gesture.GestureState.STATE_START && WhichSide.capturedSide(hand, _useArea, this._mountType))
+                    if (gesture.Type == Gesture.GestureType.TYPE_SWIPE)
                     {
-                        _isPlaying = true;
-                        _startPoint = hand.PalmPosition;
-                    }
- 
-                    if (_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
-                    {
-                        _endPoint = hand.PalmPosition;
-                        switch (UseAxis)
+                        _swipe_gestrue = new SwipeGesture(gesture);
+
+                        if (!_isPlaying && gesture.State == Gesture.GestureState.STATE_START && WhichSide.capturedSide(hand, _useArea, this._mountType))
                         {
-                            case 'x':
-                                if (((_endPoint.x - _startPoint.x) * _useDirection) > Sensitivity)
-                                {
-                                    this._isChecked = true;
-                                    _isPlaying = !_isPlaying;
-                                    break;
-                                }
-                                _state = gesture.State;
-                                break;
-                            case 'y':
-                                if (((_endPoint.y - _startPoint.y) * _useDirection) > Sensitivity)
-                                {
+                            _isPlaying = true;
+                            _startPoint = hand.PalmPosition;
+                        }
 
-                                    this._isChecked = true;
-                                    _isPlaying = !_isPlaying;
-                                    break;
-                                }
-                                _state = gesture.State;
-                                break;
-                            case 'z':
-                                if (_startPoint.y < this._maxY && _endPoint.y < this._maxY &&
-                                    ((_endPoint.z - _startPoint.z) * _useDirection) > Sensitivity)
-                                {
-                                    this._isChecked = true;
-                                    _isPlaying = !_isPlaying;
+                        if (_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
+                        {
+                            _endPoint = hand.PalmPosition;
+                            switch (UseAxis)
+                            {
+                                case 'x':
+                                    if (((_endPoint.x - _startPoint.x) * _useDirection) > Sensitivity)
+                                    {
+                                        this._isChecked = true;
+                                        _isPlaying = !_isPlaying;
+                                        break;
+                                    }
                                     _state = gesture.State;
                                     break;
-                                }
-                                _state = gesture.State;
-                                break;
-                            default:
-                                break;
+                                case 'y':
+                                    if (((_endPoint.y - _startPoint.y) * _useDirection) > Sensitivity)
+                                    {
+
+                                        this._isChecked = true;
+                                        _isPlaying = !_isPlaying;
+                                        break;
+                                    }
+                                    _state = gesture.State;
+                                    break;
+                                case 'z':
+                                    if (_startPoint.y < this._maxY && _endPoint.y < this._maxY &&
+                                        ((_endPoint.z - _startPoint.z) * _useDirection) > Sensitivity)
+                                    {
+                                        this._isChecked = true;
+                                        _isPlaying = !_isPlaying;
+                                        _state = gesture.State;
+                                        break;
+                                    }
+                                    _state = gesture.State;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+
+                        if (!this._isPlaying || this._isChecked)
+                        {
+                            break;
+                        }
+
+                        _state = gesture.State;
                     }
 
-                    if (!this._isPlaying || this._isChecked)
-                    {
-                        break;
-                    }
-
-                    _state = gesture.State;
                 }
 
-            }
-
-            if (_isPlaying && _state == Gesture.GestureState.STATE_UPDATE && WhichSide.capturedSide(hand, _useArea, this.MountType))
-            {
-                _endPoint = hand.PalmPosition;
-                switch (UseAxis)
+                if (_isPlaying && _state == Gesture.GestureState.STATE_UPDATE && WhichSide.capturedSide(hand, _useArea, this.MountType))
                 {
-                    case 'x':
-                        if (((_endPoint.x - _startPoint.x) * _useDirection) > Sensitivity)
-                        {
+                    _endPoint = hand.PalmPosition;
+                    switch (UseAxis)
+                    {
+                        case 'x':
+                            if (((_endPoint.x - _startPoint.x) * _useDirection) > Sensitivity)
+                            {
 
-                            this._isChecked = true;
-                            _isPlaying = !_isPlaying;
+                                this._isChecked = true;
+                                _isPlaying = !_isPlaying;
+                                break;
+                            }
                             break;
-                        }
-                        break;
-                    case 'y':
-                        if (((_endPoint.y - _startPoint.y) * _useDirection) > Sensitivity)
-                        {
+                        case 'y':
+                            if (((_endPoint.y - _startPoint.y) * _useDirection) > Sensitivity)
+                            {
 
-                            this._isChecked = true;
-                            _isPlaying = !_isPlaying;
+                                this._isChecked = true;
+                                _isPlaying = !_isPlaying;
+                                break;
+                            }
                             break;
-                        }
-                        break;
-                    case 'z':
-                        if (_startPoint.y < this._maxY && _endPoint.y < this._maxY &&
-                            ((_endPoint.z - _startPoint.z) * _useDirection) > Sensitivity)
-                        {
-                            this._isChecked = true;
-                            _isPlaying = !_isPlaying;
+                        case 'z':
+                            if (_startPoint.y < this._maxY && _endPoint.y < this._maxY &&
+                                ((_endPoint.z - _startPoint.z) * _useDirection) > Sensitivity)
+                            {
+                                this._isChecked = true;
+                                _isPlaying = !_isPlaying;
+                                break;
+                            }
+                            else
+                            {
+                                _isPlaying = !_isPlaying;
+                            }
                             break;
-                        }
-                        else
-                        {
-                            _isPlaying = !_isPlaying;
-                        }
-                        break;
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
+
                 }
 
+
             }
-
-
         }
+       
 
         // -------------------- 
         // If Gesture is captured, call the handler function 'DoAction()'

@@ -4,6 +4,9 @@ using Leap;
 
 public class UserGesture : MonoBehaviour, IUserGesture {
 
+    [HideInInspector]
+    public Hand tempHand;
+
     protected Vector StartPosition;
     protected Vector EndPosition;
     protected FingerList Fingers;
@@ -74,13 +77,19 @@ public class UserGesture : MonoBehaviour, IUserGesture {
         _lastFrame = _leap_controller.Frame(0);
         tFrame = _leap_controller.Frame(5);
         Hands = _lastFrame.Hands;
-        Fingers = _lastFrame.Fingers;
-        hand = Hands.Frontmost;
 
-        if(WhichSide.IsEnableGestureHand(this) && WhichSide.capturedSide(hand,_useArea,_mountType))
+        foreach(Hand hand in Hands)
         {
-            this._isChecked = GestureCondition();
+            tempHand = hand;
+            Fingers = hand.Fingers;
+            if (WhichSide.IsEnableGestureHand(this) && WhichSide.IsEnableGestureHand(this) && WhichSide.capturedSide(hand, _useArea, _mountType))
+            {
+                this._isChecked = GestureCondition();
+                if (this._isChecked)
+                    break;
+            }
         }
+       
        
 
         if(_isChecked)

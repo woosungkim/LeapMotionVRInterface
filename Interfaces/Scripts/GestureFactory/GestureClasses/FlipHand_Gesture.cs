@@ -8,6 +8,9 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
     public FlipHand_Gesture _fliphand_gesture;
     [HideInInspector]
     public PalmDirection _palmDirection;
+    [HideInInspector]
+    public Hand tempHand;
+
     public MountType MountType;
     public UseArea UseArea;
     public UsingHand UsingHand;
@@ -56,19 +59,16 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
         _lastFrame = _leap_controller.Frame();
         Hands = _lastFrame.Hands;
 
-        if (!this._isChecked && IsEnableGestureHand())
+        foreach (Hand hand in Hands)
         {
-
-            foreach (Hand hand in Hands)
+            tempHand = hand;
+            if (WhichSide.IsEnableGestureHand(this) && WhichSide.capturedSide(hand, _useArea, _mountType) && IsCorrectHandDirection(hand))
             {
-
-                if (WhichSide.capturedSide(hand, _useArea, _mountType) && IsCorrectHandDirection(hand))
-                {
-                    this._isChecked = true;
-                    break;
-                }
+                this._isChecked = true;
+                break;
             }
         }
+        
 
 
         if (this._isChecked)

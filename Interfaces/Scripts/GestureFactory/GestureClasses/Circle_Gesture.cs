@@ -11,6 +11,8 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
     public float _progress;
     [HideInInspector]
     public int _useDirection = 0;
+    [HideInInspector]
+    public Hand tempHand;
 
     protected Vector _normal;
     public Pointable _pointable;
@@ -96,53 +98,60 @@ public class Circle_Gesture : MonoBehaviour, IMultiStepCheckGesture
         _lastFrame = _leap_controller.Frame(0);
         Hands = _lastFrame.Hands;
         _gestures = _lastFrame.Gestures();
-        Hand hand = Hands.Frontmost;
 
-        if (WhichSide.IsEnableGestureHand(this))
+        foreach(Hand hand in Hands)
         {
-            foreach (Gesture gesture in _gestures)
+            tempHand = hand;
+            _fingers = hand.Fingers;
+            if (WhichSide.IsEnableGestureHand(this))
             {
-                _fingers = hand.Fingers;
-                if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE)
+                foreach (Gesture gesture in _gestures)
                 {
-                    
-
-                    _circle_gesture = new CircleGesture(gesture);
-                    if (!_isPlaying && (gesture.State == Gesture.GestureState.STATE_START) && WhichSide.capturedSide(hand, _useArea, _mountType))
+                    _fingers = hand.Fingers;
+                    if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE)
                     {
-                        _isPlaying = !_isPlaying;
-                        this._startProgress = _circle_gesture.Progress;
-                    }
 
-                    if (_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
-                    {
-                        int direc = PropertyGetter.IsClockWise(this);
-                        this._endProgress = _circle_gesture.Progress;
-                        if (this._endProgress >= this.MinProgress && direc == _useDirection)
+
+                        _circle_gesture = new CircleGesture(gesture);
+                        if (!_isPlaying && (gesture.State == Gesture.GestureState.STATE_START) && WhichSide.capturedSide(hand, _useArea, _mountType))
                         {
-                            this._isChecked = true;
-                            this._isPlaying = !this._isPlaying;
+                            _isPlaying = !_isPlaying;
+                            this._startProgress = _circle_gesture.Progress;
+                        }
+
+                        if (_isPlaying && gesture.State == Gesture.GestureState.STATE_STOP)
+                        {
+                            int direc = PropertyGetter.IsClockWise(this);
+                            this._endProgress = _circle_gesture.Progress;
+                            if (this._endProgress >= this.MinProgress && direc == _useDirection)
+                            {
+                                this._isChecked = true;
+                                this._isPlaying = !this._isPlaying;
+                            }
+                            this._state = gesture.State;
+
+                            break;
                         }
                         this._state = gesture.State;
-
-                        break;
                     }
-                    this._state = gesture.State;
                 }
-            }
 
-            if (_isPlaying && _state == Gesture.GestureState.STATE_UPDATE)
-            {
-                int direc = this.IsClockWise();
-                this._endProgress = _circle_gesture.Progress;
-                if (this._endProgress >= this.MinProgress && direc == _useDirection)
+                if (_isPlaying && _state == Gesture.GestureState.STATE_UPDATE)
                 {
-                    this._isChecked = true;
-                    this._isPlaying = !this._isPlaying;
+                    int direc = this.IsClockWise();
+                    this._endProgress = _circle_gesture.Progress;
+                    if (this._endProgress >= this.MinProgress && direc == _useDirection)
+                    {
+                        this._isChecked = true;
+                        this._isPlaying = !this._isPlaying;
+                    }
                 }
-            }
 
+            }
+            if (this._isChecked)
+                break;
         }
+        
 
 
         if (_isChecked)

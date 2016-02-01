@@ -89,6 +89,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 			if (_scale <= _normalScale) {
 				_appearAnimFlag = false;
 				_isAnimating = false;
+
+				gameObject.GetComponentInParent<ShortcutController>().IsAppearing = true;
 			}
 		} 
 		else {
@@ -103,6 +105,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 			if (_scale >= _normalScale) {
 				_appearAnimFlag = false;
 				_isAnimating = false;
+
+				gameObject.GetComponentInParent<ShortcutController>().IsAppearing = true;
 			}
 		}
 	}
@@ -116,6 +120,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 				_disappearAnimFlag = false;
 				_isAnimating = false;
 
+				gameObject.GetComponentInParent<ShortcutController>().IsAppearing = false;
+
 				gameObject.SetActive(false);
 			}
 		}
@@ -126,6 +132,8 @@ public class UILayer : MonoBehaviour, IUILayer {
 			if (_scale >= _outScale) {
 				_disappearAnimFlag = false;
 				_isAnimating = false;
+
+				gameObject.GetComponentInParent<ShortcutController>().IsAppearing = false;
 
 				gameObject.SetActive(false);
 			}

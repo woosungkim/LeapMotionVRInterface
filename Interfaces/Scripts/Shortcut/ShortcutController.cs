@@ -64,23 +64,28 @@ public class ShortcutController : MonoBehaviour {
 
 	/* Appear this shortcut. */
 	public void Appear() {
-		_isAppearing = true;
-
-		if (_isFirst) {
-			// item hierarchy build
-			_ItemHierarchy.Build (_ShortcutSettings, gameObject);
-			_isFirst = false;
-		} 
-		else {
-			_ItemHierarchy.Appear ();
+		if (!_isAppearing) {
+			if (_isFirst) {
+				// item hierarchy build
+				_ItemHierarchy.Build (_ShortcutSettings, gameObject);
+				_isFirst = false;
+			} 
+			else {
+				_ItemHierarchy.Appear ();
+			}
+			//_isAppearing = true;
 		}
+
 	}
 	
 	/* DisAppear this shortcut. */
 	public void Disappear() {
-		_isAppearing = false;
+		if (_isAppearing) {
+			_ItemHierarchy.Disappear ();
 
-		_ItemHierarchy.Disappear ();
+			//_isAppearing = false;
+		}
+
 	}
 
 

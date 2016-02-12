@@ -18,6 +18,7 @@ public static class MeshNative {
 	                               float startAngle,
 	                               float endAngle,
 	                               int steps) {
+
 		float angleFull = endAngle - startAngle;
 		float angleInc = angleFull / steps;
 		float angle = startAngle;

@@ -114,14 +114,14 @@ public class FlipHand_Gesture : MonoBehaviour, ISingleStepCheckGesture {
             {
                 return true;
             }
-            else if (Mathf.Abs(roll) > 2.5)
+            else if (Mathf.Abs(roll) > 2.2)
             {
                 return false;
             }
         }
         else
         {
-            if (Mathf.Abs(roll) > 2.5)
+            if (Mathf.Abs(roll) > 2.2)
             {
                 return true;
             }

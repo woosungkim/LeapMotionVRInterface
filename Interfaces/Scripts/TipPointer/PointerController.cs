@@ -78,7 +78,7 @@ public class PointerController : MonoBehaviour {
 			
 			_pointerDict.Add (type, pointerObj);
 			InteractionManager.SetPointerPos (type, Vector3.one*9999.0f);
-			
+			ObjectInteractionManager.SetPointerWorldPos(type, Vector3.one*99999.0f);
 			
 			Pointer pointer = pointerObj.AddComponent<Pointer> ();
 			pointer.Build (_PointerSettings, type);
@@ -97,9 +97,8 @@ public class PointerController : MonoBehaviour {
 
 		foreach (PointerType type in _PointerSettings.PointerUsed) {
 			InteractionManager.SetPointerPos (type, Vector3.one*9999.0f);
+			ObjectInteractionManager.SetPointerWorldPos(type, Vector3.one*99999.0f);
 		}
-		//leftHandObj.SetActive (false);
-		//rightHandObj.SetActive (false);
 		                 
 		// 
 		bool leftHandOn = false;
@@ -137,9 +136,11 @@ public class PointerController : MonoBehaviour {
 						if (_PointerSettings.MountType == MountType.TableMount) {
 							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
+							ObjectInteractionManager.SetPointerWorldPos(type, pointerTransform.position);
 						} else if (_PointerSettings.MountType == MountType.HeadMount) {
 							InteractionManager.SetPointerPos (type, Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
 							pointerTransform.position = _Camera.ViewportToWorldPoint(Converter.ConvertPosInFrustumVR(finger.TipPosition.ToUnity()));
+							ObjectInteractionManager.SetPointerWorldPos(type, pointerTransform.position);
 						}
 						//print (Converter.ConvertPosInFrustum(finger.TipPosition.ToUnity()));
 						

@@ -12,6 +12,7 @@ public static class InteractionManager {
     static Dictionary<int, float> _interactionStartDict = new Dictionary<int, float> ();
 	static Dictionary<int, float> _progressDict = new Dictionary<int, float> ();
 
+
 	/*******************************************************************/
 	public static bool HasPointer(PointerType type) {
 		if (_pointerPosDict.ContainsKey (type))
@@ -160,4 +161,28 @@ public static class InteractionManager {
 
 	}
 
+
 }
+
+
+/*
+ * float nearestDis = 999.0f;
+
+		foreach (PointerType type in _pointerPosDict.Keys) {
+	        float intervalStart =  _interactionStartDict[id];
+			float intervalEnd = (_interactionStartDict[id]*3.0f);
+			float interval = intervalEnd - intervalStart;
+
+            float dis = Vector2.Distance((Vector2)_itemPosDict[id], (Vector2)_pointerPosDict[type]);
+           
+			if (intervalEnd > dis) {
+				dis -= intervalStart;
+				dis /= interval;
+                nearestDis = Math.Min (nearestDis, dis);
+				//Mathf.Lerp (0, 1, (1-nearestDis));
+            }
+			//Debug.Log ("Item : " + (Vector2)pos);
+		}
+		nearestDis = Mathf.Lerp (0, 1, nearestDis);
+
+*/

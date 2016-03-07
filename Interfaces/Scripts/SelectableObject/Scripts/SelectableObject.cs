@@ -3,6 +3,8 @@ using System.Collections;
 
 public class SelectableObject : MonoBehaviour {
 
+	public GameObject _SignPrefab;
+
 	public float _SelectDistance = 1.0f;
 
 	private int _id;
@@ -13,7 +15,11 @@ public class SelectableObject : MonoBehaviour {
 		_id = SelectableObjectUtil.AutoItemId;
 
 		originalColor = gameObject.GetComponent<Renderer> ().material.color;
-		print (gameObject.GetComponent<Renderer> ());
+
+		GameObject instance = (GameObject)Instantiate (_SignPrefab, 
+			gameObject.transform.position + (Vector3.up * 1.0f), 
+			Quaternion.Euler(Vector3.zero)
+		);
 	}
 	
 	// Update is called once per frame

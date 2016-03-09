@@ -3,23 +3,21 @@ using System.Collections;
 
 public class SelectableObject : MonoBehaviour {
 
-	public GameObject _SignPrefab;
-
 	public float _SelectDistance = 1.0f;
 
+	public EventScript _SelectEvent;
+
+	public ActionExecType _ActionExecuteType = ActionExecType.Once;
+	/****************************************/
+
 	private int _id;
-	private Color originalColor;
+
+	private bool isSelected = false;
 
 	// Use this for initialization
 	void Start () {
 		_id = SelectableObjectUtil.AutoItemId;
 
-		originalColor = gameObject.GetComponent<Renderer> ().material.color;
-
-		GameObject instance = (GameObject)Instantiate (_SignPrefab, 
-			gameObject.transform.position + (Vector3.up * 1.0f), 
-			Quaternion.Euler(Vector3.zero)
-		);
 	}
 	
 	// Update is called once per frame
@@ -30,10 +28,20 @@ public class SelectableObject : MonoBehaviour {
 		float dis = ObjectInteractionManager.findNearestPointerDistance (_id);
 
 		if (dis < _SelectDistance) {
-			print ("select!!");
-			gameObject.GetComponent<Renderer> ().material.color = new Color(0.5f, 0.0f, 0.0f, 0.2f);
+			//print ("select!!");
+			if (_SelectEvent != null) {
+
+				if (_ActionExecuteType == ActionExecType.DuringSelecting) {
+					_SelectEvent.ClickAction ();
+				} else if (_ActionExecuteType == ActionExecType.Once) {
+					if (!isSelected) {
+						isSelected = true;
+						_SelectEvent.ClickAction ();
+					}
+				}
+			}
 		} else {
-			gameObject.GetComponent<Renderer> ().material.color = originalColor;
+			isSelected = false;
 		}
 	}
 }

@@ -36,7 +36,7 @@ public class SwitcherInfaredCamera: MonoBehaviour {
 	void Update () {
 		if (_target != null) {
 			// track camera position & rotation
-            transform.position = Vector3.Lerp(_target.transform.position - (_target.transform.forward * 0.1f), transform.position, 5f * Time.deltaTime);
+            transform.position = Vector3.Lerp(_target.transform.position - (_target.transform.forward * 0.1f), transform.position, 10f * Time.deltaTime);
 			transform.rotation = _target.transform.rotation;
             
             if(state == CameraState.VR)

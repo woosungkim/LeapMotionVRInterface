@@ -52,7 +52,7 @@ public class SelectableObject : MonoBehaviour {
 
 		float dis = ObjectInteractionManager.findNearestPointerDistance (_id);
 		if (dis < _SelectDistance) {
-			print ("select!!");
+			//print ("select!!");
 			arrowInst.GetComponent<Renderer> ().material.color = _selectColor;
 			if (_SelectEvent != null) {
 				if (_ActionExecuteType == ActionExecType.DuringSelecting) {
@@ -65,7 +65,7 @@ public class SelectableObject : MonoBehaviour {
 				}
 			}
 		} else if (dis < (_SelectDistance * 1.5f)) {
-			print ("focus~~~");
+			//print ("focus~~~");
 			arrowInst.GetComponent<Renderer> ().material.color = _FocusColor;
 		}
 		else {

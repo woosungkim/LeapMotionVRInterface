@@ -40,7 +40,8 @@ public class UITextManager : MonoBehaviour {
 			canvasObj.transform.SetParent (canvasGroupObj.transform, false);
 
 			Canvas canvas = canvasObj.AddComponent<Canvas> ();
-			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+			//canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+			canvas.renderMode = RenderMode.ScreenSpaceCamera;
 
 			/**/
 

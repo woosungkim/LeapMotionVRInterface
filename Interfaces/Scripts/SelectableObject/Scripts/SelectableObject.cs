@@ -19,16 +19,15 @@ public class SelectableObject : MonoBehaviour {
 		_id = SelectableObjectUtil.AutoItemId;
 
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
 		ObjectInteractionManager.SetObjectPos (_id, gameObject.transform.position);
 
 		float dis = ObjectInteractionManager.findNearestPointerDistance (_id);
-
 		if (dis < _SelectDistance) {
-			//print ("select!!");
+			print ("select!!");
 			if (_SelectEvent != null) {
 
 				if (_ActionExecuteType == ActionExecType.DuringSelecting) {
@@ -40,7 +39,10 @@ public class SelectableObject : MonoBehaviour {
 					}
 				}
 			}
-		} else {
+		} else if (dis < (_SelectDistance * 1.5f)) {
+			print ("focus~~~");
+		}
+		else {
 			isSelected = false;
 		}
 	}

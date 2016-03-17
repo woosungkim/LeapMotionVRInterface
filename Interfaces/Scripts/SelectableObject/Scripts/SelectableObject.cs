@@ -10,6 +10,9 @@ public class SelectableObject : MonoBehaviour {
 	public ActionExecType _ActionExecuteType = ActionExecType.Once;
 	/****************************************/
 
+
+	public bool _IsArrowAppearing = true;
+
 	public float _DistanceFromObject = 1.0f;
 
 	public float _RotationSpeed = 1.0f;
@@ -46,14 +49,21 @@ public class SelectableObject : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		arrowInst.transform.Rotate (0, _RotationSpeed, 0);
+		if (_IsArrowAppearing) {
+			arrowInst.SetActive (true);
+			arrowInst.transform.Rotate (0, _RotationSpeed, 0);
+		} else {
+			arrowInst.SetActive (false);
+		}
 
 		ObjectInteractionManager.SetObjectPos (_id, gameObject.transform.position);
 
 		float dis = ObjectInteractionManager.findNearestPointerDistance (_id);
 		if (dis < _SelectDistance) {
 			//print ("select!!");
-			arrowInst.GetComponent<Renderer> ().material.color = _selectColor;
+			if (_IsArrowAppearing) {
+				arrowInst.GetComponent<Renderer> ().material.color = _selectColor;
+			}
 			if (_SelectEvent != null) {
 				if (_ActionExecuteType == ActionExecType.DuringSelecting) {
 					_SelectEvent.ClickAction ();
@@ -66,11 +76,15 @@ public class SelectableObject : MonoBehaviour {
 			}
 		} else if (dis < (_SelectDistance * 1.5f)) {
 			//print ("focus~~~");
-			arrowInst.GetComponent<Renderer> ().material.color = _FocusColor;
+			if (_IsArrowAppearing) {
+				arrowInst.GetComponent<Renderer> ().material.color = _FocusColor;
+			}
 		}
 		else {
 			isSelected = false;
-			arrowInst.GetComponent<Renderer> ().material.color = _NormalColor;
+			if (_IsArrowAppearing) {
+				arrowInst.GetComponent<Renderer> ().material.color = _NormalColor;
+			}
 		}
 	}
 }

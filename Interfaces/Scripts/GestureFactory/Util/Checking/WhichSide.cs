@@ -129,124 +129,18 @@ public static class WhichSide{
     // This method check whether hand user want to use direction is captured.
     public static bool IsEnableGestureHand<T>(T ob) where T : IGesture
     {
-        switch (ob._gestureType) // Check the gesture type.
+        if (ob._usingHand == UsingHand.All) // If UsingHand value is All.
         {
-            case GestureType.swipe: // If GestureType is swipe.
-                Swipe_Gesture tempSwipe = ob as Swipe_Gesture; // Wrap gesture type.
-                if (tempSwipe._usingHand == UsingHand.All) // If UsingHand value is All.
-                {
-                    return true;
-                }
-                else if ((tempSwipe._usingHand == UsingHand.Left) && (tempSwipe.tempHand.IsLeft)) //If UsingHand value is Left and captured hand side is left.
-                {
-                    return true;
-                }
-                else if ((tempSwipe._usingHand == UsingHand.Right) && tempSwipe.tempHand.IsRight)//If UsingHand value is Right and captured hand side is Right.
-                {
-                    return true;
-                }
-                return false;
-            case GestureType.circle: // If GestureType is circle.
-                Circle_Gesture tempCircle = ob as Circle_Gesture;
-                
-                if (tempCircle._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempCircle._usingHand == UsingHand.Left) && (tempCircle.tempHand.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempCircle._usingHand == UsingHand.Right) && tempCircle.tempHand.IsRight)
-                {
-                    return true;
-                }
-                return false;
-
-            case GestureType.keytab:// If GestureType is keytab.
-                KeyTap_Gesture tempKeytab = ob as KeyTap_Gesture;
-                
-                if (tempKeytab._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempKeytab._usingHand == UsingHand.Left) && (tempKeytab.tempHand.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempKeytab._usingHand == UsingHand.Right) && tempKeytab.tempHand.IsRight)
-                {
-                    return true;
-                }
-                return false;
-
-            case GestureType.screentab:// If GestureType is screentab.
-                ScreenTap_Gesture tempScreenTab = ob as ScreenTap_Gesture;
-
-                if (tempScreenTab._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempScreenTab._usingHand == UsingHand.Left) && (tempScreenTab.tempHand.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempScreenTab._usingHand == UsingHand.Right) && tempScreenTab.tempHand.IsRight)
-                {
-                    return true;
-                }
-                return false;
-           
-            case GestureType.grabhand: // If GestureType is grabbing hand.
-                GrabHand_Gesture tempGrabHand = ob as GrabHand_Gesture;
-
-                if (tempGrabHand._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempGrabHand._usingHand == UsingHand.Left) && tempGrabHand.tempHand.IsLeft)
-                {
-                    return true;
-                }
-                else if ((tempGrabHand._usingHand == UsingHand.Right) && tempGrabHand.tempHand.IsRight)
-                {
-                    return true;
-                }
-                return false;
-            case GestureType.fliphand: // If GestureType is fliphand.
-                FlipHand_Gesture tempFlipHand = ob as FlipHand_Gesture;
-
-                if (tempFlipHand._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempFlipHand._usingHand == UsingHand.Left) && (tempFlipHand.tempHand.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempFlipHand._usingHand == UsingHand.Right) && (tempFlipHand.tempHand.IsRight))
-                {
-                    return true;
-                }
-                return false;
-            case GestureType.usercustom: // If GestureType is user custom.
-                UserGesture tempUser = ob as UserGesture;
-
-                if (tempUser._usingHand == UsingHand.All)
-                {
-                    return true;
-                }
-                else if ((tempUser._usingHand == UsingHand.Left) && (tempUser.tempHand.IsLeft))
-                {
-                    return true;
-                }
-                else if ((tempUser._usingHand == UsingHand.Right) && (tempUser.tempHand.IsRight))
-                {
-                    return true;
-                }
-                return false;
-            default:
-                return false;
+            return true;
         }
+        else if ((ob._usingHand == UsingHand.Left) && (ob.tempHand.IsLeft)) //If UsingHand value is Left and captured hand side is left.
+        {
+            return true;
+        }
+        else if ((ob._usingHand == UsingHand.Right) && ob.tempHand.IsRight)//If UsingHand value is Right and captured hand side is Right.
+        {
+            return true;
+        }
+        return false;
     }
 }
